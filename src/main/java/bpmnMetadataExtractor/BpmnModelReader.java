@@ -6,6 +6,9 @@ import java.io.InputStream;
 import java.time.LocalDateTime;
 
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
+
+import metricsOnGraphs.ModelConverter;
+
 import org.camunda.bpm.model.bpmn.Bpmn;
 
 /**
@@ -53,7 +56,9 @@ public class BpmnModelReader {
 		BpmnModelInstance modelInstance = Bpmn.readModelFromFile(loadedFile);
 		JsonEncoder jsonEncoder = new JsonEncoder(loadedFile.getName());
 		BpmnBasicMetricsExtractor basicExtractor = new BpmnBasicMetricsExtractor(modelInstance, jsonEncoder);
-		BpmnAdvancedMetricsExtractor advExtractor = new BpmnAdvancedMetricsExtractor(basicExtractor, jsonEncoder);
+		//Model
+		ModelConverter mc = new ModelConverter(modelInstance);
+		BpmnAdvancedMetricsExtractor advExtractor = new BpmnAdvancedMetricsExtractor(mc, basicExtractor, jsonEncoder);
 		long loadTime = System.currentTimeMillis() - startTime;
 //		System.out.println("Tempo load del file: " + loadTime + "ms");
 		basicExtractor.runMetrics();
@@ -75,7 +80,7 @@ public class BpmnModelReader {
 		BpmnModelInstance modelInstance = Bpmn.readModelFromStream(fileStream);
 		JsonEncoder jsonEncoder = new JsonEncoder(fileName);
 		BpmnBasicMetricsExtractor basicExtractor = new BpmnBasicMetricsExtractor(modelInstance, jsonEncoder);
-		BpmnAdvancedMetricsExtractor advExtractor = new BpmnAdvancedMetricsExtractor(basicExtractor, jsonEncoder);
+		BpmnAdvancedMetricsExtractor advExtractor = new BpmnAdvancedMetricsExtractor(new ModelConverter(modelInstance), basicExtractor, jsonEncoder);
 //		System.out.println("Start extracting Metrics\n");
 		basicExtractor.runMetrics();
 //		System.out.println("Basic Metrics have been extracted\n");

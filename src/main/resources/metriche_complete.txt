@@ -172,6 +172,7 @@ NTEV	%Number of Timer Events {Camunda API Instance Package}
 NTR	%Number of Transactions {Camunda API Instance Package}
 NUT	%Number of User Tasks {Camunda API Instance Package}
 NSUB	%Number of Subprocesses {Camunda API Instance Package}
+NCSUB	%Number of Collapsed Subprocesses {Camunda API Instance Package}
 NFDCG	%Number of Flows dividing complex gateways {Camunda API Instance Package}
 NFDEBG	%Number of Flows dividing event-based gateways {Camunda API Instance Package}
 NFDEXG	%Number of Flows dividing exclusive gateways {Camunda API Instance Package}
@@ -266,3 +267,5 @@ DSM	%Durfee Square Metric	{10.1007/978-3-319-03677-9_6}
 PSM	%Perfect Square Metric	{10.1007/978-3-319-03677-9_6}
 Layout_Complexity	%It evaluates the usability of different screen designs based on the Shannon formula	{10.1007/978-0-387-35175-9_109}
 Layout_Measure	%It is a group of measures that quantify layout of models	{10.1016/j.infsof.2009.04.008}
+DOP	%Degree of parallelism	{absent}
+B %Binding of structure	{absent}

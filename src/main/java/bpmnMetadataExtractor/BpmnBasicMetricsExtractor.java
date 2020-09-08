@@ -162,6 +162,7 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NTR", this.getTransactions());
 		this.json.addBasicMetric("NUT", this.getUserTasks());
 		this.json.addBasicMetric("NSUB", this.getSubprocesses());
+		this.json.addBasicMetric("NCSUB", this.getCollapsedSubprocesses());
 		this.json.addBasicMetric("NFDCG", this.getFlowDividingComplexGateways());
 		this.json.addBasicMetric("NFDEBG", this.getFlowDividingEventBasedGateways());
 		this.json.addBasicMetric("NFDEXG", this.getFlowDividingExclusiveGateways());
@@ -1808,6 +1809,20 @@ public class BpmnBasicMetricsExtractor {
 	 */
 	public int getSubprocesses() {
 		return getNumberOfTypeElement(SubProcess.class);
+	}
+	
+	/**
+	 * Metric: NCSUB
+	 * 
+	 * @return number of collapsed Sub-Processes
+	 */
+	//
+	public int getCollapsedSubprocesses() {
+		int ncsub = 0;
+		for(ModelElementInstance sub : getCollectionOfElementType(SubProcess.class))
+			if(((SubProcess) sub).getFlowElements().size()==0)
+				ncsub++;
+		return ncsub;
 	}
 	
 	/**
