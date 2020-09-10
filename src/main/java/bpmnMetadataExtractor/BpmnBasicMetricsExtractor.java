@@ -19,18 +19,27 @@ import org.camunda.bpm.model.xml.type.ModelElementType;
 public class BpmnBasicMetricsExtractor {
 
 	// modello da cui estrarre le metriche
-	private BpmnModelInstance modelInstance;
+	//private BpmnModelInstance modelInstance;
 	private JsonEncoder json;
+	//added for multi-processess model
+	private Process process;
+	private int numberProcess;
 
-	public BpmnBasicMetricsExtractor(BpmnModelInstance modelInstance, JsonEncoder jsonEncoder) {
+	/*public BpmnBasicMetricsExtractor(BpmnModelInstance modelInstance, JsonEncoder jsonEncoder) {
 		this.modelInstance = modelInstance;
 		this.json = jsonEncoder;
+	}*/
+	
+	public BpmnBasicMetricsExtractor(Process process, JsonEncoder jsonEncoder, int i) {
+		this.process = process;
+		this.json = jsonEncoder;
+		this.numberProcess = i;
 	}
 
 	/**
 	 * Metodo principale per runnare tutti i metodi che ottengono le metriche
 	 */
-	public void runMetrics() {
+	/*public void runMetrics() {
 
 		this.json.addBasicMetric("NT", this.getTasks());
 		this.json.addBasicMetric("NCD", this.getComplexDecisions());
@@ -229,6 +238,207 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NBNIMUEV", this.getNonInterruptingBoundaryMultipleEvents());
 		this.json.addBasicMetric("NBNIESCEV", this.getNonInterruptingBoundaryEscalationEvents());
 		this.json.addBasicMetric("NBNIPMUEV", this.getNonInterruptingBoundaryParallelMultipleEvents());
+	}*/
+	
+	public void runMetrics() {
+
+		this.json.addBasicMetric("NT", this.getTasks(), this.numberProcess);
+		this.json.addBasicMetric("NCD", this.getComplexDecisions(), this.numberProcess);
+		this.json.addBasicMetric("NDOin", this.getDataObjectsInput(), this.numberProcess);
+		this.json.addBasicMetric("NDOout", this.getDataObjectsOutput(), this.numberProcess);
+		this.json.addBasicMetric("NID", this.getInclusiveDecisions(), this.numberProcess);
+		this.json.addBasicMetric("NEDDB", this.getExclusiveDataBasedDecisions(), this.numberProcess);
+		this.json.addBasicMetric("NEDEB", this.getExclusiveEventBasedDecisions(), this.numberProcess);
+		this.json.addBasicMetric("NL", this.getLanes(), this.numberProcess);
+		this.json.addBasicMetric("NMF", this.getMessageFlows(), this.numberProcess);
+		this.json.addBasicMetric("NP", this.getPools(), this.numberProcess);
+		this.json.addBasicMetric("NEP", this.getEmptyPools(), this.numberProcess);
+		this.json.addBasicMetric("NSFE", this.getSequenceFlowsFromEvents(), this.numberProcess);
+		this.json.addBasicMetric("NSFG", this.getSequenceFlowsFromGateways(), this.numberProcess);
+		this.json.addBasicMetric("NSFA", this.getSequenceFlowsBetweenActivities(), this.numberProcess);
+		this.json.addBasicMetric("NAC", this.getActivationConditions(), this.numberProcess);
+		this.json.addBasicMetric("NACT", this.getActivities(), this.numberProcess);
+		this.json.addBasicMetric("NART", this.getArtifacts(), this.numberProcess);
+		this.json.addBasicMetric("NASI", this.getAssignments(), this.numberProcess);
+		this.json.addBasicMetric("NASO", this.getAssociations(), this.numberProcess);
+		this.json.addBasicMetric("NAUD", this.getAuditing(), this.numberProcess);
+		this.json.addBasicMetric("NBEL", this.getBaseElements(), this.numberProcess);
+		this.json.addBasicMetric("NBEV", this.getBoundaryEvents(), this.numberProcess);
+		this.json.addBasicMetric("NBRT", this.getBusinessRuleTasks(), this.numberProcess);
+		this.json.addBasicMetric("NCEL", this.getCallableElements(), this.numberProcess);
+		this.json.addBasicMetric("NCAC", this.getCallActivities(), this.numberProcess);
+		this.json.addBasicMetric("NCCO", this.getCallConversations(), this.numberProcess);
+		this.json.addBasicMetric("NCANEV", this.getCancelEvents(), this.numberProcess);
+		this.json.addBasicMetric("NCATEV", this.getCatchEvents(), this.numberProcess);
+		this.json.addBasicMetric("NCVAL", this.getCategoryValues(), this.numberProcess);
+		this.json.addBasicMetric("NCOL", this.getCollaborations(), this.numberProcess);
+		this.json.addBasicMetric("NCOMEV", this.getCompensateEvents(), this.numberProcess);
+		this.json.addBasicMetric("NCOCON", this.getCompletionConditions(), this.numberProcess);
+		this.json.addBasicMetric("NCBDEF", this.getComplexBehaviorDefinitions(), this.numberProcess);
+		this.json.addBasicMetric("NCOND", this.getConditions(), this.numberProcess);
+		this.json.addBasicMetric("NCONDEV", this.getConditionalEvent(), this.numberProcess);
+		this.json.addBasicMetric("NCONDEX", this.getConditionExpressions(), this.numberProcess);
+		this.json.addBasicMetric("NCONV", this.getConversations(), this.numberProcess);
+		this.json.addBasicMetric("NCONVAS", this.getConversationAssociations(), this.numberProcess);
+		this.json.addBasicMetric("NCONVL", this.getConversationLinks(), this.numberProcess);
+		this.json.addBasicMetric("NCONVN", this.getConversationNodes(), this.numberProcess);
+		this.json.addBasicMetric("NCORK", this.getCorrelationKeys(), this.numberProcess);
+		this.json.addBasicMetric("NCORP", this.getCorrelationProperties(), this.numberProcess);
+		this.json.addBasicMetric("NCORPB", this.getCorrelationPropertyBindings(), this.numberProcess);
+		this.json.addBasicMetric("NCORPRE", this.getCorrelationPropertyRetrievalExpressions(), this.numberProcess);
+		this.json.addBasicMetric("NCORS", this.getCorrelationSubscriptions(), this.numberProcess);
+		this.json.addBasicMetric("NDA", this.getDataAssociations(), this.numberProcess);
+		this.json.addBasicMetric("NDInA", this.getDataInputAssociations(), this.numberProcess);
+		this.json.addBasicMetric("NDO", this.getDataObjects(), this.numberProcess);
+		this.json.addBasicMetric("NDOR", this.getDataObjectReferences(), this.numberProcess);
+		this.json.addBasicMetric("NDOutA", this.getDataOutputAssociations(), this.numberProcess);
+		this.json.addBasicMetric("NDSTA", this.getDataStates(), this.numberProcess);
+		this.json.addBasicMetric("NDSTO", this.getDataStores(), this.numberProcess);
+		this.json.addBasicMetric("NDEF", this.getDefinitions(), this.numberProcess);
+		this.json.addBasicMetric("NDOC", this.getDocumentations(), this.numberProcess);
+		this.json.addBasicMetric("NENDEV", this.getEndEvents(), this.numberProcess);
+		this.json.addBasicMetric("NENDP", this.getEndPoints(), this.numberProcess);
+		this.json.addBasicMetric("NERR", this.getErrors(), this.numberProcess);
+		this.json.addBasicMetric("NERREV", this.getErrorEvents(), this.numberProcess);
+		this.json.addBasicMetric("NESC", this.getEscalations(), this.numberProcess);
+		this.json.addBasicMetric("NESCEV", this.getEscalationEvents(), this.numberProcess);
+		this.json.addBasicMetric("NEV", this.getEvents(), this.numberProcess);
+		this.json.addBasicMetric("NEVDEF", this.getEventDefinitions(), this.numberProcess);
+		this.json.addBasicMetric("NEXP", this.getExpressions(), this.numberProcess);
+		this.json.addBasicMetric("NEXT", this.getExtensions(), this.numberProcess);
+		this.json.addBasicMetric("NEXTEL", this.getExtensionElements(), this.numberProcess);
+		this.json.addBasicMetric("NFLEL", this.getFlowElements(), this.numberProcess);
+		this.json.addBasicMetric("NFLNO", this.getFlowNodes(), this.numberProcess);
+		this.json.addBasicMetric("NFOREXP", this.getFormalExpressions(), this.numberProcess);
+		this.json.addBasicMetric("NGA", this.getGateways(), this.numberProcess);
+		this.json.addBasicMetric("NGC", this.getGlobalConversations(), this.numberProcess);
+		this.json.addBasicMetric("NHP", this.getHumanPerformers(), this.numberProcess);
+		this.json.addBasicMetric("NIMP", this.getImports(), this.numberProcess);
+		this.json.addBasicMetric("NInDI", this.getInputDataItems(), this.numberProcess);
+		this.json.addBasicMetric("NInS", this.getInputSets(), this.numberProcess);
+		this.json.addBasicMetric("NINTNO", this.getInteractionNodes(), this.numberProcess);
+		this.json.addBasicMetric("NINTE", this.getInterfaces(), this.numberProcess);
+		this.json.addBasicMetric("NICEV", this.getIntermediateCatchEvents(), this.numberProcess);
+		this.json.addBasicMetric("NITEV", this.getIntermediateThrowEvents(), this.numberProcess);
+		this.json.addBasicMetric("NIOB", this.getIoBindings(), this.numberProcess);
+		this.json.addBasicMetric("NIOS", this.getIoSpecifications(), this.numberProcess);
+		this.json.addBasicMetric("NIAEL", this.getItemAwareElements(), this.numberProcess);
+		this.json.addBasicMetric("NIDEF", this.getItemDefinitions(), this.numberProcess);
+		this.json.addBasicMetric("NLEV", this.getLinkEvents(), this.numberProcess);
+		this.json.addBasicMetric("NLOOPCA", this.getLoopCardinalities(), this.numberProcess);
+		this.json.addBasicMetric("NLOOPCH", this.getLoopCharacteristics(), this.numberProcess);
+		this.json.addBasicMetric("NMT", this.getManualTasks(), this.numberProcess);
+		this.json.addBasicMetric("NMES", this.getMessages(), this.numberProcess);
+		this.json.addBasicMetric("NMESEV", this.getMessageEvents(), this.numberProcess);
+		this.json.addBasicMetric("NMESFA", this.getMessageFlowAssociations(), this.numberProcess);
+		this.json.addBasicMetric("NMON", this.getMonitorings(), this.numberProcess);
+		this.json.addBasicMetric("NMILCH", this.getMultiInstanceLoopCharacteristics(), this.numberProcess);
+		this.json.addBasicMetric("NOP", this.getOperations(), this.numberProcess);
+		this.json.addBasicMetric("NOutDI", this.getOutputDataItems(), this.numberProcess);
+		this.json.addBasicMetric("NOutS", this.getOutputSets(), this.numberProcess);
+		this.json.addBasicMetric("NPG", this.getParallelGateways(), this.numberProcess);
+		this.json.addBasicMetric("NPAS", this.getParticipantAssociations(), this.numberProcess);
+		this.json.addBasicMetric("NPM", this.getParticipantMultiplicities(), this.numberProcess);
+		this.json.addBasicMetric("NPER", this.getPerformers(), this.numberProcess);
+		this.json.addBasicMetric("NPO", this.getPotentialOwners(), this.numberProcess);
+		this.json.addBasicMetric("NPROC", this.getProcesses(), this.numberProcess);
+		this.json.addBasicMetric("NPROP", this.getProperties(), this.numberProcess);
+		this.json.addBasicMetric("NRT", this.getReceiveTasks(), this.numberProcess);
+		this.json.addBasicMetric("NREL", this.getRelationships(), this.numberProcess);
+		this.json.addBasicMetric("NREN", this.getRenderings(), this.numberProcess);
+		this.json.addBasicMetric("NRES", this.getResources(), this.numberProcess);
+		this.json.addBasicMetric("NRESAEX", this.getResourceAssignmentExpressions(), this.numberProcess);
+		this.json.addBasicMetric("NRESP", this.getResourceParameters(), this.numberProcess);
+		this.json.addBasicMetric("NRESPB", this.getResourceParameterBindings(), this.numberProcess);
+		this.json.addBasicMetric("NRESR", this.getResourceRoles(), this.numberProcess);
+		this.json.addBasicMetric("NRE", this.getRootElements(), this.numberProcess);
+		this.json.addBasicMetric("NSCR", this.getScripts(), this.numberProcess);
+		this.json.addBasicMetric("NSCT", this.getScriptTasks(), this.numberProcess);
+		this.json.addBasicMetric("NSENT", this.getSendTasks(), this.numberProcess);
+		this.json.addBasicMetric("NSEQF", this.getSequenceFlows(), this.numberProcess);
+		this.json.addBasicMetric("NSERT", this.getServiceTasks(), this.numberProcess);
+		this.json.addBasicMetric("NSI", this.getSignals(), this.numberProcess);
+		this.json.addBasicMetric("NSIEV", this.getSignalEvent(), this.numberProcess);
+		this.json.addBasicMetric("NSTEV", this.getStartEvents(), this.numberProcess);
+		this.json.addBasicMetric("NSCONV", this.getSubConversations(), this.numberProcess);
+		this.json.addBasicMetric("NTEEV", this.getTerminateEvents(), this.numberProcess);
+		this.json.addBasicMetric("NTEX", this.getTexts(), this.numberProcess);
+		this.json.addBasicMetric("NTEXA", this.getTextAnnotations(), this.numberProcess);
+		this.json.addBasicMetric("NTHEV", this.getThrowEvents(), this.numberProcess);
+		this.json.addBasicMetric("NTC", this.getTimeCycles(), this.numberProcess);
+		this.json.addBasicMetric("NTDA", this.getTimeDates(), this.numberProcess);
+		this.json.addBasicMetric("NTDU", this.getTimeDurations(), this.numberProcess);
+		this.json.addBasicMetric("NTEV", this.getTimerEventDefinitions(), this.numberProcess);
+		this.json.addBasicMetric("NTR", this.getTransactions(), this.numberProcess);
+		this.json.addBasicMetric("NUT", this.getUserTasks(), this.numberProcess);
+		this.json.addBasicMetric("NSUB", this.getSubprocesses(), this.numberProcess);
+		this.json.addBasicMetric("NCSUB", this.getCollapsedSubprocesses(), this.numberProcess);
+		this.json.addBasicMetric("NFDCG", this.getFlowDividingComplexGateways(), this.numberProcess);
+		this.json.addBasicMetric("NFDEBG", this.getFlowDividingEventBasedGateways(), this.numberProcess);
+		this.json.addBasicMetric("NFDEXG", this.getFlowDividingExclusiveGateways(), this.numberProcess);
+		this.json.addBasicMetric("NFDIG", this.getFlowDividingInclusiveGateways(), this.numberProcess);
+		this.json.addBasicMetric("NFDPG", this.getFlowDividingParallelGateways(), this.numberProcess);
+		this.json.addBasicMetric("NFDG", this.getFlowDividingGateways(), this.numberProcess);
+		this.json.addBasicMetric("NFDT", this.getFlowDividingTasks(), this.numberProcess);
+		this.json.addBasicMetric("NFJCG", this.getFlowJoiningComplexGateways(), this.numberProcess);
+		this.json.addBasicMetric("NFJEBG", this.getFlowJoiningEventBasedGateways(), this.numberProcess);
+		this.json.addBasicMetric("NFJEXG", this.getFlowJoiningExclusiveGateways(), this.numberProcess);
+		this.json.addBasicMetric("NFJIG", this.getFlowJoiningInclusiveGateways(), this.numberProcess);
+		this.json.addBasicMetric("NFJPG", this.getFlowJoiningParallelGateways(), this.numberProcess);
+		this.json.addBasicMetric("NFJG", this.getFlowJoiningGateways(), this.numberProcess);
+		this.json.addBasicMetric("NFJT", this.getFlowJoiningTasks(), this.numberProcess);
+		this.json.addBasicMetric("NFJDCG", this.getFlowJoiningAndDividingComplexGateways(), this.numberProcess);
+		this.json.addBasicMetric("NFJDEBG", this.getFlowJoiningAndDividingEventBasedGateways(), this.numberProcess);
+		this.json.addBasicMetric("NFJDEXG", this.getFlowJoiningAndDividingExclusiveGateways(), this.numberProcess);
+		this.json.addBasicMetric("NFJDIG", this.getFlowJoiningAndDividingInclusiveGateways(), this.numberProcess);
+		this.json.addBasicMetric("NFJDPG", this.getFlowJoiningAndDividingParallelGateways(), this.numberProcess);
+		this.json.addBasicMetric("NFJDG", this.getFlowJoiningAndDividingGateways(), this.numberProcess);
+		this.json.addBasicMetric("NFJDT", this.getFlowJoiningAndDividingTasks(), this.numberProcess);
+		this.json.addBasicMetric("NSTMEV", this.getStartMessageEvents(), this.numberProcess);
+		this.json.addBasicMetric("NSTCOEV", this.getStartConditionalEvents(), this.numberProcess);
+		this.json.addBasicMetric("NSTSIGEV", this.getStartSignalEvents(), this.numberProcess);
+		this.json.addBasicMetric("NSTTEV", this.getStartTimerEvents(), this.numberProcess);
+		this.json.addBasicMetric("NSTMUEV", this.getStartMultipleEvents(), this.numberProcess);
+		this.json.addBasicMetric("NSTPMUEV", this.getStartParallelMultipleEvents(), this.numberProcess);
+		this.json.addBasicMetric("NENDCEV", this.getEndCancelEvents(), this.numberProcess);
+		this.json.addBasicMetric("NENDCOMEV", this.getEndCompensationEvents(), this.numberProcess);
+		this.json.addBasicMetric("NENDCOMEV", this.getCompensateEvents(), this.numberProcess);
+		this.json.addBasicMetric("NENDERREV", this.getEndErrorEvents(), this.numberProcess);
+		this.json.addBasicMetric("NENDESCEV", this.getEndEscalationEvents(), this.numberProcess);
+		this.json.addBasicMetric("NENDMEV", this.getEndMessageEvents(), this.numberProcess);
+		this.json.addBasicMetric("NENDSIGEV", this.getEndSignalEvents(), this.numberProcess);
+		this.json.addBasicMetric("NENDTEREV", this.getEndTerminateEvents(), this.numberProcess);
+		this.json.addBasicMetric("NENDMUEV", this.getEndMultipleEvents(), this.numberProcess);
+		this.json.addBasicMetric("NIBEV", this.getInterruptingBoundaryEvents(), this.numberProcess);
+		this.json.addBasicMetric("NIBCANCEV", this.getInterruptingBoundaryCancelEvents(), this.numberProcess);
+		this.json.addBasicMetric("NIBCOMPEV", this.getInterruptingBoundaryCompensationEvents(), this.numberProcess);
+		this.json.addBasicMetric("NIBCOEV", this.getInterruptingBoundaryConditionalEvents(), this.numberProcess);
+		this.json.addBasicMetric("NIBERREV", this.getInterruptingBoundaryErrorEvents(), this.numberProcess);
+		this.json.addBasicMetric("NIBESCEV", this.getInterruptingBoundaryEscalationEvents(), this.numberProcess);
+		this.json.addBasicMetric("NIBMEV", this.getInterruptingBoundaryMessageEvents(), this.numberProcess);
+		this.json.addBasicMetric("NIBSIGEV", this.getInterruptingBoundarySignalEvents(), this.numberProcess);
+		this.json.addBasicMetric("NIBTEV", this.getInterruptingBoundaryTimerEvents(), this.numberProcess);
+		this.json.addBasicMetric("NIESCTEV", this.getIntermediateEscalationThrowEvents(), this.numberProcess);
+		this.json.addBasicMetric("NICOMTEV", this.getIntermediateCompensationThrowEvents(), this.numberProcess);
+		this.json.addBasicMetric("NILTEV", this.getIntermediateLinkThrowEvents(), this.numberProcess);
+		this.json.addBasicMetric("NIMTEV", this.getIntermediateMessageThrowEvents(), this.numberProcess);
+		this.json.addBasicMetric("NISIGTEV", this.getIntermediateSignalThrowEvents(), this.numberProcess);
+		this.json.addBasicMetric("NIMUTEV",this.getIntermediateMultipleThrowEvents(), this.numberProcess);
+		this.json.addBasicMetric("NICOMCEV", this.getIntermediateCompensationCatchEvents(), this.numberProcess);
+		this.json.addBasicMetric("NICONCEV", this.getIntermediateConditionalCatchEvents(), this.numberProcess);
+		this.json.addBasicMetric("NILCEV", this.getIntermediateLinkCatchEvents(), this.numberProcess);
+		this.json.addBasicMetric("NIMCEV", this.getIntermediateMessageCatchEvents(), this.numberProcess);
+		this.json.addBasicMetric("NISIGCEV", this.getIntermediateSignalCatchEvents(), this.numberProcess);
+		this.json.addBasicMetric("NIMUCEV", this.getIntermediateMultipleCatchEvents(), this.numberProcess);
+		this.json.addBasicMetric("NIPMUCEV", this.getIntermediateParallelMultipleCatchEvents(), this.numberProcess);
+		this.json.addBasicMetric("NBNIEV", this.getNonInterruptingBoundaryEvents(), this.numberProcess);
+		this.json.addBasicMetric("NBNIMEV", this.getNonInterruptingBoundaryMessageEvents(), this.numberProcess);
+		this.json.addBasicMetric("NBNITEV", this.getNonInterruptingBoundaryTimerEvents(), this.numberProcess);
+		this.json.addBasicMetric("NBNICONEV", this.getNonInterruptingBoundaryConditionalEvents(), this.numberProcess);
+		this.json.addBasicMetric("NBNISIGEV", this.getNonInterruptingBoundarySignalEvents(), this.numberProcess);
+		this.json.addBasicMetric("NBNIMUEV", this.getNonInterruptingBoundaryMultipleEvents(), this.numberProcess);
+		this.json.addBasicMetric("NBNIESCEV", this.getNonInterruptingBoundaryEscalationEvents(), this.numberProcess);
+		this.json.addBasicMetric("NBNIPMUEV", this.getNonInterruptingBoundaryParallelMultipleEvents(), this.numberProcess);
 	}
 	
 	/**
@@ -299,8 +509,29 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number of lanes
 	 */
-	public int getLanes() {
+	/*public int getLanes() {
 		Collection<Participant> participants = this.modelInstance.getModelElementsByType(Participant.class);
+		int numberOfLanes = 0;
+		for (Participant p : participants) {
+
+			//Try to check whether it is a collapsed pool or not
+			try{
+				Collection<LaneSet> laneSets = p.getProcess().getLaneSets();
+				for (LaneSet l : laneSets) {
+					Collection<Lane> lanes = l.getLanes();
+					if (lanes.size() > 1) {
+						numberOfLanes += lanes.size();
+					}
+				}
+			}catch(Exception e){
+//				System.out.println("Collapsed Pool so no lane");
+			}
+		}
+		return numberOfLanes;
+	}*/
+	
+	public int getLanes() {
+		Collection<Participant> participants = this.process.getChildElementsByType(Participant.class);
 		int numberOfLanes = 0;
 		for (Participant p : participants) {
 
@@ -343,8 +574,17 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number of outgoing sequence flows from events
 	 */
-	public int getSequenceFlowsFromEvents() {
+	/*public int getSequenceFlowsFromEvents() {
 		Collection<Event> events = this.modelInstance.getModelElementsByType(Event.class);
+		int numberOfOutgoingSequenceFlows = 0;
+		for (Event e : events) {
+			numberOfOutgoingSequenceFlows += e.getOutgoing().size();
+		}
+		return numberOfOutgoingSequenceFlows;
+	}*/
+	
+	public int getSequenceFlowsFromEvents() {
+		Collection<Event> events = this.process.getChildElementsByType(Event.class);
 		int numberOfOutgoingSequenceFlows = 0;
 		for (Event e : events) {
 			numberOfOutgoingSequenceFlows += e.getOutgoing().size();
@@ -357,8 +597,17 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return Number of outgoing sequence flows from gateways
 	 */
-	public int getSequenceFlowsFromGateways() {
+	/*public int getSequenceFlowsFromGateways() {
 		Collection<Gateway> gateways = this.modelInstance.getModelElementsByType(Gateway.class);
+		int numberOfOutgoingSequenceFlows = 0;
+		for (Gateway g : gateways) {
+			numberOfOutgoingSequenceFlows += g.getOutgoing().size();
+		}
+		return numberOfOutgoingSequenceFlows;
+	}*/
+	
+	public int getSequenceFlowsFromGateways() {
+		Collection<Gateway> gateways = this.process.getChildElementsByType(Gateway.class);
 		int numberOfOutgoingSequenceFlows = 0;
 		for (Gateway g : gateways) {
 			numberOfOutgoingSequenceFlows += g.getOutgoing().size();
@@ -371,8 +620,27 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return Number of sequence flows between activities
 	 */
-	public int getSequenceFlowsBetweenActivities() {
+	/*public int getSequenceFlowsBetweenActivities() {
 		Collection<Activity> activities = this.modelInstance.getModelElementsByType(Activity.class);
+		Collection<SequenceFlow> outgoingFlows;
+		int numberOfSequenceFlows = 0;
+		for (Activity a : activities) {
+			outgoingFlows = a.getOutgoing();
+			for (SequenceFlow s : outgoingFlows) {
+				try {
+					if (s.getTarget() instanceof Activity) {
+						numberOfSequenceFlows++;
+					}
+				}catch(Exception e) {
+					continue;
+				}
+			}
+		}
+		return numberOfSequenceFlows;
+	}*/
+	
+	public int getSequenceFlowsBetweenActivities() {
+		Collection<Activity> activities = this.process.getChildElementsByType(Activity.class);
 		Collection<SequenceFlow> outgoingFlows;
 		int numberOfSequenceFlows = 0;
 		for (Activity a : activities) {
@@ -466,8 +734,19 @@ public class BpmnBasicMetricsExtractor {
 	 * Metric: NIBEV
 	 * @return the number of Interrupting Boundary Events
 	 */
-		public int getInterruptingBoundaryEvents() {
+		/*public int getInterruptingBoundaryEvents() {
 		Collection<BoundaryEvent> boundaryEvents = this.modelInstance.getModelElementsByType(BoundaryEvent.class);
+		int toReturn = 0;
+		 for (BoundaryEvent event: boundaryEvents) {
+			 if (event.cancelActivity()) {
+				 toReturn += 1;
+			 }
+		 }
+		return toReturn;
+	}*/
+	
+	public int getInterruptingBoundaryEvents() {
+		Collection<BoundaryEvent> boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
 		int toReturn = 0;
 		 for (BoundaryEvent event: boundaryEvents) {
 			 if (event.cancelActivity()) {
@@ -482,8 +761,13 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number of interrupting Boundary Message Events
 	 */
-	public int getInterruptingBoundaryMessageEvents() {
+	/*public int getInterruptingBoundaryMessageEvents() {
 		Collection<BoundaryEvent> boundaryEvents = this.modelInstance.getModelElementsByType(BoundaryEvent.class);
+		return this.getInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.MessageEventDefinitionImpl");
+	}*/
+	
+	public int getInterruptingBoundaryMessageEvents() {
+		Collection<BoundaryEvent> boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
 		return this.getInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.MessageEventDefinitionImpl");
 	}
 	
@@ -492,8 +776,13 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number of interrupting Boundary Timer Events
 	 */
-	public int getInterruptingBoundaryTimerEvents() {
+	/*public int getInterruptingBoundaryTimerEvents() {
 		Collection<BoundaryEvent> boundaryEvents = this.modelInstance.getModelElementsByType(BoundaryEvent.class);
+		return this.getInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.TimerEventDefinitionImpl");
+	}*/
+	
+	public int getInterruptingBoundaryTimerEvents() {
+		Collection<BoundaryEvent> boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
 		return this.getInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.TimerEventDefinitionImpl");
 	}
 	
@@ -502,8 +791,13 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number of interrupting Boundary Conditional Events
 	 */
-	public int getInterruptingBoundaryConditionalEvents() {
+	/*public int getInterruptingBoundaryConditionalEvents() {
 		Collection<BoundaryEvent> boundaryEvents = this.modelInstance.getModelElementsByType(BoundaryEvent.class);
+		return this.getInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.ConditionalEventDefinitionImpl");
+	}*/
+	
+	public int getInterruptingBoundaryConditionalEvents() {
+		Collection<BoundaryEvent> boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
 		return this.getInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.ConditionalEventDefinitionImpl");
 	}
 	
@@ -512,8 +806,13 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number of interrupting Boundary Signal Events
 	 */
-	public int getInterruptingBoundarySignalEvents() {
+	/*public int getInterruptingBoundarySignalEvents() {
 		Collection<BoundaryEvent> boundaryEvents = this.modelInstance.getModelElementsByType(BoundaryEvent.class);
+		return this.getInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.SignalEventDefinitionImpl");
+	}*/
+	
+	public int getInterruptingBoundarySignalEvents() {
+		Collection<BoundaryEvent> boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
 		return this.getInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.SignalEventDefinitionImpl");
 	}
 	
@@ -522,8 +821,13 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number of interrupting Boundary Escalation Events
 	 */
-	public int getInterruptingBoundaryEscalationEvents() {
+	/*public int getInterruptingBoundaryEscalationEvents() {
 		Collection<BoundaryEvent> boundaryEvents = this.modelInstance.getModelElementsByType(BoundaryEvent.class);
+		return this.getInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.EscalationEventDefinitionImpl");
+	}*/
+	
+	public int getInterruptingBoundaryEscalationEvents() {
+		Collection<BoundaryEvent> boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
 		return this.getInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.EscalationEventDefinitionImpl");
 	}
 	
@@ -532,8 +836,13 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number of interrupting Boundary Cancel Events
 	 */
-	public int getInterruptingBoundaryCancelEvents() {
+	/*public int getInterruptingBoundaryCancelEvents() {
 		Collection<BoundaryEvent> boundaryEvents = this.modelInstance.getModelElementsByType(BoundaryEvent.class);
+		return this.getInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.CancelEventDefinitionImpl");
+	}*/
+	
+	public int getInterruptingBoundaryCancelEvents() {
+		Collection<BoundaryEvent> boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
 		return this.getInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.CancelEventDefinitionImpl");
 	}
 	
@@ -542,8 +851,13 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number of interrupting Boundary Error Events
 	 */
-	public int getInterruptingBoundaryErrorEvents() {
+	/*public int getInterruptingBoundaryErrorEvents() {
 		Collection<BoundaryEvent> boundaryEvents = this.modelInstance.getModelElementsByType(BoundaryEvent.class);
+		return this.getInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.ErrorEventDefinitionImpl");
+		}*/
+	
+	public int getInterruptingBoundaryErrorEvents() {
+		Collection<BoundaryEvent> boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
 		return this.getInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.ErrorEventDefinitionImpl");
 		}
 	
@@ -552,8 +866,13 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number of  interrupting Boundary Compensation Events
 	 */
-	public int getInterruptingBoundaryCompensationEvents() {
+	/*public int getInterruptingBoundaryCompensationEvents() {
 		Collection<BoundaryEvent> boundaryEvents = this.modelInstance.getModelElementsByType(BoundaryEvent.class);
+		return this.getInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.CompensateEventDefinitionImpl");
+	}*/
+	
+	public int getInterruptingBoundaryCompensationEvents() {
+		Collection<BoundaryEvent> boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
 		return this.getInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.CompensateEventDefinitionImpl");
 	}
 	
@@ -561,8 +880,19 @@ public class BpmnBasicMetricsExtractor {
 	 * Metric: NBNIEV
 	 * @return the number of non-interrupting boundary events
 	 */
-	public int getNonInterruptingBoundaryEvents() {
+	/*public int getNonInterruptingBoundaryEvents() {
 		Collection<BoundaryEvent> boundaryEvents = this.modelInstance.getModelElementsByType(BoundaryEvent.class);
+		int toReturn = 0;
+		 for (BoundaryEvent event: boundaryEvents) {
+			 if (!event.cancelActivity()) {
+				 toReturn += 1;
+			 }
+		 }
+		return toReturn;
+	}*/
+	
+	public int getNonInterruptingBoundaryEvents() {
+		Collection<BoundaryEvent> boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
 		int toReturn = 0;
 		 for (BoundaryEvent event: boundaryEvents) {
 			 if (!event.cancelActivity()) {
@@ -576,8 +906,13 @@ public class BpmnBasicMetricsExtractor {
 	 * Metric: NBNIMEV
 	 * @return the number of non-interrupting boundary message events
 	 */
-	public int getNonInterruptingBoundaryMessageEvents() {
+	/*public int getNonInterruptingBoundaryMessageEvents() {
 		Collection<BoundaryEvent> boundaryEvents = this.modelInstance.getModelElementsByType(BoundaryEvent.class);
+		return this.getNonInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.MessageEventDefinitionImpl");
+	}*/
+	
+	public int getNonInterruptingBoundaryMessageEvents() {
+		Collection<BoundaryEvent> boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
 		return this.getNonInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.MessageEventDefinitionImpl");
 	}
 	
@@ -585,8 +920,13 @@ public class BpmnBasicMetricsExtractor {
 	 * Metric: NBNITEV
 	 * @return
 	 */
-	public int getNonInterruptingBoundaryTimerEvents() {
+	/*public int getNonInterruptingBoundaryTimerEvents() {
 		Collection<BoundaryEvent> boundaryEvents = this.modelInstance.getModelElementsByType(BoundaryEvent.class);
+		return this.getNonInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.TimerEventDefinitionImpl");
+	}*/
+	
+	public int getNonInterruptingBoundaryTimerEvents() {
+		Collection<BoundaryEvent> boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
 		return this.getNonInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.TimerEventDefinitionImpl");
 	}
 	
@@ -594,8 +934,13 @@ public class BpmnBasicMetricsExtractor {
 	 * Metric: NBNICONEV
 	 * @return the number of non-interrupting boundary conditional events
 	 */
-	public int getNonInterruptingBoundaryConditionalEvents() {
+	/*public int getNonInterruptingBoundaryConditionalEvents() {
 		Collection<BoundaryEvent> boundaryEvents = this.modelInstance.getModelElementsByType(BoundaryEvent.class);
+		return this.getNonInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.ConditionalEventDefinitionImpl");
+	}*/
+	
+	public int getNonInterruptingBoundaryConditionalEvents() {
+		Collection<BoundaryEvent> boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
 		return this.getNonInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.ConditionalEventDefinitionImpl");
 	}
 	
@@ -603,8 +948,13 @@ public class BpmnBasicMetricsExtractor {
 	 * Metric: NBNISIGEV
 	 * @return the number of non-interrupting boundary signal events
 	 */
-	public int getNonInterruptingBoundarySignalEvents() {
+	/*public int getNonInterruptingBoundarySignalEvents() {
 		Collection<BoundaryEvent> boundaryEvents = this.modelInstance.getModelElementsByType(BoundaryEvent.class);
+		return this.getNonInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.SignalEventDefinitionImpl");
+	}*/
+	
+	public int getNonInterruptingBoundarySignalEvents() {
+		Collection<BoundaryEvent> boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
 		return this.getNonInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.SignalEventDefinitionImpl");
 	}
 	
@@ -612,17 +962,34 @@ public class BpmnBasicMetricsExtractor {
 	 * Metric: NBNIESCEV
 	 * @return the number of non-interrupting boundary escalation events
 	 */
-	public int getNonInterruptingBoundaryEscalationEvents() {
+	/*public int getNonInterruptingBoundaryEscalationEvents() {
 		Collection<BoundaryEvent> boundaryEvents = this.modelInstance.getModelElementsByType(BoundaryEvent.class);
+		return this.getNonInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.EscalationEventDefinitionImpl");
+	}*/
+	
+	public int getNonInterruptingBoundaryEscalationEvents() {
+		Collection<BoundaryEvent> boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
 		return this.getNonInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.EscalationEventDefinitionImpl");
 	}
 	/**
 	 * Metric: NBNIMUEV
 	 * @return the number of non-interrupting boundary multiple events
 	 */
-	public int getNonInterruptingBoundaryMultipleEvents() {
+	/*public int getNonInterruptingBoundaryMultipleEvents() {
 		int toReturn = 0;
 		Collection<BoundaryEvent> boundaryEvents = this.modelInstance.getModelElementsByType(BoundaryEvent.class);
+		for (BoundaryEvent event: boundaryEvents) {
+			if (!event.cancelActivity() && event.getEventDefinitions().size() > 1) {
+				toReturn += 1;
+			}
+		}
+		
+		return toReturn;
+	}*/
+	
+	public int getNonInterruptingBoundaryMultipleEvents() {
+		int toReturn = 0;
+		Collection<BoundaryEvent> boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
 		for (BoundaryEvent event: boundaryEvents) {
 			if (!event.cancelActivity() && event.getEventDefinitions().size() > 1) {
 				toReturn += 1;
@@ -636,9 +1003,21 @@ public class BpmnBasicMetricsExtractor {
 	 * Metric: NBNIPMUEV
 	 * @return the number of non-interrupting boundary parallel multiple events
 	 */
-	public int getNonInterruptingBoundaryParallelMultipleEvents() {
+	/*public int getNonInterruptingBoundaryParallelMultipleEvents() {
 		int toReturn = 0;
 		Collection<BoundaryEvent> boundaryEvents = this.modelInstance.getModelElementsByType(BoundaryEvent.class);
+		for (BoundaryEvent event: boundaryEvents) {
+			if (!event.cancelActivity() && event.isParallelMultiple()) {
+				toReturn++;
+			}
+		}
+		
+		return toReturn;
+	}*/
+	
+	public int getNonInterruptingBoundaryParallelMultipleEvents() {
+		int toReturn = 0;
+		Collection<BoundaryEvent> boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
 		for (BoundaryEvent event: boundaryEvents) {
 			if (!event.cancelActivity() && event.isParallelMultiple()) {
 				toReturn++;
@@ -950,8 +1329,14 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number of End Message Events
 	 */
-	public int getEndMessageEvents() {
+	/*public int getEndMessageEvents() {
 		 Collection<ThrowEvent> events = this.modelInstance.getModelElementsByType(ThrowEvent.class);
+		 return this.getNumberOfEventDefinitionsOfThrowEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.EndEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.MessageEventDefinitionImpl");
+
+	}*/
+	
+	public int getEndMessageEvents() {
+		 Collection<ThrowEvent> events = this.process.getChildElementsByType(ThrowEvent.class);
 		 return this.getNumberOfEventDefinitionsOfThrowEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.EndEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.MessageEventDefinitionImpl");
 
 	}
@@ -961,8 +1346,14 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number of End Escalation Events
 	 */
-	public int getEndEscalationEvents(){
+	/*public int getEndEscalationEvents(){
 		 Collection<ThrowEvent> events = this.modelInstance.getModelElementsByType(ThrowEvent.class);
+		 return this.getNumberOfEventDefinitionsOfThrowEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.EndEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.EscalationEventDefinitionImpl");
+
+	}*/
+	
+	public int getEndEscalationEvents(){
+		 Collection<ThrowEvent> events = this.process.getChildElementsByType(ThrowEvent.class);
 		 return this.getNumberOfEventDefinitionsOfThrowEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.EndEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.EscalationEventDefinitionImpl");
 
 	}
@@ -972,8 +1363,14 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number of End Signal Events
 	 */
-	public int getEndSignalEvents(){
+	/*public int getEndSignalEvents(){
 		 Collection<ThrowEvent> events = this.modelInstance.getModelElementsByType(ThrowEvent.class);
+		 return this.getNumberOfEventDefinitionsOfThrowEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.EndEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.SignalEventDefinitionImpl");
+
+	}*/
+	
+	public int getEndSignalEvents(){
+		 Collection<ThrowEvent> events = this.process.getChildElementsByType(ThrowEvent.class);
 		 return this.getNumberOfEventDefinitionsOfThrowEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.EndEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.SignalEventDefinitionImpl");
 
 	}
@@ -983,8 +1380,14 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number of End Error Events
 	 */
-	public int getEndErrorEvents(){
+	/*public int getEndErrorEvents(){
 		 Collection<ThrowEvent> events = this.modelInstance.getModelElementsByType(ThrowEvent.class);
+		 return this.getNumberOfEventDefinitionsOfThrowEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.EndEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.ErrorEventDefinitionImpl");
+
+	}*/
+	
+	public int getEndErrorEvents(){
+		 Collection<ThrowEvent> events = this.process.getChildElementsByType(ThrowEvent.class);
 		 return this.getNumberOfEventDefinitionsOfThrowEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.EndEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.ErrorEventDefinitionImpl");
 
 	}
@@ -994,8 +1397,14 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number of End Cancel Events
 	 */
-	public int getEndCancelEvents(){
+	/*public int getEndCancelEvents(){
 		 Collection<ThrowEvent> events = this.modelInstance.getModelElementsByType(ThrowEvent.class);
+		 return this.getNumberOfEventDefinitionsOfThrowEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.EndEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.CancelEventDefinitionImpl");
+
+	}*/
+	
+	public int getEndCancelEvents(){
+		 Collection<ThrowEvent> events = this.process.getChildElementsByType(ThrowEvent.class);
 		 return this.getNumberOfEventDefinitionsOfThrowEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.EndEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.CancelEventDefinitionImpl");
 
 	}
@@ -1005,8 +1414,14 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number of End Compensation Events
 	 */
-	public int getEndCompensationEvents(){
+	/*public int getEndCompensationEvents(){
 		 Collection<ThrowEvent> events = this.modelInstance.getModelElementsByType(ThrowEvent.class);
+		 return this.getNumberOfEventDefinitionsOfThrowEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.EndEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.CompensateEventDefinitionImpl");
+
+	}*/
+	
+	public int getEndCompensationEvents(){
+		 Collection<ThrowEvent> events = this.process.getChildElementsByType(ThrowEvent.class);
 		 return this.getNumberOfEventDefinitionsOfThrowEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.EndEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.CompensateEventDefinitionImpl");
 
 	}
@@ -1016,16 +1431,26 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number of End Terminate Events
 	 */
-	public int getEndTerminateEvents(){
+	/*public int getEndTerminateEvents(){
 		 Collection<ThrowEvent> events = this.modelInstance.getModelElementsByType(ThrowEvent.class);
+		 return this.getNumberOfEventDefinitionsOfThrowEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.EndEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.TerminateEventDefinitionImpl");
+	}*/
+	
+	public int getEndTerminateEvents(){
+		 Collection<ThrowEvent> events = this.process.getChildElementsByType(ThrowEvent.class);
 		 return this.getNumberOfEventDefinitionsOfThrowEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.EndEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.TerminateEventDefinitionImpl");
 	}
 	/**
 	 * Metric: NENDMUEV
 	 * @return number of End Multiple Events
 	 */
-	public int getEndMultipleEvents() {
+	/*public int getEndMultipleEvents() {
 		Collection<ThrowEvent> events = this.modelInstance.getModelElementsByType(ThrowEvent.class);
+		return this.getThrowEventsMultipleDefinitions(events, "org.camunda.bpm.model.bpmn.impl.instance.EndEventImpl");
+	}*/
+	
+	public int getEndMultipleEvents() {
+		Collection<ThrowEvent> events = this.process.getChildElementsByType(ThrowEvent.class);
 		return this.getThrowEventsMultipleDefinitions(events, "org.camunda.bpm.model.bpmn.impl.instance.EndEventImpl");
 	}
 	
@@ -1232,8 +1657,14 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number degli Intermediate Message Catch Events
 	 */
-	public int getIntermediateMessageCatchEvents(){
+	/*public int getIntermediateMessageCatchEvents(){
 		Collection<CatchEvent> events = this.modelInstance.getModelElementsByType(CatchEvent.class);
+		return this.getNumberOfEventDefinitionsOfCatchEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateCatchEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.MessageEventDefinitionImpl");
+
+	}*/
+	
+	public int getIntermediateMessageCatchEvents(){
+		Collection<CatchEvent> events = this.process.getChildElementsByType(CatchEvent.class);
 		return this.getNumberOfEventDefinitionsOfCatchEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateCatchEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.MessageEventDefinitionImpl");
 
 	}
@@ -1243,8 +1674,14 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number degli Intermediate Link Catch Events
 	 */	
-	public int getIntermediateLinkCatchEvents(){
+	/*public int getIntermediateLinkCatchEvents(){
 		Collection<CatchEvent> events = this.modelInstance.getModelElementsByType(CatchEvent.class);
+		return this.getNumberOfEventDefinitionsOfCatchEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateCatchEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.LinkEventDefinitionImpl");
+
+	}*/
+	
+	public int getIntermediateLinkCatchEvents(){
+		Collection<CatchEvent> events = this.process.getChildElementsByType(CatchEvent.class);
 		return this.getNumberOfEventDefinitionsOfCatchEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateCatchEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.LinkEventDefinitionImpl");
 
 	}
@@ -1254,8 +1691,14 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number degli Intermediate Signal Catch Events
 	 */
-	public int getIntermediateSignalCatchEvents(){
+	/*public int getIntermediateSignalCatchEvents(){
 		Collection<CatchEvent> events = this.modelInstance.getModelElementsByType(CatchEvent.class);
+		return this.getNumberOfEventDefinitionsOfCatchEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateCatchEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.SignalEventDefinitionImpl");
+
+	}*/
+	
+	public int getIntermediateSignalCatchEvents(){
+		Collection<CatchEvent> events = this.process.getChildElementsByType(CatchEvent.class);
 		return this.getNumberOfEventDefinitionsOfCatchEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateCatchEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.SignalEventDefinitionImpl");
 
 	}
@@ -1265,8 +1708,14 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number degli Intermediate Conditional Catch Events
 	 */
-	public int getIntermediateConditionalCatchEvents(){
+	/*public int getIntermediateConditionalCatchEvents(){
 		Collection<CatchEvent> events = this.modelInstance.getModelElementsByType(CatchEvent.class);
+		return this.getNumberOfEventDefinitionsOfCatchEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateCatchEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.ConditionalEventDefinitionImpl");
+
+	}*/
+	
+	public int getIntermediateConditionalCatchEvents(){
+		Collection<CatchEvent> events = this.process.getChildElementsByType(CatchEvent.class);
 		return this.getNumberOfEventDefinitionsOfCatchEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateCatchEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.ConditionalEventDefinitionImpl");
 
 	}
@@ -1276,8 +1725,13 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number degli Intermediate Compensation Catch Events
 	 */	
-	public int getIntermediateCompensationCatchEvents() {
+	/*public int getIntermediateCompensationCatchEvents() {
 		Collection<CatchEvent> events = this.modelInstance.getModelElementsByType(CatchEvent.class);
+		return this.getNumberOfEventDefinitionsOfCatchEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateCatchEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.CompensateEventDefinitionImpl");
+	}*/
+	
+	public int getIntermediateCompensationCatchEvents() {
+		Collection<CatchEvent> events = this.process.getChildElementsByType(CatchEvent.class);
 		return this.getNumberOfEventDefinitionsOfCatchEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateCatchEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.CompensateEventDefinitionImpl");
 	}
 	
@@ -1285,8 +1739,13 @@ public class BpmnBasicMetricsExtractor {
 	 * Metric: NIMUCEV
 	 * @return the number of Intermediate Multiple Catch Events
 	 */
-	public int getIntermediateMultipleCatchEvents() {
+	/*public int getIntermediateMultipleCatchEvents() {
 		Collection<CatchEvent> events = this.modelInstance.getModelElementsByType(CatchEvent.class);
+		return this.getCatchEventsMultipleDefinitions(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateCatchEventImpl");
+	}*/
+	
+	public int getIntermediateMultipleCatchEvents() {
+		Collection<CatchEvent> events = this.process.getChildElementsByType(CatchEvent.class);
 		return this.getCatchEventsMultipleDefinitions(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateCatchEventImpl");
 	}
 	
@@ -1294,9 +1753,21 @@ public class BpmnBasicMetricsExtractor {
 	 * Metric: NIPMUCEV
 	 * @return the number of Intermediate Parallel Multiple Catch Events
 	 */
-	public int getIntermediateParallelMultipleCatchEvents() {
+	/*public int getIntermediateParallelMultipleCatchEvents() {
 		int toReturn = 0;
 		Collection<IntermediateCatchEvent> events = this.modelInstance.getModelElementsByType(IntermediateCatchEvent.class);
+		for (IntermediateCatchEvent event: events) {
+			if (event.isParallelMultiple()) {
+				toReturn++;
+			}
+		}
+		
+		return toReturn;
+	}*/
+	
+	public int getIntermediateParallelMultipleCatchEvents() {
+		int toReturn = 0;
+		Collection<IntermediateCatchEvent> events = this.process.getChildElementsByType(IntermediateCatchEvent.class);
 		for (IntermediateCatchEvent event: events) {
 			if (event.isParallelMultiple()) {
 				toReturn++;
@@ -1321,8 +1792,13 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number degli Intermediate Message Throw Events
 	 */
 	
-	public int getIntermediateMessageThrowEvents() {
+	/*public int getIntermediateMessageThrowEvents() {
 		Collection<ThrowEvent> events = this.modelInstance.getModelElementsByType(ThrowEvent.class);
+		return this.getNumberOfEventDefinitionsOfThrowEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateThrowEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.MessageEventDefinitionImpl");
+	}*/
+	
+	public int getIntermediateMessageThrowEvents() {
+		Collection<ThrowEvent> events = this.process.getChildElementsByType(ThrowEvent.class);
 		return this.getNumberOfEventDefinitionsOfThrowEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateThrowEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.MessageEventDefinitionImpl");
 	}
 	
@@ -1331,8 +1807,13 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number degli Intermediate Signal Throw Events
 	 */
-	 public int getIntermediateSignalThrowEvents() {
+	 /*public int getIntermediateSignalThrowEvents() {
 		 Collection<ThrowEvent> events = this.modelInstance.getModelElementsByType(ThrowEvent.class);
+		 return this.getNumberOfEventDefinitionsOfThrowEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateThrowEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.SignalEventDefinitionImpl");
+	 }*/
+	 
+	 public int getIntermediateSignalThrowEvents() {
+		 Collection<ThrowEvent> events = this.process.getChildElementsByType(ThrowEvent.class);
 		 return this.getNumberOfEventDefinitionsOfThrowEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateThrowEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.SignalEventDefinitionImpl");
 	 }
 	 
@@ -1341,8 +1822,13 @@ public class BpmnBasicMetricsExtractor {
 	  * 
 	  * @return number degli Intermediate Escalation Throw Events
 	  */
-	 public int getIntermediateEscalationThrowEvents() {
+	 /*public int getIntermediateEscalationThrowEvents() {
 		 Collection<ThrowEvent> events = this.modelInstance.getModelElementsByType(ThrowEvent.class);
+		 return this.getNumberOfEventDefinitionsOfThrowEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateThrowEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.EscalationEventDefinitionImpl");
+	 }*/
+	 
+	 public int getIntermediateEscalationThrowEvents() {
+		 Collection<ThrowEvent> events = this.process.getChildElementsByType(ThrowEvent.class);
 		 return this.getNumberOfEventDefinitionsOfThrowEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateThrowEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.EscalationEventDefinitionImpl");
 	 }
 	 
@@ -1351,8 +1837,13 @@ public class BpmnBasicMetricsExtractor {
 	  * 
 	  * @return number degli Intermediate Link Throw Events
 	  */
-	 public int getIntermediateLinkThrowEvents() {
+	 /*public int getIntermediateLinkThrowEvents() {
 		 Collection<ThrowEvent> events = this.modelInstance.getModelElementsByType(ThrowEvent.class);
+		 return this.getNumberOfEventDefinitionsOfThrowEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateThrowEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.LinkEventDefinitionImpl");
+	 }*/
+	 
+	 public int getIntermediateLinkThrowEvents() {
+		 Collection<ThrowEvent> events = this.process.getChildElementsByType(ThrowEvent.class);
 		 return this.getNumberOfEventDefinitionsOfThrowEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateThrowEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.LinkEventDefinitionImpl");
 	 }
 	 
@@ -1361,16 +1852,26 @@ public class BpmnBasicMetricsExtractor {
 	  * 
 	  * @return number degli Intermediate Compensation Throw Events
 	  */
-	 public int getIntermediateCompensationThrowEvents() {
+	/* public int getIntermediateCompensationThrowEvents() {
 		 Collection<ThrowEvent> events = this.modelInstance.getModelElementsByType(ThrowEvent.class);
+		 return this.getNumberOfEventDefinitionsOfThrowEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateThrowEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.CompensateEventDefinitionImpl");
+	 }*/
+	 
+	 public int getIntermediateCompensationThrowEvents() {
+		 Collection<ThrowEvent> events = this.process.getChildElementsByType(ThrowEvent.class);
 		 return this.getNumberOfEventDefinitionsOfThrowEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateThrowEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.CompensateEventDefinitionImpl");
 	 }
 	 /**
 	  * Metric: NIMUTEV
 	  * @return number of Intermediate Multiple Throw Events
 	  */
-	 public int getIntermediateMultipleThrowEvents(){
+	 /*public int getIntermediateMultipleThrowEvents(){
 		 Collection<ThrowEvent> events = this.modelInstance.getModelElementsByType(ThrowEvent.class);
+		 return this.getThrowEventsMultipleDefinitions(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateThrowEventImpl");
+	 }*/
+	 
+	 public int getIntermediateMultipleThrowEvents(){
+		 Collection<ThrowEvent> events = this.process.getChildElementsByType(ThrowEvent.class);
 		 return this.getThrowEventsMultipleDefinitions(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateThrowEventImpl");
 	 }
 	 
@@ -1740,8 +2241,13 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number of Start Message Events
 	 */
-	public int getStartMessageEvents() {
+	/*public int getStartMessageEvents() {
 		Collection<CatchEvent> events = this.modelInstance.getModelElementsByType(CatchEvent.class);
+		return this.getNumberOfEventDefinitionsOfCatchEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.StartEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.MessageEventDefinitionImpl");
+	}*/
+	
+	public int getStartMessageEvents() {
+		Collection<CatchEvent> events = this.process.getChildElementsByType(CatchEvent.class);
 		return this.getNumberOfEventDefinitionsOfCatchEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.StartEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.MessageEventDefinitionImpl");
 	}
 	
@@ -1750,8 +2256,13 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number of Start Timer Events
 	 */
-	public int getStartTimerEvents() {
+	/*public int getStartTimerEvents() {
 		Collection<CatchEvent> events = this.modelInstance.getModelElementsByType(CatchEvent.class);
+		return this.getNumberOfEventDefinitionsOfCatchEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.StartEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.TimerEventDefinitionImpl");		
+	}*/
+	
+	public int getStartTimerEvents() {
+		Collection<CatchEvent> events = this.process.getChildElementsByType(CatchEvent.class);
 		return this.getNumberOfEventDefinitionsOfCatchEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.StartEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.TimerEventDefinitionImpl");		
 	}
 	
@@ -1760,8 +2271,14 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number of Start Conditional Events
 	 */
-	public int getStartConditionalEvents(){
+	/*public int getStartConditionalEvents(){
 		Collection<CatchEvent> events = this.modelInstance.getModelElementsByType(CatchEvent.class);
+		return this.getNumberOfEventDefinitionsOfCatchEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.StartEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.ConditionalEventDefinitionImpl");
+
+	}*/
+	
+	public int getStartConditionalEvents(){
+		Collection<CatchEvent> events = this.process.getChildElementsByType(CatchEvent.class);
 		return this.getNumberOfEventDefinitionsOfCatchEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.StartEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.ConditionalEventDefinitionImpl");
 
 	}
@@ -1771,8 +2288,14 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number of Start Signal Events
 	 */
-	public int getStartSignalEvents(){
+	/*public int getStartSignalEvents(){
 		Collection<CatchEvent> events = this.modelInstance.getModelElementsByType(CatchEvent.class);
+		return this.getNumberOfEventDefinitionsOfCatchEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.StartEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.SignalEventDefinitionImpl");
+
+	}*/
+	
+	public int getStartSignalEvents(){
+		Collection<CatchEvent> events = this.process.getChildElementsByType(CatchEvent.class);
 		return this.getNumberOfEventDefinitionsOfCatchEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.StartEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.SignalEventDefinitionImpl");
 
 	}
@@ -1781,8 +2304,13 @@ public class BpmnBasicMetricsExtractor {
 	 * Metric: NSTMUEV
 	 * @return the number of Start Multiple Events
 	 */
-	public int getStartMultipleEvents() {
+	/*public int getStartMultipleEvents() {
 		Collection<CatchEvent> events = this.modelInstance.getModelElementsByType(CatchEvent.class);
+		return this.getCatchEventsMultipleDefinitions(events, "org.camunda.bpm.model.bpmn.impl.instance.StartEventImpl");
+	}*/
+	
+	public int getStartMultipleEvents() {
+		Collection<CatchEvent> events = this.process.getChildElementsByType(CatchEvent.class);
 		return this.getCatchEventsMultipleDefinitions(events, "org.camunda.bpm.model.bpmn.impl.instance.StartEventImpl");
 	}
 	
@@ -1790,9 +2318,21 @@ public class BpmnBasicMetricsExtractor {
 	 * Metric: NSTPMUEV
 	 * @return the number of Start Parallel Multiple Events
 	 */
-	public int getStartParallelMultipleEvents() {
+	/*public int getStartParallelMultipleEvents() {
 		int toReturn = 0;
 		Collection<StartEvent> events = this.modelInstance.getModelElementsByType(StartEvent.class);
+		for (StartEvent event: events) {
+			if (event.isParallelMultiple()) {
+				toReturn++;
+			}
+		}
+		
+		return toReturn;
+	}*/
+	
+	public int getStartParallelMultipleEvents() {
+		int toReturn = 0;
+		Collection<StartEvent> events = this.process.getChildElementsByType(StartEvent.class);
 		for (StartEvent event: events) {
 			if (event.isParallelMultiple()) {
 				toReturn++;
@@ -2174,9 +2714,13 @@ public class BpmnBasicMetricsExtractor {
 		return getCollectionOfElementType(type).size();
 	}
 	
-	public Collection<ModelElementInstance> getCollectionOfElementType(Class type) {
+	/*public Collection<ModelElementInstance> getCollectionOfElementType(Class type) {
 		ModelElementType modelElementType = modelInstance.getModel().getType(type);
 		return this.modelInstance.getModelElementsByType(modelElementType);
+	}*/
+	
+	public Collection<ModelElementInstance> getCollectionOfElementType(Class type) {
+		return this.process.getChildElementsByType(type);
 	}
 	
 	/**
@@ -2317,8 +2861,12 @@ public class BpmnBasicMetricsExtractor {
 	 * Model Instance's getter
 	 * @return
 	 */
-	public BpmnModelInstance getModelInstance() {
+	/*public BpmnModelInstance getModelInstance() {
 		return modelInstance;
+	}*/
+	
+	public Process getProcess() {
+	return this.process;
 	}
 
 	
@@ -2327,7 +2875,7 @@ public class BpmnBasicMetricsExtractor {
 	 * @param 
 	 * @return number of empty pools
 	 */
-	private int getEmptyPools() {
+	/*private int getEmptyPools() {
 
 		int numberOfEmptyPools = 0;
 		try{
@@ -2347,5 +2895,28 @@ public class BpmnBasicMetricsExtractor {
 		//System.out.println("numberOfEmptyPools: "+numberOfEmptyPools);
 	return numberOfEmptyPools;
 
+	}*/
+	
+	private int getEmptyPools() {
+
+		int numberOfEmptyPools = 0;
+		try{
+			Collection<Participant> participants = this.process.getChildElementsByType(Participant.class);
+			
+			for (Participant p : participants) {
+
+				//Try to check whether it is a collapsed pool or not
+				
+					Collection<FlowElement> flowElementSet = p.getProcess().getFlowElements();
+					if(flowElementSet.size()==0)numberOfEmptyPools++;
+				
+			}
+		}catch(Exception e){
+			//System.out.println("NO ELEMENT");
+		}
+		//System.out.println("numberOfEmptyPools: "+numberOfEmptyPools);
+	return numberOfEmptyPools;
+
 	}
 }
+

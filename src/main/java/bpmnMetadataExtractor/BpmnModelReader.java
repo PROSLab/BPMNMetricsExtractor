@@ -7,6 +7,8 @@ import java.time.LocalDateTime;
 
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 
+import org.camunda.bpm.model.bpmn.instance.Process;
+
 import metricsOnGraphs.ModelConverter;
 
 import org.camunda.bpm.model.bpmn.Bpmn;
@@ -51,7 +53,7 @@ public class BpmnModelReader {
 	/**
 	 * Metodo di test che viene richiamato dal main
 	 */
-	private void test() {
+	/*private void test() {
 		long startTime = System.currentTimeMillis();
 		BpmnModelInstance modelInstance = Bpmn.readModelFromFile(loadedFile);
 		JsonEncoder jsonEncoder = new JsonEncoder(loadedFile.getName());
@@ -91,6 +93,59 @@ public class BpmnModelReader {
 //		db.connect();
 //		db.saveMetrics(jsonEncoder);
 //		db.closeConnection();
+		return jsonEncoder.getJson().toString();
+	}*/
+	
+	private void test() {
+		long startTime = System.currentTimeMillis();
+		BpmnModelInstance modelInstance = Bpmn.readModelFromFile(loadedFile);
+		JsonEncoder jsonEncoder = new JsonEncoder(loadedFile.getName());
+		int numberProcess = 0;
+		for(Process p: modelInstance.getModelElementsByType(Process.class)) {
+			jsonEncoder.buildJSON(numberProcess);
+			BpmnBasicMetricsExtractor basicExtractor = new BpmnBasicMetricsExtractor(p, jsonEncoder, numberProcess);
+			//Model
+			ModelConverter mc = new ModelConverter(modelInstance);
+			BpmnAdvancedMetricsExtractor advExtractor = new BpmnAdvancedMetricsExtractor(mc, basicExtractor, jsonEncoder, numberProcess);
+			numberProcess++;
+			long loadTime = System.currentTimeMillis() - startTime;
+//			System.out.println("Tempo load del file: " + loadTime + "ms");
+			basicExtractor.runMetrics();
+			long basicTime = System.currentTimeMillis() - loadTime - startTime;
+//			System.out.println("Tempo calcolo metriche di base: " + basicTime + "ms");
+			advExtractor.runMetrics();
+			long advTime = System.currentTimeMillis() - basicTime - startTime - loadTime;
+//			System.out.println("Tempo calcolo metriche avanzate: " + advTime + "ms");
+			jsonEncoder.exportJson();
+			MySqlInterface db = new MySqlInterface();
+			db.connect();
+//			db.createTables(jsonEncoder);
+//			db.createAndInsertMetricsInfosTable();
+//			db.saveMetrics(jsonEncoder);
+//			db.closeConnection();
+		}
+	}
+	
+	public String getJsonMetrics(InputStream fileStream, String fileName) {
+		BpmnModelInstance modelInstance = Bpmn.readModelFromStream(fileStream);
+		JsonEncoder jsonEncoder = new JsonEncoder(fileName);
+		int numberProcess = 0;
+		for(Process p: modelInstance.getModelElementsByType(Process.class)) {
+			jsonEncoder.buildJSON(numberProcess);
+			BpmnBasicMetricsExtractor basicExtractor = new BpmnBasicMetricsExtractor(p, jsonEncoder, numberProcess);
+			BpmnAdvancedMetricsExtractor advExtractor = new BpmnAdvancedMetricsExtractor(new ModelConverter(modelInstance), basicExtractor, jsonEncoder, numberProcess);
+			numberProcess++;
+//			System.out.println("Start extracting Metrics\n");
+			basicExtractor.runMetrics();
+//			System.out.println("Basic Metrics have been extracted\n");
+			advExtractor.runMetrics();
+//			System.out.println("Advanced Metrics have been extracted\n");
+			jsonEncoder.populateHeader(LocalDateTime.now());
+//			MySqlInterface db = new MySqlInterface();
+//			db.connect();
+//			db.saveMetrics(jsonEncoder);
+//			db.closeConnection();
+		}
 		return jsonEncoder.getJson().toString();
 	}
 

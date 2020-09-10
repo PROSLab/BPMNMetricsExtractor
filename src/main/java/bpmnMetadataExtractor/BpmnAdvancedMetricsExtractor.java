@@ -36,11 +36,12 @@ public class BpmnAdvancedMetricsExtractor {
 	private StronglyConnectedComponentsMetricExtractor sccExtractor;
 	private CognitiveWeightMetricExtractor cwExtractor;
 	private LayoutMetricsExtractor lmExtractor;
-	//!!!
+	//new addition
 	private ModelConverter mc;
 	private DOPMetricsExtractor dopExtractor;
+	private int numberProcess;
 	
-	public BpmnAdvancedMetricsExtractor(ModelConverter mc, BpmnBasicMetricsExtractor basicMetricsExtractor, JsonEncoder jsonEncoder) {
+	/*public BpmnAdvancedMetricsExtractor(ModelConverter mc, BpmnBasicMetricsExtractor basicMetricsExtractor, JsonEncoder jsonEncoder) {
 		this.basicMetricsExtractor = basicMetricsExtractor;
 		this.json = jsonEncoder;
 		this.ccExtractor = new CrossConnectivityMetricExtractor(basicMetricsExtractor);
@@ -55,9 +56,26 @@ public class BpmnAdvancedMetricsExtractor {
 		//!!!
 		this.dopExtractor = new DOPMetricsExtractor();
 		this.mc = mc;
+	}*/
+	
+	public BpmnAdvancedMetricsExtractor(ModelConverter mc, BpmnBasicMetricsExtractor basicMetricsExtractor, JsonEncoder jsonEncoder, int i) {
+		this.basicMetricsExtractor = basicMetricsExtractor;
+		this.json = jsonEncoder;
+		this.ccExtractor = new CrossConnectivityMetricExtractor(basicMetricsExtractor);
+		this.connectorInterplayMetricsExtractor = new ConnectorInterplayMetricsExtractor(basicMetricsExtractor);
+		this.dsmExtractor = new DurfeeSquareMetricExtractor(basicMetricsExtractor);
+		this.partExtractor = new PartitionabilityMetricsExtractor(basicMetricsExtractor);
+		this.sizeExtractor = new SizeMetricsExtractor(basicMetricsExtractor);
+		this.ndExtractor = new NestingDepthMetricsExtractor(basicMetricsExtractor);
+		this.sccExtractor = new StronglyConnectedComponentsMetricExtractor(basicMetricsExtractor);
+		this.cwExtractor = new CognitiveWeightMetricExtractor(basicMetricsExtractor);
+		this.lmExtractor = new LayoutMetricsExtractor(basicMetricsExtractor);
+		this.dopExtractor = new DOPMetricsExtractor();
+		this.mc = mc;
+		this.numberProcess = i;
 	}
 	
-	public void runMetrics() {
+	/*public void runMetrics() {
 		json.addAdvancedMetric("CLA", getConnectivityLevelBetweenActivities());
 		json.addAdvancedMetric("CLP", getConnectivityLevelBetweenPartecipants());
 		json.addAdvancedMetric("PDOPin", getProportionOfIncomingDataObjectsAndTotalDataObjects());
@@ -146,6 +164,87 @@ public class BpmnAdvancedMetricsExtractor {
 		}
 		this.json.addAdvancedMetric("DOP", this.dopExtractor.getDop());
 		this.json.addAdvancedMetric("B", ((double) Math.round(sumB * 1000d) / 1000d) / cont);
+	}*/
+	
+	public void runMetrics() {
+		json.addAdvancedMetric("CLA", getConnectivityLevelBetweenActivities(), this.numberProcess);
+		json.addAdvancedMetric("CLP", getConnectivityLevelBetweenPartecipants(),  this.numberProcess);
+		json.addAdvancedMetric("PDOPin", getProportionOfIncomingDataObjectsAndTotalDataObjects(), this.numberProcess);
+		json.addAdvancedMetric("PDOPout", getProportionOfOutgoingDataObjectsAndTotalDataObjects(), this.numberProcess);
+		json.addAdvancedMetric("TNT", getTotalNumberOfTasks(), this.numberProcess);
+		json.addAdvancedMetric("VOL", getVolume(), this.numberProcess);
+		json.addAdvancedMetric("RRPA", getRatioRolesActivities(), this.numberProcess);
+		json.addAdvancedMetric("PDOTout", getProportionOfDataObjectsAsOutgoingProducts(), this.numberProcess);
+		json.addAdvancedMetric("PLT", getProportionOfLanesAndTasks(), this.numberProcess);
+		json.addAdvancedMetric("TNCS", getNumberOfCollapsedSubProcesses(), this.numberProcess);
+		//json.addAdvancedMetric("TNA", getTotalNumberOfActivities());
+		json.addAdvancedMetric("TNDO", getTotalNumberOfDataObjects(), this.numberProcess);
+		json.addAdvancedMetric("TNG", getTotalNumberOfGateways(), this.numberProcess);
+		json.addAdvancedMetric("S(df)", getDataFlowSize(), this.numberProcess);
+		json.addAdvancedMetric("C(df)", getDataFlowComplexity(), this.numberProcess);
+		json.addAdvancedMetric("TNEE", getTotalNumberOfEndEvents(), this.numberProcess);
+		json.addAdvancedMetric("TNIE", getTotalNumberOfIntermediateEvents(), this.numberProcess);
+		json.addAdvancedMetric("TNSE", getTotalNumberOfStartEvents(), this.numberProcess);
+		json.addAdvancedMetric("TNE", getTotalNumberOfEvents(), this.numberProcess);
+		json.addAdvancedMetric("CFC", getControlFlowComplexity(), this.numberProcess);
+		json.addAdvancedMetric("CFC(rel)", getRelativeControlFlowComplexity(), this.numberProcess);
+		json.addAdvancedMetric("PCFC", getParallelControlFlowComplexity(), this.numberProcess);
+		json.addAdvancedMetric("JC", getJoinComplexity(), this.numberProcess);
+		json.addAdvancedMetric("JSR", getJoinSplitRatio(), this.numberProcess);
+		json.addAdvancedMetric("PC", getProcessComplexity(), this.numberProcess);
+		json.addAdvancedMetric("PFC", getProcessFlowComplexity(), this.numberProcess);
+		json.addAdvancedMetric("CADAC", getArcCognitiveComplexity(), this.numberProcess);
+		json.addAdvancedMetric("NOAC", getNumberOfActivitiesAndControlFlowElements(), this.numberProcess);
+		json.addAdvancedMetric("NOAJS", this.getNumberOfActivitiesJoinsAndSplits(), this.numberProcess);
+		json.addAdvancedMetric("HPC_D", getHalsteadBasedProcessComplexityDifficulty(), this.numberProcess);
+		json.addAdvancedMetric("HPC_N", getHalsteadBasedProcessComplexityLength(), this.numberProcess);
+		json.addAdvancedMetric("HPC_V", getHalsteadBasedProcessComplexityVolume(), this.numberProcess);
+		json.addAdvancedMetric("NoI", getNumberOfActivityInputs(), this.numberProcess);
+		json.addAdvancedMetric("AAI", getAverageActivityInput(), this.numberProcess);
+		json.addAdvancedMetric("NoO", getNumberOfActivityOutputs(), this.numberProcess);
+		json.addAdvancedMetric("AAO", getAverageActivityOutput(), this.numberProcess);
+		json.addAdvancedMetric("Length", getActivityLength(), this.numberProcess);
+		json.addAdvancedMetric("IC", getInterfaceComplexityOfActivityMetric(), this.numberProcess);
+		json.addAdvancedMetric("FIO", getStructuralComplexity(), this.numberProcess);
+		json.addAdvancedMetric("NOF", getNumberOfControlFlow(), this.numberProcess);	
+		json.addAdvancedMetric("TNSF", getTotalNumberOfSequenceFlow(), this.numberProcess);	
+		json.addAdvancedMetric("CC", ccExtractor.calculateCrossConnectivity(), this.numberProcess);
+		json.addAdvancedMetric("ICP",getImportedCouplingOfProcess(), this.numberProcess);
+		json.addAdvancedMetric("ECP",getExportedCouplingOfProcess(), this.numberProcess);
+		json.addAdvancedMetric("W", cwExtractor.getCognitiveWeight(), this.numberProcess);
+		json.addAdvancedMetric("MaxND", ndExtractor.getMaxNestingDepth(), this.numberProcess);
+		json.addAdvancedMetric("CP", getProcessCoupling(), this.numberProcess);
+		json.addAdvancedMetric("WCP", getWeightedProcessCoupling(), this.numberProcess);
+		json.addAdvancedMetric("Par", getParallelism(), this.numberProcess);
+		json.addAdvancedMetric("CNC^2", this.getCoefficientOfNetworkComplexity(), this.numberProcess);
+		json.addAdvancedMetric("CNC", this.getCoefficientComplexity(), this.numberProcess);
+		json.addAdvancedMetric("NCA", this.getActivityCoupling(), this.numberProcess);
+		json.addAdvancedMetric("MeanND", ndExtractor.getMeanNestingDepth(), this.numberProcess);
+		json.addAdvancedMetric("Sn", getNumberOfNodes(), this.numberProcess);
+		json.addAdvancedMetric("Sequentiality", getSequentiality(), this.numberProcess);
+		json.addAdvancedMetric("diam", sizeExtractor.getDiam(), this.numberProcess);
+		json.addAdvancedMetric("Depth", partExtractor.getDepth(), this.numberProcess);
+//		json.addAdvancedMetric("Structuredness", partExtractor.getStructuredness());
+		json.addAdvancedMetric("CYC", this.sccExtractor.getCyclicity(), this.numberProcess);
+		json.addAdvancedMetric("TS", this.getTokenSplit(), this.numberProcess);
+		json.addAdvancedMetric("Density", getDensity(), this.numberProcess);
+		json.addAdvancedMetric("ACD", this.getAverageConnectorDegree(), this.numberProcess);
+		json.addAdvancedMetric("MCD", this.getMaximumConnectorDegree(), this.numberProcess);
+		json.addAdvancedMetric("GM", this.connectorInterplayMetricsExtractor.getGatewaysMismatchMetric(), this.numberProcess);
+		json.addAdvancedMetric("CH", this.connectorInterplayMetricsExtractor.getConnectorsHeterogeneityMetric(), this.numberProcess);
+		json.addAdvancedMetric("ECaM", this.getExtendedCardosoMetric(), this.numberProcess);
+		json.addAdvancedMetric("ECyM", this.sccExtractor.getEcym(), this.numberProcess);
+		json.addAdvancedMetric("PF", this.sccExtractor.getCycle(), this.numberProcess);
+		json.addAdvancedMetric("DSM", dsmExtractor.getDurfeeMetric(), this.numberProcess);
+		json.addAdvancedMetric("PSM", dsmExtractor.getPerfectSquareMetric(), this.numberProcess);
+		json.addAdvancedMetric("Layout_Complexity", dsmExtractor.getLayoutComplexityMetric(), this.numberProcess);
+		json.addAdvancedMetric("Layout_Measure", this.lmExtractor.getLayoutMeasure(), this.numberProcess);
+		//System.out.println("JSON adv: " + this.json.getString());
+		GraphMatrixes gm = this.mc.convertModel(this.basicMetricsExtractor.getProcess(), "WhiteBox");
+		BindingStructure b = new BindingStructure(gm.getEdge(),gm.getVertix());
+	    this.dopExtractor.setDop(this.basicMetricsExtractor.getProcess());
+		this.json.addAdvancedMetric("DOP", this.dopExtractor.getDop(), this.numberProcess);
+		this.json.addAdvancedMetric("B", (double) Math.round(b.getB() * 1000d) / 1000d, this.numberProcess);
 	}
 
 	/**
