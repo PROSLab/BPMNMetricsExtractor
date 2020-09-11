@@ -166,7 +166,7 @@ public class BpmnAdvancedMetricsExtractor {
 		this.json.addAdvancedMetric("B", ((double) Math.round(sumB * 1000d) / 1000d) / cont);
 	}*/
 	
-	public void runMetrics() {
+	public void runMetrics(String conversion) {
 		json.addAdvancedMetric("CLA", getConnectivityLevelBetweenActivities(), this.numberProcess);
 		json.addAdvancedMetric("CLP", getConnectivityLevelBetweenPartecipants(),  this.numberProcess);
 		json.addAdvancedMetric("PDOPin", getProportionOfIncomingDataObjectsAndTotalDataObjects(), this.numberProcess);
@@ -240,7 +240,7 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("Layout_Complexity", dsmExtractor.getLayoutComplexityMetric(), this.numberProcess);
 		json.addAdvancedMetric("Layout_Measure", this.lmExtractor.getLayoutMeasure(), this.numberProcess);
 		//System.out.println("JSON adv: " + this.json.getString());
-		GraphMatrixes gm = this.mc.convertModel(this.basicMetricsExtractor.getProcess(), "WhiteBox");
+		GraphMatrixes gm = this.mc.convertModel(this.basicMetricsExtractor.getProcess(), conversion);
 		BindingStructure b = new BindingStructure(gm.getEdge(),gm.getVertix());
 	    this.dopExtractor.setDop(this.basicMetricsExtractor.getProcess());
 		this.json.addAdvancedMetric("DOP", this.dopExtractor.getDop(), this.numberProcess);
