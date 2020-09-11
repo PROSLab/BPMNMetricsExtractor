@@ -22,26 +22,29 @@ public class BpmnModelReader {
 	//file da cui vengono lette le metriche
 	private File loadedFile;
 	private String conversionType;
+	private String extractionType;
 	
 	/**
 	 * Costruttore in cui viene instanziato il loadedFile tramite il suo path
 	 * @param filePath
 	 */
-	/*public BpmnModelReader(String filePath) {
+	public BpmnModelReader(String filePath) {
 		loadedFile = new File(filePath);
 	}
 	
 	public BpmnModelReader() {
 		
-	}*/
-	
-	public BpmnModelReader(String filePath, String s) {
-		loadedFile = new File(filePath);
-		this.conversionType = s;
 	}
 	
-	public BpmnModelReader(String s) {
-		this.conversionType = s;
+	public BpmnModelReader(String filePath, String c, String e) {
+		loadedFile = new File(filePath);
+		this.conversionType = c;
+		this.extractionType = e;
+	}
+	
+	public BpmnModelReader(String c, String e) {
+		this.conversionType = c;
+		this.extractionType = e;
 	}
 	
 	/**
@@ -113,19 +116,30 @@ public class BpmnModelReader {
 		int numberProcess = 0;
 		for(Process p: modelInstance.getModelElementsByType(Process.class)) {
 			jsonEncoder.buildJSON(numberProcess);
-			BpmnBasicMetricsExtractor basicExtractor = new BpmnBasicMetricsExtractor(p, jsonEncoder, numberProcess);
+			BpmnBasicMetricsExtractor basicExtractor = new BpmnBasicMetricsExtractor(modelInstance, p, jsonEncoder, numberProcess, this.extractionType);
 			//Model
 			ModelConverter mc = new ModelConverter(modelInstance);
 			BpmnAdvancedMetricsExtractor advExtractor = new BpmnAdvancedMetricsExtractor(mc, basicExtractor, jsonEncoder, numberProcess);
-			numberProcess++;
-			long loadTime = System.currentTimeMillis() - startTime;
-//			System.out.println("Tempo load del file: " + loadTime + "ms");
-			basicExtractor.runMetrics();
-			long basicTime = System.currentTimeMillis() - loadTime - startTime;
-//			System.out.println("Tempo calcolo metriche di base: " + basicTime + "ms");
-			advExtractor.runMetrics(this.conversionType);
-			long advTime = System.currentTimeMillis() - basicTime - startTime - loadTime;
-//			System.out.println("Tempo calcolo metriche avanzate: " + advTime + "ms");
+			if(this.extractionType.equals("Process")) {
+				numberProcess++;
+				long loadTime = System.currentTimeMillis() - startTime;
+//				System.out.println("Tempo load del file: " + loadTime + "ms");
+				basicExtractor.runMetricsProcess();
+				long basicTime = System.currentTimeMillis() - loadTime - startTime;
+//				System.out.println("Tempo calcolo metriche di base: " + basicTime + "ms");
+				advExtractor.runMetricsProcess(this.conversionType);
+				long advTime = System.currentTimeMillis() - basicTime - startTime - loadTime;
+//				System.out.println("Tempo calcolo metriche avanzate: " + advTime + "ms");
+			} else {
+				long loadTime = System.currentTimeMillis() - startTime;
+//				System.out.println("Tempo load del file: " + loadTime + "ms");
+				basicExtractor.runMetrics();
+				long basicTime = System.currentTimeMillis() - loadTime - startTime;
+//				System.out.println("Tempo calcolo metriche di base: " + basicTime + "ms");
+				advExtractor.runMetrics();
+				long advTime = System.currentTimeMillis() - basicTime - startTime - loadTime;
+//				System.out.println("Tempo calcolo metriche avanzate: " + advTime + "ms");
+			}
 			jsonEncoder.exportJson();
 			MySqlInterface db = new MySqlInterface();
 			db.connect();
@@ -142,14 +156,22 @@ public class BpmnModelReader {
 		int numberProcess = 0;
 		for(Process p: modelInstance.getModelElementsByType(Process.class)) {
 			jsonEncoder.buildJSON(numberProcess);
-			BpmnBasicMetricsExtractor basicExtractor = new BpmnBasicMetricsExtractor(p, jsonEncoder, numberProcess);
+			BpmnBasicMetricsExtractor basicExtractor = new BpmnBasicMetricsExtractor(modelInstance, p, jsonEncoder, numberProcess, this.extractionType);
 			BpmnAdvancedMetricsExtractor advExtractor = new BpmnAdvancedMetricsExtractor(new ModelConverter(modelInstance), basicExtractor, jsonEncoder, numberProcess);
-			numberProcess++;
-//			System.out.println("Start extracting Metrics\n");
-			basicExtractor.runMetrics();
-//			System.out.println("Basic Metrics have been extracted\n");
-			advExtractor.runMetrics(this.conversionType);
-//			System.out.println("Advanced Metrics have been extracted\n");
+			if(this.extractionType.equals("Process")){
+				numberProcess++;
+//				System.out.println("Start extracting Metrics\n");
+				basicExtractor.runMetricsProcess();
+//				System.out.println("Basic Metrics have been extracted\n");
+				advExtractor.runMetricsProcess(this.conversionType);
+//				System.out.println("Advanced Metrics have been extracted\n");
+			} else {
+//				System.out.println("Start extracting Metrics\n");
+				basicExtractor.runMetrics();
+//				System.out.println("Basic Metrics have been extracted\n");
+				advExtractor.runMetrics();
+//				System.out.println("Advanced Metrics have been extracted\n");
+			}
 			jsonEncoder.populateHeader(LocalDateTime.now());
 //			MySqlInterface db = new MySqlInterface();
 //			db.connect();

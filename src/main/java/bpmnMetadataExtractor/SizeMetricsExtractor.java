@@ -19,7 +19,10 @@ public class SizeMetricsExtractor {
 	}
 
 	public double getDiam() {
-		Collection<ModelElementInstance> startNodes = basicExtractor.getCollectionOfElementType(StartEvent.class);
+		Collection<ModelElementInstance> startNodes;
+		if(this.basicExtractor.getExtractionType().equals("Model"))
+			startNodes = basicExtractor.getCollectionOfElementType(StartEvent.class);
+		else startNodes = basicExtractor.getCollectionOfElementTypeProcess(StartEvent.class);
 		ArrayList<Integer> results = new ArrayList<Integer>();
 		for (ModelElementInstance startNodeModel : startNodes) {
 			visitedNodes.clear();

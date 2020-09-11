@@ -28,8 +28,13 @@ public class LayoutMetricsExtractor {
 	
 	public LayoutMetricsExtractor(BpmnBasicMetricsExtractor basicMetricsExtractor) {
 		this.basicExtractor = basicMetricsExtractor;
-		this.edges = basicExtractor.getCollectionOfElementType(BpmnEdge.class);
-		this.shapes = basicExtractor.getCollectionOfElementType(BpmnShape.class);
+		if(this.basicExtractor.getExtractionType().equals("Model")) {
+			this.edges = basicExtractor.getCollectionOfElementType(BpmnEdge.class);
+			this.shapes = basicExtractor.getCollectionOfElementType(BpmnShape.class);
+		} else {
+			this.edges = basicExtractor.getCollectionOfElementTypeProcess(BpmnEdge.class);
+			this.shapes = basicExtractor.getCollectionOfElementTypeProcess(BpmnShape.class);
+		}
 	}
 	/**
 	 * Method that computes the Layout Measure Metric

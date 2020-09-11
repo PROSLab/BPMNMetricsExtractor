@@ -114,7 +114,8 @@ public class JsonEncoder {
 		basicMetric.put("value", n);
 		basicMetric.put("description", metricInfos[0]);
 		basicMetric.put("source", metricInfos[1]);
-		this.json.getJSONObject("basic_metrics").put(metricName, basicMetric);
+		//edited
+		this.json.getJSONObject("process").getJSONObject("0").getJSONObject("basic_metrics").put(metricName, basicMetric);
 	}
 	
 	public void addBasicMetric(String metricName, int n, int i){
@@ -140,7 +141,9 @@ public class JsonEncoder {
 		advMetric.put("value", n);
 		advMetric.put("description", metricInfos[0]);
 		advMetric.put("source", metricInfos[1]);
-		this.json.getJSONObject("advanced_metrics").put(metricName, advMetric);
+		//edited
+		this.json.getJSONObject("process").getJSONObject("0").getJSONObject("advanced_metrics").put(metricName, advMetric);
+
 	}
 	
 	public void addAdvancedMetric(String metricName, double n, int i){

@@ -25,30 +25,17 @@ public class StronglyConnectedComponentsMetricExtractor {
 	private ArrayList<TarjanNode> nodesInCycle = new ArrayList<TarjanNode>();
 	private ArrayList<ArrayList<TarjanNode>> stronglyConnectedComponents = new ArrayList<ArrayList<TarjanNode>>();
 	
-	/*public StronglyConnectedComponentsMetricExtractor(BpmnBasicMetricsExtractor bpmnBasicExtractor) {
-		this.basicMetricsExtractor = bpmnBasicExtractor;
-		this.nodesStack = new Stack<TarjanNode>();
-		//Creates a TarjanNode for each node in the model
-		for (FlowNode node: this.basicMetricsExtractor.getModelInstance().getModelElementsByType(FlowNode.class)) {
-			this.nodes.add(new TarjanNode(node));
-		}
-		
-		//Initializes the successors of all the nodes
-		for (TarjanNode node: this.nodes) {
-			node.setSuccessors(this.nodes);
-		}
-		//computes the strongly connected components of the model
-		this.getModelStronglyConnectedComponents();
-	}*/
-	
 	public StronglyConnectedComponentsMetricExtractor(BpmnBasicMetricsExtractor bpmnBasicExtractor) {
 		this.basicMetricsExtractor = bpmnBasicExtractor;
 		this.nodesStack = new Stack<TarjanNode>();
 		//Creates a TarjanNode for each node in the model
-		for (FlowNode node: this.basicMetricsExtractor.getProcess().getChildElementsByType(FlowNode.class)) {
+		if(this.basicMetricsExtractor.getExtractionType().equals("Model"))
+			for (FlowNode node: this.basicMetricsExtractor.getModelInstance().getModelElementsByType(FlowNode.class)) {
+				this.nodes.add(new TarjanNode(node));
+			}
+		else for (FlowNode node: this.basicMetricsExtractor.getProcess().getChildElementsByType(FlowNode.class)) {
 			this.nodes.add(new TarjanNode(node));
 		}
-		
 		//Initializes the successors of all the nodes
 		for (TarjanNode node: this.nodes) {
 			node.setSuccessors(this.nodes);
@@ -56,6 +43,7 @@ public class StronglyConnectedComponentsMetricExtractor {
 		//computes the strongly connected components of the model
 		this.getModelStronglyConnectedComponents();
 	}
+
 	/**
 	 * METRIC: CYC
 	 * @return the cyclicity degree of the model

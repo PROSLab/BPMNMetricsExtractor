@@ -24,7 +24,7 @@ public class MetricsExtractorRouter {
 			@FormDataParam("model") FormDataContentDisposition fileDetail,
 			@FormDataParam("conversion") String conversion,
 			@FormDataParam("extraction") String extraction) {
-		BpmnModelReader metricsExtractor = new BpmnModelReader(conversion);
+		BpmnModelReader metricsExtractor = new BpmnModelReader(conversion, extraction);
 //		String fileName = fileDetail.getFileName().substring(0, fileDetail.getFileName().lastIndexOf('.'));
 		String fileName = "ExtractedMetadata";
 		String json = metricsExtractor.getJsonMetrics(uploadedInputStream, fileName);
