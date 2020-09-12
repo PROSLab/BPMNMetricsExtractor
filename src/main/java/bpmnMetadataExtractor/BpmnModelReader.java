@@ -9,7 +9,7 @@ import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 
 import org.camunda.bpm.model.bpmn.instance.Process;
 
-import metricsOnGraphs.ModelConverter;
+import graphElements.ModelConverter;
 
 import org.camunda.bpm.model.bpmn.Bpmn;
 

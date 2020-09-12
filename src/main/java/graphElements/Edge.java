@@ -1,4 +1,4 @@
-package metricsOnGraphs;
+package graphElements;
 
 public class Edge {
 	private String sourceId;

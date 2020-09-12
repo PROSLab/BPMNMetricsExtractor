@@ -1,4 +1,4 @@
-package metricsOnGraphs;
+package graphElements;
 
 public class Node {
 	private String id;

@@ -1,4 +1,4 @@
-package metricsOnGraphs;
+package graphElements;
 
 import java.util.Vector;
 

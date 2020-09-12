@@ -58,7 +58,8 @@ public class JsonEncoder {
 	private void initializeJSON(){
 		JSONObject header = new JSONObject();
 		JSONObject process = new JSONObject();
-		this.json.put("header", header).put("process", process);
+		JSONObject notes = new JSONObject();
+		this.json.put("header", header).put("notes", notes).put("process", process);
 	}
 	
 	public void buildJSON(int i){
@@ -156,6 +157,15 @@ public class JsonEncoder {
 		advMetric.put("description", metricInfos[0]);
 		advMetric.put("source", metricInfos[1]);
 		this.json.getJSONObject("process").getJSONObject(Integer.toString(i)).getJSONObject("advanced_metrics").put(metricName, advMetric);
+	}
+	
+	/**
+	 * Metodo per aggiungere al json gli avvisi prodotti durante la conversione
+	 * @param processName nome del processo convertito
+	 * @param note avviso prodotto durante conversione
+	 */
+	public void addAlert(String processName, String note){
+		this.json.getJSONObject("notes").put(processName, note);
 	}
 	
 	public ArrayList<String> getBasicMetricsNames() {

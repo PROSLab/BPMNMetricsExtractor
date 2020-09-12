@@ -269,3 +269,9 @@ Layout_Complexity	%It evaluates the usability of different screen designs based 
 Layout_Measure	%It is a group of measures that quantify layout of models	{10.1016/j.infsof.2009.04.008}
 DOP	%Degree of parallelism	{absent}
 B %Binding of structure	{absent}
+L %Diameter of a network structure	{absent}
+D %Structure diversity	{absent}
+AC %Aggregate indicator of process complexity	{absent}
+RT %Restrictiveness estimator 	{absent}
+T %Number of trees in a graph	{absent}
+CI %Complexity index	{absent}

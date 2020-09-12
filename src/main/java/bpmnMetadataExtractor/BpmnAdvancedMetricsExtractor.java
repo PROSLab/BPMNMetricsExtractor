@@ -17,10 +17,17 @@ import org.camunda.bpm.model.bpmn.instance.Process;
 import org.camunda.bpm.model.bpmn.instance.SequenceFlow;
 import org.camunda.bpm.model.xml.instance.ModelElementInstance;
 
-import metricsOnGraphs.BindingStructure;
-import metricsOnGraphs.Diameter;
-import metricsOnGraphs.GraphMatrixes;
-import metricsOnGraphs.ModelConverter;
+import metricsOnGraph.BindingStructure;
+import metricsOnGraph.Diameter;
+import graphElements.GraphMatrixes;
+import graphElements.ModelConverter;
+import metricsOnGraph.ComplexityIndex;
+import metricsOnGraph.TreesNumber;
+import metricsOnGraph.RestrictivenessEstimator;
+import metricsOnGraph.AggregateIndicator;
+import graphElements.CycleDetector;
+import graphElements.GraphAdjacencyList;
+import metricsOnGraph.StructureDiversity;
 
 public class BpmnAdvancedMetricsExtractor {
 	
@@ -40,23 +47,6 @@ public class BpmnAdvancedMetricsExtractor {
 	private ModelConverter mc;
 	private DOPMetricsExtractor dopExtractor;
 	private int numberProcess;
-	
-	/*public BpmnAdvancedMetricsExtractor(ModelConverter mc, BpmnBasicMetricsExtractor basicMetricsExtractor, JsonEncoder jsonEncoder) {
-		this.basicMetricsExtractor = basicMetricsExtractor;
-		this.json = jsonEncoder;
-		this.ccExtractor = new CrossConnectivityMetricExtractor(basicMetricsExtractor);
-		this.connectorInterplayMetricsExtractor = new ConnectorInterplayMetricsExtractor(basicMetricsExtractor);
-		this.dsmExtractor = new DurfeeSquareMetricExtractor(basicMetricsExtractor);
-		this.partExtractor = new PartitionabilityMetricsExtractor(basicMetricsExtractor);
-		this.sizeExtractor = new SizeMetricsExtractor(basicMetricsExtractor);
-		this.ndExtractor = new NestingDepthMetricsExtractor(basicMetricsExtractor);
-		this.sccExtractor = new StronglyConnectedComponentsMetricExtractor(basicMetricsExtractor);
-		this.cwExtractor = new CognitiveWeightMetricExtractor(basicMetricsExtractor);
-		this.lmExtractor = new LayoutMetricsExtractor(basicMetricsExtractor);
-		//!!!
-		this.dopExtractor = new DOPMetricsExtractor();
-		this.mc = mc;
-	}*/
 	
 	public BpmnAdvancedMetricsExtractor(ModelConverter mc, BpmnBasicMetricsExtractor basicMetricsExtractor, JsonEncoder jsonEncoder, int i) {
 		this.basicMetricsExtractor = basicMetricsExtractor;
@@ -149,10 +139,6 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("Layout_Complexity", dsmExtractor.getLayoutComplexityMetric());
 		json.addAdvancedMetric("Layout_Measure", this.lmExtractor.getLayoutMeasure());
 		//System.out.println("JSON adv: " + this.json.getString());
-		for(Process p : this.mc.getProcesses()) {
-			this.dopExtractor.setDop(p);
-		}
-		this.json.addAdvancedMetric("DOP", this.dopExtractor.getDop());
 	}
 	
 	public void runMetricsProcess(String conversion) {
@@ -230,10 +216,32 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("Layout_Measure", this.lmExtractor.getLayoutMeasure(), this.numberProcess);
 		//System.out.println("JSON adv: " + this.json.getString());
 		GraphMatrixes gm = this.mc.convertModel(this.basicMetricsExtractor.getProcess(), conversion);
-		BindingStructure b = new BindingStructure(gm.getEdge(),gm.getVertix());
-	    this.dopExtractor.setDop(this.basicMetricsExtractor.getProcess());
-		this.json.addAdvancedMetric("DOP", this.dopExtractor.getDop(), this.numberProcess);
-		this.json.addAdvancedMetric("B", (double) Math.round(b.getB() * 1000d) / 1000d, this.numberProcess);
+		if(gm != null) {
+			GraphAdjacencyList gal = new GraphAdjacencyList(gm.getAdjacencyMatrix());
+			boolean cyclical = new CycleDetector(gal.getAdj()).isCyclic();
+			//compute all metrics on graph
+			BindingStructure b = new BindingStructure(gm.getEdge(),gm.getVertix());
+			this.json.addAdvancedMetric("B", (double) Math.round(b.getB() * 1000d) / 1000d, this.numberProcess);
+			Diameter l = new Diameter(gm.getAdjacencyMatrix());
+			this.json.addAdvancedMetric("L", l.getL(), this.numberProcess);
+			StructureDiversity d = new StructureDiversity(gm.getAdjacencyMatrix(), gm.getReachabilityMatrix(), gal.getAdj());
+			this.json.addAdvancedMetric("D", (double) Math.round(d.getD() * 1000d) / 1000d);
+			AggregateIndicator ac = new AggregateIndicator(l.getL(),b.getB(),d.getD());
+			this.json.addAdvancedMetric("AC",(double) Math.round(ac.getAC() * 1000d) / 1000d);
+			RestrictivenessEstimator rt = new RestrictivenessEstimator(gm.getVertix(),gm.getReachabilityMatrix());
+			this.json.addAdvancedMetric("RT",(double) Math.round(rt.getRT() * 1000d) / 1000d);
+			TreesNumber t = new TreesNumber(gm.getAdjacencyMatrix());
+			this.json.addAdvancedMetric("T", t.getT());
+			//compute metricss on acyclical graph
+			if(!cyclical) {
+				this.dopExtractor.setDop(this.basicMetricsExtractor.getProcess());
+				this.json.addAdvancedMetric("DOP", this.dopExtractor.getDop(), this.numberProcess);
+				ComplexityIndex ci = new ComplexityIndex(gm.getAdjacencyMatrix(), gal.getAdj());
+				this.json.addAdvancedMetric("CI",ci.getCI());
+			}
+			for(String s : this.mc.getNotification())
+				this.json.addAlert(this.basicMetricsExtractor.getProcess().getId(), s);
+		}
 	}
 
 	/**

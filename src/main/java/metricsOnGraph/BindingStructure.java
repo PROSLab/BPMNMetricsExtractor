@@ -1,4 +1,4 @@
-package metricsOnGraphs;
+package metricsOnGraph;
 
 public class BindingStructure {
 	private double m;
