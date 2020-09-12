@@ -175,15 +175,9 @@ public class PartitionabilityMetricsExtractor {
 		 * @return the depth of the model
 		 */
 		public double getDepthInner() {
-			Collection<ModelElementInstance> modelStartEvent;
-			Collection<ModelElementInstance> modelNodes;
-			if(basicExtractor.getExtractionType().equals("Model")) {
-				modelStartEvent = basicExtractor.getCollectionOfElementType(StartEvent.class);
-				modelNodes = basicExtractor.getCollectionOfElementType(FlowNode.class);
-			} else {
-				modelStartEvent = basicExtractor.getCollectionOfElementTypeProcess(StartEvent.class);
-				modelNodes = basicExtractor.getCollectionOfElementTypeProcess(FlowNode.class);
-			}
+			Collection<ModelElementInstance> modelStartEvent = basicExtractor
+					.getCollectionOfElementType(StartEvent.class);
+			Collection<ModelElementInstance> modelNodes = basicExtractor.getCollectionOfElementType(FlowNode.class);
 			ArrayList<Integer> results = new ArrayList<Integer>();
 			int depthIn = 0;
 			int depthOut = 0;
@@ -375,10 +369,7 @@ public class PartitionabilityMetricsExtractor {
 		 * @return the structuredness of the model
 		 */
 		public double getStructurednessInner() {
-			Collection<ModelElementInstance> modelNodes;
-			if(basicExtractor.getExtractionType().equals("Model"))
-				modelNodes = basicExtractor.getCollectionOfElementType(FlowNode.class);
-			else modelNodes = basicExtractor.getCollectionOfElementType(Process.class);
+			Collection<ModelElementInstance> modelNodes = basicExtractor.getCollectionOfElementType(FlowNode.class);
 			double totalNumberOfNodes = (double) modelNodes.size();
 			double reducedGraphNodes = (double) getReducedGraphNumberOfNodes();
 			if (reducedGraphNodes == 2.0) {
@@ -397,10 +388,7 @@ public class PartitionabilityMetricsExtractor {
 		 * @return the number of nodes in the reduced graph
 		 */
 		private int getReducedGraphNumberOfNodes() {
-			Collection<ModelElementInstance> modelNodes;
-			if(basicExtractor.getExtractionType().equals("Model"))
-				modelNodes = basicExtractor.getCollectionOfElementType(FlowNode.class);
-			else modelNodes = basicExtractor.getCollectionOfElementTypeProcess(FlowNode.class);
+			Collection<ModelElementInstance> modelNodes = basicExtractor.getCollectionOfElementType(FlowNode.class);
 			int nodesInReducedGraph = modelNodes.size();
 			// If the model can be homogeneously reduced, the only nodes present are the
 			// start event and the end event
@@ -698,10 +686,7 @@ public class PartitionabilityMetricsExtractor {
 		 * @return true if the homogeneous reduction is applicable, false otherwise
 		 */
 		private boolean homogeneousReductionResult(Collection<ModelElementInstance> modelNodes) {
-			Collection<ModelElementInstance> modelGateways;
-			if(basicExtractor.getExtractionType().equals("Model"))
-				modelGateways = basicExtractor.getCollectionOfElementType(Gateway.class);
-			else modelGateways = basicExtractor.getCollectionOfElementTypeProcess(Gateway.class);
+			Collection<ModelElementInstance> modelGateways = basicExtractor.getCollectionOfElementType(Gateway.class);
 			boolean firstCase = true;
 			boolean secondCase = true;
 			boolean thirdCase = true;

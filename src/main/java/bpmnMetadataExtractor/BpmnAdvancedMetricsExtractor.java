@@ -240,6 +240,7 @@ public class BpmnAdvancedMetricsExtractor {
 				this.json.addAdvancedMetric("CI",ci.getCI(), this.numberProcess);
 			}	
 		}
+		//da controllare
 		for(String s : this.mc.getNotification())
 			this.json.addAlert(this.basicMetricsExtractor.getProcess().getId(), s);
 	}
@@ -252,7 +253,7 @@ public class BpmnAdvancedMetricsExtractor {
 	 */
 	public float getConnectivityLevelBetweenActivities() {
 		try {
-			float toReturn = (float)basicMetricsExtractor.getActivities() /  basicMetricsExtractor.getSequenceFlowsBetweenActivitiesProcess();
+			float toReturn = (float)basicMetricsExtractor.getActivities() /  basicMetricsExtractor.getSequenceFlowsBetweenActivities();
 			if (Float.isFinite(toReturn)) {
 				return toReturn;
 			} 
@@ -519,10 +520,10 @@ public class BpmnAdvancedMetricsExtractor {
 	public double getControlFlowComplexity() {
 		double toReturn = 0;
 		int tempSize = 0;
-		Collection<ModelElementInstance> exclusiveGateways = basicMetricsExtractor.getCollectionOfElementTypeProcess(ExclusiveGateway.class);
-		Collection<ModelElementInstance> inclusiveGateways = basicMetricsExtractor.getCollectionOfElementTypeProcess(InclusiveGateway.class);
-		Collection<ModelElementInstance> parallelGateways = basicMetricsExtractor.getCollectionOfElementTypeProcess(ParallelGateway.class);
-		Collection<ModelElementInstance> activities = basicMetricsExtractor.getCollectionOfElementTypeProcess(Activity.class);
+		Collection<ModelElementInstance> exclusiveGateways = basicMetricsExtractor.getCollectionOfElementType(ExclusiveGateway.class);
+		Collection<ModelElementInstance> inclusiveGateways = basicMetricsExtractor.getCollectionOfElementType(InclusiveGateway.class);
+		Collection<ModelElementInstance> parallelGateways = basicMetricsExtractor.getCollectionOfElementType(ParallelGateway.class);
+		Collection<ModelElementInstance> activities = basicMetricsExtractor.getCollectionOfElementType(Activity.class);
 		//The CFC of a xor-split is given by the number of his outgoing flows
 		for (ModelElementInstance exGateway : exclusiveGateways) {
 			if (((FlowNode) exGateway).getOutgoing().size() > 1)
@@ -561,10 +562,10 @@ public class BpmnAdvancedMetricsExtractor {
 	public double getJoinComplexity() {
 		double toReturn = 0;
 		int tempSize = 0;
-		Collection<ModelElementInstance> exclusiveGateways = basicMetricsExtractor.getCollectionOfElementTypeProcess(ExclusiveGateway.class);
-		Collection<ModelElementInstance> inclusiveGateways = basicMetricsExtractor.getCollectionOfElementTypeProcess(InclusiveGateway.class);
-		Collection<ModelElementInstance> parallelGateways = basicMetricsExtractor.getCollectionOfElementTypeProcess(ParallelGateway.class);
-		Collection<ModelElementInstance> activities = basicMetricsExtractor.getCollectionOfElementTypeProcess(Activity.class);
+		Collection<ModelElementInstance> exclusiveGateways = basicMetricsExtractor.getCollectionOfElementType(ExclusiveGateway.class);
+		Collection<ModelElementInstance> inclusiveGateways = basicMetricsExtractor.getCollectionOfElementType(InclusiveGateway.class);
+		Collection<ModelElementInstance> parallelGateways = basicMetricsExtractor.getCollectionOfElementType(ParallelGateway.class);
+		Collection<ModelElementInstance> activities = basicMetricsExtractor.getCollectionOfElementType(Activity.class);
 		//The JC of a xor-split is given by the number of his incoming flows
 		for (ModelElementInstance exGateway : exclusiveGateways) {
 			if (((FlowNode) exGateway).getIncoming().size() > 1)
@@ -600,7 +601,7 @@ public class BpmnAdvancedMetricsExtractor {
 	 * @return
 	 */
 	public int getDataFlowSize() {
-		Collection<ModelElementInstance> activities = basicMetricsExtractor.getCollectionOfElementTypeProcess(Activity.class);
+		Collection<ModelElementInstance> activities = basicMetricsExtractor.getCollectionOfElementType(Activity.class);
 		int toReturn = 0;
 		for (ModelElementInstance activity : activities) {
 			toReturn+=((FlowNode) activity).getIncoming().size()+((FlowNode) activity).getOutgoing().size();
@@ -616,7 +617,7 @@ public class BpmnAdvancedMetricsExtractor {
 	 * @return
 	 */
 	public int getDataFlowComplexity() {
-		Collection<ModelElementInstance> activities = basicMetricsExtractor.getCollectionOfElementTypeProcess(Activity.class);
+		Collection<ModelElementInstance> activities = basicMetricsExtractor.getCollectionOfElementType(Activity.class);
 		int toReturn = 0;
 		for (ModelElementInstance activity : activities) {
 			toReturn+=((FlowNode) activity).getIncoming().size()+((FlowNode) activity).getOutgoing().size();
@@ -781,7 +782,7 @@ public class BpmnAdvancedMetricsExtractor {
 	public double getArcCognitiveComplexity() {
 		try {
 		
-			return (double)(this.basicMetricsExtractor.getActivities() + (this.ndExtractor.getMaxNestingDepth()) * 14) + (basicMetricsExtractor.getCollectionOfElementTypeProcess(InclusiveGateway.class).size()*7) + (basicMetricsExtractor.getCollectionOfElementTypeProcess(ExclusiveGateway.class).size()*2) + (basicMetricsExtractor.getCollectionOfElementTypeProcess(ParallelGateway.class).size()*4) + (this.getStructuralComplexity()*4) + (this.getTotalNumberOfSequenceFlow());
+			return (double)(this.basicMetricsExtractor.getActivities() + (this.ndExtractor.getMaxNestingDepth()) * 14) + (basicMetricsExtractor.getCollectionOfElementType(InclusiveGateway.class).size()*7) + (basicMetricsExtractor.getCollectionOfElementType(ExclusiveGateway.class).size()*2) + (basicMetricsExtractor.getCollectionOfElementType(ParallelGateway.class).size()*4) + (this.getStructuralComplexity()*4) + (this.getTotalNumberOfSequenceFlow());
 		} 
 		catch (ArithmeticException e) {
 			return 0;	
@@ -875,8 +876,8 @@ public class BpmnAdvancedMetricsExtractor {
 	 */
 	public int getImportedCouplingOfProcess(){
 		int toReturn = 0;
-		Collection<ModelElementInstance> activities = basicMetricsExtractor.getCollectionOfElementTypeProcess(Activity.class);
-		Collection<ModelElementInstance> modelMessageFlows = basicMetricsExtractor.getCollectionOfElementTypeProcess(MessageFlow.class);
+		Collection<ModelElementInstance> activities = basicMetricsExtractor.getCollectionOfElementType(Activity.class);
+		Collection<ModelElementInstance> modelMessageFlows = basicMetricsExtractor.getCollectionOfElementType(MessageFlow.class);
 		for (ModelElementInstance a : activities){
 			toReturn += ((FlowNode) a).getOutgoing().size();
 		}
@@ -904,8 +905,8 @@ public class BpmnAdvancedMetricsExtractor {
 	 */
 	public int getExportedCouplingOfProcess(){
 		int toReturn = 0;
-		Collection<ModelElementInstance> activities = basicMetricsExtractor.getCollectionOfElementTypeProcess(Activity.class);
-		Collection<ModelElementInstance> modelMessageFlows = basicMetricsExtractor.getCollectionOfElementTypeProcess(MessageFlow.class);
+		Collection<ModelElementInstance> activities = basicMetricsExtractor.getCollectionOfElementType(Activity.class);
+		Collection<ModelElementInstance> modelMessageFlows = basicMetricsExtractor.getCollectionOfElementType(MessageFlow.class);
 		for (ModelElementInstance a : activities){
 			toReturn += ((FlowNode) a).getIncoming().size();
 		}
@@ -932,7 +933,7 @@ public class BpmnAdvancedMetricsExtractor {
 	 */
 	public float getProcessCoupling(){
 		float toReturn = 0;
-		Collection<ModelElementInstance> activities = basicMetricsExtractor.getCollectionOfElementTypeProcess(Activity.class);
+		Collection<ModelElementInstance> activities = basicMetricsExtractor.getCollectionOfElementType(Activity.class);
 		if (activities.size() > 1){
 			for (ModelElementInstance t: activities){
 				Collection<SequenceFlow> outgoing = ((FlowNode) t).getOutgoing();
@@ -958,7 +959,7 @@ public class BpmnAdvancedMetricsExtractor {
 	//Calculate the normal Coupling Value
 	public float getWeightedProcessCoupling(){
 		float toReturn = 0;
-		Collection<ModelElementInstance> activities = basicMetricsExtractor.getCollectionOfElementTypeProcess(Activity.class);
+		Collection<ModelElementInstance> activities = basicMetricsExtractor.getCollectionOfElementType(Activity.class);
 		if (activities.size() > 1){
 			for (ModelElementInstance t: activities){
 				Collection<SequenceFlow> outgoing = ((FlowNode) t).getOutgoing();
@@ -1122,7 +1123,7 @@ public class BpmnAdvancedMetricsExtractor {
 	 * @return CFC/FlowDividingTasks
 	 */
 	public int getParallelControlFlowComplexity() {
-		Collection<ModelElementInstance> parallelGateways = basicMetricsExtractor.getCollectionOfElementTypeProcess(ParallelGateway.class);
+		Collection<ModelElementInstance> parallelGateways = basicMetricsExtractor.getCollectionOfElementType(ParallelGateway.class);
 		int toReturn=1;
 		try {
 			for (ModelElementInstance parGateway : parallelGateways) {
@@ -1219,7 +1220,7 @@ public class BpmnAdvancedMetricsExtractor {
 	 * @return
 	 */
 	public float getSequentiality() {
-		Collection<ModelElementInstance> sequenceFlowsModel = basicMetricsExtractor.getCollectionOfElementTypeProcess(SequenceFlow.class);
+		Collection<ModelElementInstance> sequenceFlowsModel = basicMetricsExtractor.getCollectionOfElementType(SequenceFlow.class);
 		float arcBetweenNonConnectorsNode = sequenceFlowsModel.size();
 		for (ModelElementInstance sFModel : sequenceFlowsModel) {
 			SequenceFlow flow = (SequenceFlow) sFModel;
@@ -1242,8 +1243,8 @@ public class BpmnAdvancedMetricsExtractor {
 		float toReturn = 0.0f;
 		float sum = 0.0f, n = 0.0f;
 		try {
-			Collection<ModelElementInstance> gateways = basicMetricsExtractor.getCollectionOfElementTypeProcess(Gateway.class);
-			Collection<ModelElementInstance> activities = basicMetricsExtractor.getCollectionOfElementTypeProcess(Activity.class);
+			Collection<ModelElementInstance> gateways = basicMetricsExtractor.getCollectionOfElementType(Gateway.class);
+			Collection<ModelElementInstance> activities = basicMetricsExtractor.getCollectionOfElementType(Activity.class);
 			for (ModelElementInstance modelGateway : gateways){
 				FlowNode g = (FlowNode) modelGateway;
 				if (g.getOutgoing().size() > 1 || g.getIncoming().size() > 1){
@@ -1285,7 +1286,7 @@ public class BpmnAdvancedMetricsExtractor {
 	 */
 	public int getTokenSplit() {
 		int tokenSplitDegree = 0;
-		Collection<ModelElementInstance> gateways = this.basicMetricsExtractor.getCollectionOfElementTypeProcess(Gateway.class);
+		Collection<ModelElementInstance> gateways = this.basicMetricsExtractor.getCollectionOfElementType(Gateway.class);
 		Gateway temp;
 		for (ModelElementInstance modelGateway: gateways) {
 			temp = (Gateway) modelGateway;
@@ -1306,8 +1307,8 @@ public class BpmnAdvancedMetricsExtractor {
 	 */
 	public float getMaximumConnectorDegree(){
 		float toReturn = 0;
-		Collection<ModelElementInstance> gateways = basicMetricsExtractor.getCollectionOfElementTypeProcess(Gateway.class);
-		Collection<ModelElementInstance> activities = basicMetricsExtractor.getCollectionOfElementTypeProcess(Activity.class);
+		Collection<ModelElementInstance> gateways = basicMetricsExtractor.getCollectionOfElementType(Gateway.class);
+		Collection<ModelElementInstance> activities = basicMetricsExtractor.getCollectionOfElementType(Activity.class);
 		for (ModelElementInstance g: gateways){
 			if (((FlowNode) g).getOutgoing().size() + ((FlowNode) g).getIncoming().size() > toReturn){
 				toReturn = ((FlowNode) g).getOutgoing().size() + ((FlowNode)g).getIncoming().size();
@@ -1400,7 +1401,7 @@ public class BpmnAdvancedMetricsExtractor {
 	private int getNumberOfUniqueDataObjects() {
 		String name = "";
 		Collection<String> objectNames = new ArrayList<String>();
-		Collection<ModelElementInstance> dataObjects = basicMetricsExtractor.getCollectionOfElementTypeProcess(DataObject.class);
+		Collection<ModelElementInstance> dataObjects = basicMetricsExtractor.getCollectionOfElementType(DataObject.class);
 		for (ModelElementInstance obj : dataObjects) {
 			DataObject dataObj = (DataObject) obj;
 			name = dataObj.getName();

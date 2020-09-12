@@ -31,10 +31,7 @@ public class NestingDepthMetricsExtractor {
 		this.basicExtractor = basicExtractor;
 		visitedNodes = new ArrayList<String>();
 		nestingDepthValues = new HashMap<String, Integer>();
-		Collection<ModelElementInstance> modelNodes;
-		if(this.basicExtractor.getExtractionType().equals("Model"))
-			modelNodes = basicExtractor.getCollectionOfElementType(FlowNode.class);
-		else modelNodes = basicExtractor.getCollectionOfElementTypeProcess(FlowNode.class);
+		Collection<ModelElementInstance> modelNodes = basicExtractor.getCollectionOfElementType(FlowNode.class);
 		nodes = new ArrayList<FlowNode>();
 		for (ModelElementInstance modelNode : modelNodes) {
 			if (!(modelNodes instanceof BoundaryEvent))
@@ -47,18 +44,10 @@ public class NestingDepthMetricsExtractor {
 	 * Populates the map of the nesting values, iterating over the start nodes and calling the recursive method getNodeNestingDepth 
 	 */
 	private void initializeNestingDepthValuesMap() {
-		if(this.basicExtractor.getExtractionType().equals("Model")) {
-			for (ModelElementInstance modelStartEvent : basicExtractor.getCollectionOfElementType(StartEvent.class)) {
-				visitedNodes.clear();
-				getNodeNestingDepth((FlowNode) modelStartEvent, 0);
-			}
-		} else {
-			for (ModelElementInstance modelStartEvent : basicExtractor.getCollectionOfElementTypeProcess(StartEvent.class)) {
-				visitedNodes.clear();
-				getNodeNestingDepth((FlowNode) modelStartEvent, 0);
-			}
+		for (ModelElementInstance modelStartEvent : basicExtractor.getCollectionOfElementType(StartEvent.class)) {
+			visitedNodes.clear();
+			getNodeNestingDepth((FlowNode) modelStartEvent, 0);
 		}
-		
 	}
 	
 	/**

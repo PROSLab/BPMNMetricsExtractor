@@ -25,31 +25,15 @@ public class CognitiveWeightMetricExtractor {
 	
 	public double getCognitiveWeight() {
 		int totalWeight = 0;
-		if(this.basicMetricsExtractor.getExtractionType().equals("Model")) {
-			for (ModelElementInstance modelStartEvent : basicMetricsExtractor.getCollectionOfElementType(StartEvent.class)) {
-				totalWeight += getSequenceNodesCognitiveWeight((FlowNode) modelStartEvent, false, false);
-			}
-			for (ModelElementInstance modelExGateway : basicMetricsExtractor.getCollectionOfElementType(ExclusiveGateway.class)) {
-				ExclusiveGateway gateway = (ExclusiveGateway) modelExGateway;
-				if (gateway.getOutgoing().size() == 2) {
-					totalWeight += 2;
-				} else if (gateway.getOutgoing().size() > 2) {
-					totalWeight += 3;
-				}
-			}
+		for (ModelElementInstance modelStartEvent : basicMetricsExtractor.getCollectionOfElementType(StartEvent.class)) {
+			totalWeight += getSequenceNodesCognitiveWeight((FlowNode) modelStartEvent, false, false);
 		}
-		else {
-			//for processes
-			for (ModelElementInstance modelStartEvent : basicMetricsExtractor.getCollectionOfElementTypeProcess(StartEvent.class)) {
-				totalWeight += getSequenceNodesCognitiveWeight((FlowNode) modelStartEvent, false, false);
-			}
-			for (ModelElementInstance modelExGateway : basicMetricsExtractor.getCollectionOfElementTypeProcess(ExclusiveGateway.class)) {
-				ExclusiveGateway gateway = (ExclusiveGateway) modelExGateway;
-				if (gateway.getOutgoing().size() == 2) {
-					totalWeight += 2;
-				} else if (gateway.getOutgoing().size() > 2) {
-					totalWeight += 3;
-				}
+		for (ModelElementInstance modelExGateway : basicMetricsExtractor.getCollectionOfElementType(ExclusiveGateway.class)) {
+			ExclusiveGateway gateway = (ExclusiveGateway) modelExGateway;
+			if (gateway.getOutgoing().size() == 2) {
+				totalWeight += 2;
+			} else if (gateway.getOutgoing().size() > 2) {
+				totalWeight += 3;
 			}
 		}
 		totalWeight += (basicMetricsExtractor.getFlowDividingParallelGateways() * 4);

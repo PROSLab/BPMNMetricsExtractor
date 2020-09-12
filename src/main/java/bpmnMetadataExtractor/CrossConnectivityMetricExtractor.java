@@ -55,10 +55,7 @@ public class CrossConnectivityMetricExtractor {
 	 * OR : (1 / 2^d - 1) + ((2^d - 2) / (2^d - 1)) * 1 / d  
 	 */
 	private void getNodesWeights() {
-		Collection<ModelElementInstance> nodes;
-		if(basicExtractor.getExtractionType().equals("Model"))
-			nodes = basicExtractor.getCollectionOfElementType(FlowNode.class);
-		else nodes = basicExtractor.getCollectionOfElementTypeProcess(FlowNode.class);
+		Collection<ModelElementInstance> nodes = basicExtractor.getCollectionOfElementType(FlowNode.class);
 		double value = 0.0;
 		double d = 0.0;
 		double powOfD = 0.0;
@@ -86,10 +83,7 @@ public class CrossConnectivityMetricExtractor {
 	 * Il peso di un arco � dato dalla prodotto del peso del nodo sorgente e del peso del nodo bersaglio
 	 */
 	private void getArchsWeights() {
-		Collection<ModelElementInstance> nodes;
-		if(basicExtractor.getExtractionType().equals("Model"))
-			nodes = basicExtractor.getCollectionOfElementType(SequenceFlow.class);
-		else nodes = basicExtractor.getCollectionOfElementTypeProcess(SequenceFlow.class);
+		Collection<ModelElementInstance> nodes = basicExtractor.getCollectionOfElementType(SequenceFlow.class);
 		double value = 0;
 		double node1;
 		double node2;
@@ -109,10 +103,7 @@ public class CrossConnectivityMetricExtractor {
 	 * Il valore di connessione tra due nodi n1 e n2 � data dal valore massimo di percorso tra n1 e n2.
 	 */
 	private void getConnections() {
-		Collection<ModelElementInstance> nodes;
-		if(basicExtractor.getExtractionType().equals("Model"))
-			nodes = basicExtractor.getCollectionOfElementType(FlowNode.class);
-		else nodes = basicExtractor.getCollectionOfElementTypeProcess(FlowNode.class);
+		Collection<ModelElementInstance> nodes = basicExtractor.getCollectionOfElementType(FlowNode.class);
 		//Lista in cui vengono posti temporaneamente i vari valori di percorso di ogni coppia di nodi in ogni ciclo
 		Collection<Double> toCalc = new ArrayList<Double>();
 		Double tempSum = 0.0;

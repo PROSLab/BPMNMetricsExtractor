@@ -262,7 +262,7 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NEP", this.getEmptyPoolsProcess(), this.numberProcess);
 		this.json.addBasicMetric("NSFE", this.getSequenceFlowsFromEventsProcess(), this.numberProcess);
 		this.json.addBasicMetric("NSFG", this.getSequenceFlowsFromGatewaysProcess(), this.numberProcess);
-		this.json.addBasicMetric("NSFA", this.getSequenceFlowsBetweenActivitiesProcess(), this.numberProcess);
+		this.json.addBasicMetric("NSFA", this.getSequenceFlowsBetweenActivities(), this.numberProcess);
 		this.json.addBasicMetric("NAC", this.getActivationConditions(), this.numberProcess);
 		this.json.addBasicMetric("NACT", this.getActivities(), this.numberProcess);
 		this.json.addBasicMetric("NART", this.getArtifacts(), this.numberProcess);
@@ -628,26 +628,10 @@ public class BpmnBasicMetricsExtractor {
 	 * @return Number of sequence flows between activities
 	 */
 	public int getSequenceFlowsBetweenActivities() {
-		Collection<Activity> activities = this.modelInstance.getModelElementsByType(Activity.class);
-		Collection<SequenceFlow> outgoingFlows;
-		int numberOfSequenceFlows = 0;
-		for (Activity a : activities) {
-			outgoingFlows = a.getOutgoing();
-			for (SequenceFlow s : outgoingFlows) {
-				try {
-					if (s.getTarget() instanceof Activity) {
-						numberOfSequenceFlows++;
-					}
-				}catch(Exception e) {
-					continue;
-				}
-			}
-		}
-		return numberOfSequenceFlows;
-	}
-	
-	public int getSequenceFlowsBetweenActivitiesProcess() {
-		Collection<Activity> activities = this.process.getChildElementsByType(Activity.class);
+		Collection<Activity> activities;
+		if(this.extraction.equals("Process"))
+			activities = this.process.getChildElementsByType(Activity.class);
+		else activities = this.modelInstance.getModelElementsByType(Activity.class);
 		Collection<SequenceFlow> outgoingFlows;
 		int numberOfSequenceFlows = 0;
 		for (Activity a : activities) {
@@ -2366,7 +2350,7 @@ public class BpmnBasicMetricsExtractor {
 	//
 	public int getCollapsedSubprocesses() {
 		int ncsub = 0;
-		for(ModelElementInstance sub : getCollectionOfElementTypeProcess(SubProcess.class))
+		for(ModelElementInstance sub : getCollectionOfElementType(SubProcess.class))
 			if(((SubProcess) sub).getFlowElements().size()==0)
 				ncsub++;
 		return ncsub;
@@ -2667,7 +2651,7 @@ public class BpmnBasicMetricsExtractor {
 	 */
 	private int getFlowDividingElementsOfType(Class type) {
 		int toReturn = 0;
-		Collection<ModelElementInstance> modelElementInstances = getCollectionOfElementTypeProcess(type);
+		Collection<ModelElementInstance> modelElementInstances = getCollectionOfElementType(type);
 		for (ModelElementInstance instance : modelElementInstances) {
 			if (((FlowNode) instance).getOutgoing().size() > 1) {
 				toReturn += 1;
@@ -2683,7 +2667,7 @@ public class BpmnBasicMetricsExtractor {
 	 */
 	private int getFlowJoiningElementsOfType(Class type) {
 		int toReturn = 0;
-		Collection<ModelElementInstance> modelElementInstances = getCollectionOfElementTypeProcess(type);
+		Collection<ModelElementInstance> modelElementInstances = getCollectionOfElementType(type);
 		for (ModelElementInstance instance : modelElementInstances) {
 			if (((FlowNode) instance).getIncoming().size() > 1) {
 				toReturn += 1;
@@ -2699,7 +2683,7 @@ public class BpmnBasicMetricsExtractor {
 	 */
 	private int getFlowJoiningAndDividingElementsOfType(Class type) {
 		int toReturn = 0;
-		Collection<ModelElementInstance> modelElementInstances = getCollectionOfElementTypeProcess(type);
+		Collection<ModelElementInstance> modelElementInstances = getCollectionOfElementType(type);
 		for (ModelElementInstance instance : modelElementInstances) {
 			if (((FlowNode) instance).getIncoming().size() > 1 && ((FlowNode) instance).getOutgoing().size() > 1) {
 				toReturn += 1;
@@ -2718,16 +2702,15 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of elementi del tipo "type"
 	 */
 	public int getNumberOfTypeElement(Class type) {
-		return getCollectionOfElementTypeProcess(type).size();
+		return getCollectionOfElementType(type).size();
 	}
 	
 	public Collection<ModelElementInstance> getCollectionOfElementType(Class type) {
 		ModelElementType modelElementType = modelInstance.getModel().getType(type);
+		//check for extraction type option
+		if(this.extraction.equals("Process"))
+			return this.process.getChildElementsByType(type);
 		return this.modelInstance.getModelElementsByType(modelElementType);
-	}
-	
-	public Collection<ModelElementInstance> getCollectionOfElementTypeProcess(Class type) {
-		return this.process.getChildElementsByType(type);
 	}
 	
 	/**

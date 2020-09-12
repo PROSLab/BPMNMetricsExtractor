@@ -84,22 +84,12 @@ public class ConnectorInterplayMetricsExtractor {
 		 * @return the relative frequency of the specified gateway
 		 */
 		private double getRelativeFrequencyOfGateway(Class type) {
-			if(this.basicMetricExtractor.getExtractionType().equals("Model")) {
-				Collection<ModelElementInstance> gateways = this.basicMetricExtractor.getCollectionOfElementType(Gateway.class);
-				Collection<ModelElementInstance> specificGateways = this.basicMetricExtractor.getCollectionOfElementType(type);
-				try {
-					return (double)specificGateways.size()/gateways.size();
-				} catch (ArithmeticException e) {
-					return 0;
-				}
-			} else {
-				Collection<ModelElementInstance> gateways = this.basicMetricExtractor.getCollectionOfElementTypeProcess(Gateway.class);
-				Collection<ModelElementInstance> specificGateways = this.basicMetricExtractor.getCollectionOfElementTypeProcess(type);
-				try {
-					return (double)specificGateways.size()/gateways.size();
-				} catch (ArithmeticException e) {
-					return 0;
-				}
+			Collection<ModelElementInstance> gateways = this.basicMetricExtractor.getCollectionOfElementType(Gateway.class);
+			Collection<ModelElementInstance> specificGateways = this.basicMetricExtractor.getCollectionOfElementType(type);
+			try {
+				return (double)specificGateways.size()/gateways.size();
+			} catch (ArithmeticException e) {
+				return 0;
 			}
 		}
 		/**
@@ -176,10 +166,7 @@ public class ConnectorInterplayMetricsExtractor {
 			int totalDegree = 0;
 			try {
 				gatewayClass = Class.forName(classPathName);
-				Collection<ModelElementInstance> gateways;
-				if(this.basicMetricExtractor.getExtractionType().equals("Model"))
-					gateways = this.basicMetricExtractor.getCollectionOfElementType(Gateway.class);
-				else gateways = this.basicMetricExtractor.getCollectionOfElementTypeProcess(Gateway.class);
+				Collection<ModelElementInstance> gateways = this.basicMetricExtractor.getCollectionOfElementType(Gateway.class);
 				for (ModelElementInstance modelGateway: gateways) {
 					Gateway gateway = (Gateway) modelGateway;
 					if (gateway.getClass().equals(gatewayClass)) {
@@ -205,10 +192,7 @@ public class ConnectorInterplayMetricsExtractor {
 			int totalDegree = 0;
 			try {
 				gatewayClass = Class.forName(classPathName);
-				Collection<ModelElementInstance> gateways;
-				if(this.basicMetricExtractor.getExtractionType().equals("Model"))
-					gateways = this.basicMetricExtractor.getCollectionOfElementType(Gateway.class);
-				else gateways = this.basicMetricExtractor.getCollectionOfElementTypeProcess(Gateway.class);
+				Collection<ModelElementInstance> gateways = this.basicMetricExtractor.getCollectionOfElementType(Gateway.class);
 				for (ModelElementInstance modelGateway: gateways) {
 					Gateway gateway = (Gateway) modelGateway;
 					if (gateway.getClass().equals(gatewayClass)) {
