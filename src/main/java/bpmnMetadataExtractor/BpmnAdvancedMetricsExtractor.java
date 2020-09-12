@@ -225,23 +225,23 @@ public class BpmnAdvancedMetricsExtractor {
 			Diameter l = new Diameter(gm.getAdjacencyMatrix());
 			this.json.addAdvancedMetric("L", l.getL(), this.numberProcess);
 			StructureDiversity d = new StructureDiversity(gm.getAdjacencyMatrix(), gm.getReachabilityMatrix(), gal.getAdj());
-			this.json.addAdvancedMetric("D", (double) Math.round(d.getD() * 1000d) / 1000d);
+			this.json.addAdvancedMetric("D", (double) Math.round(d.getD() * 1000d) / 1000d, this.numberProcess);
 			AggregateIndicator ac = new AggregateIndicator(l.getL(),b.getB(),d.getD());
-			this.json.addAdvancedMetric("AC",(double) Math.round(ac.getAC() * 1000d) / 1000d);
+			this.json.addAdvancedMetric("AC",(double) Math.round(ac.getAC() * 1000d) / 1000d, this.numberProcess);
 			RestrictivenessEstimator rt = new RestrictivenessEstimator(gm.getVertix(),gm.getReachabilityMatrix());
-			this.json.addAdvancedMetric("RT",(double) Math.round(rt.getRT() * 1000d) / 1000d);
+			this.json.addAdvancedMetric("RT",(double) Math.round(rt.getRT() * 1000d) / 1000d, this.numberProcess);
 			TreesNumber t = new TreesNumber(gm.getAdjacencyMatrix());
-			this.json.addAdvancedMetric("T", t.getT());
+			this.json.addAdvancedMetric("T", t.getT(), this.numberProcess);
 			//compute metricss on acyclical graph
 			if(!cyclical) {
 				this.dopExtractor.setDop(this.basicMetricsExtractor.getProcess());
 				this.json.addAdvancedMetric("DOP", this.dopExtractor.getDop(), this.numberProcess);
 				ComplexityIndex ci = new ComplexityIndex(gm.getAdjacencyMatrix(), gal.getAdj());
-				this.json.addAdvancedMetric("CI",ci.getCI());
-			}
-			for(String s : this.mc.getNotification())
-				this.json.addAlert(this.basicMetricsExtractor.getProcess().getId(), s);
+				this.json.addAdvancedMetric("CI",ci.getCI(), this.numberProcess);
+			}	
 		}
+		for(String s : this.mc.getNotification())
+			this.json.addAlert(this.basicMetricsExtractor.getProcess().getId(), s);
 	}
 
 	/**
