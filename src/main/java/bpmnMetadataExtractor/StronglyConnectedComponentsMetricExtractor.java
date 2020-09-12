@@ -43,7 +43,7 @@ public class StronglyConnectedComponentsMetricExtractor {
 		//computes the strongly connected components of the model
 		this.getModelStronglyConnectedComponents();
 	}
-
+	
 	/**
 	 * METRIC: CYC
 	 * @return the cyclicity degree of the model
