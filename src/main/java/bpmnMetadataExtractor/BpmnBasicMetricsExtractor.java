@@ -245,6 +245,7 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NBNIMUEV", this.getNonInterruptingBoundaryMultipleEvents());
 		this.json.addBasicMetric("NBNIESCEV", this.getNonInterruptingBoundaryEscalationEvents());
 		this.json.addBasicMetric("NBNIPMUEV", this.getNonInterruptingBoundaryParallelMultipleEvents());
+		this.json.addBasicMetric("TNIE", getTotalNumberOfIntermediateEvents());
 	}
 	
 	public void runMetricsProcess() {
@@ -446,6 +447,8 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NBNIMUEV", this.getNonInterruptingBoundaryMultipleEventsProcess(), this.numberProcess);
 		this.json.addBasicMetric("NBNIESCEV", this.getNonInterruptingBoundaryEscalationEventsProcess(), this.numberProcess);
 		this.json.addBasicMetric("NBNIPMUEV", this.getNonInterruptingBoundaryParallelMultipleEventsProcess(), this.numberProcess);
+		json.addBasicMetric("TNIE", getTotalNumberOfIntermediateEvents(), this.numberProcess);
+
 	}
 	
 	/**
@@ -1304,6 +1307,19 @@ public class BpmnBasicMetricsExtractor {
 	 */
 	public int getDocumentations() {
 		return getNumberOfTypeElement(Documentation.class);
+	}
+	
+	/**
+	 * Metric: TNIE
+	 * Total number of Intermediate Events
+	 * Number of Intermediate None Events  + Number of Intermediate Timer Events + Number of Intermediate Message Events + Number of Intermediate Error Events + 
+	 *     + Number of Intermediate Cancel Events + Number of Intermediate Compensation Event + Number of Intermediate Rule Events +
+	 *     + Number of Intermediate Link Events + Number of Intermediate Multiple Events
+	 * (TNIE = NINE + NITE + NIMsE + NIEE + NICaE + NICoE + NIRE + NILE + NIMuE)
+	 * @return
+	 */
+	public int getTotalNumberOfIntermediateEvents() {
+		return getEvents() - getStartEvents() - getEndEvents();
 	}
 	
 	/**

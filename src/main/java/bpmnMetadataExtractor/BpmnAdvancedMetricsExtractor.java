@@ -70,21 +70,21 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("CLP", getConnectivityLevelBetweenPartecipants());
 		json.addAdvancedMetric("PDOPin", getProportionOfIncomingDataObjectsAndTotalDataObjects());
 		json.addAdvancedMetric("PDOPout", getProportionOfOutgoingDataObjectsAndTotalDataObjects());
-		json.addAdvancedMetric("TNT", getTotalNumberOfTasks());
+		//json.addAdvancedMetric("TNT", getTotalNumberOfTasks());
 		json.addAdvancedMetric("VOL", getVolume());
 		json.addAdvancedMetric("RRPA", getRatioRolesActivities());
 		json.addAdvancedMetric("PDOTout", getProportionOfDataObjectsAsOutgoingProducts());
 		json.addAdvancedMetric("PLT", getProportionOfLanesAndTasks());
-		json.addAdvancedMetric("TNCS", getNumberOfCollapsedSubProcesses());
+		//json.addAdvancedMetric("TNCS", getNumberOfCollapsedSubProcesses());
 		//json.addAdvancedMetric("TNA", getTotalNumberOfActivities());
-		json.addAdvancedMetric("TNDO", getTotalNumberOfDataObjects());
-		json.addAdvancedMetric("TNG", getTotalNumberOfGateways());
+		//json.addAdvancedMetric("TNDO", getTotalNumberOfDataObjects());
+		//json.addAdvancedMetric("TNG", getTotalNumberOfGateways());
 		json.addAdvancedMetric("S(df)", getDataFlowSize());
 		json.addAdvancedMetric("C(df)", getDataFlowComplexity());
-		json.addAdvancedMetric("TNEE", getTotalNumberOfEndEvents());
-		json.addAdvancedMetric("TNIE", getTotalNumberOfIntermediateEvents());
-		json.addAdvancedMetric("TNSE", getTotalNumberOfStartEvents());
-		json.addAdvancedMetric("TNE", getTotalNumberOfEvents());
+		//json.addAdvancedMetric("TNEE", getTotalNumberOfEndEvents());
+		//json.addAdvancedMetric("TNIE", getTotalNumberOfIntermediateEvents());
+		//json.addAdvancedMetric("TNSE", getTotalNumberOfStartEvents());
+		//json.addAdvancedMetric("TNE", getTotalNumberOfEvents());
 		json.addAdvancedMetric("CFC", getControlFlowComplexity());
 		json.addAdvancedMetric("CFC(rel)", getRelativeControlFlowComplexity());
 		json.addAdvancedMetric("PCFC", getParallelControlFlowComplexity());
@@ -102,11 +102,11 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("AAI", getAverageActivityInput());
 		json.addAdvancedMetric("NoO", getNumberOfActivityOutputs());
 		json.addAdvancedMetric("AAO", getAverageActivityOutput());
-		json.addAdvancedMetric("Length", getActivityLength());
+		//json.addAdvancedMetric("Length", getActivityLength());
 		json.addAdvancedMetric("IC", getInterfaceComplexityOfActivityMetric());
 		json.addAdvancedMetric("FIO", getStructuralComplexity());
 		json.addAdvancedMetric("NOF", getNumberOfControlFlow());	
-		json.addAdvancedMetric("TNSF", getTotalNumberOfSequenceFlow());	
+		//json.addAdvancedMetric("TNSF", getTotalNumberOfSequenceFlow());	
 		json.addAdvancedMetric("CC", ccExtractor.calculateCrossConnectivity());
 		json.addAdvancedMetric("ICP",getImportedCouplingOfProcess());
 		json.addAdvancedMetric("ECP",getExportedCouplingOfProcess());
@@ -131,7 +131,7 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("MCD", this.getMaximumConnectorDegree());
 		json.addAdvancedMetric("GM", this.connectorInterplayMetricsExtractor.getGatewaysMismatchMetric());
 		json.addAdvancedMetric("CH", this.connectorInterplayMetricsExtractor.getConnectorsHeterogeneityMetric());
-		json.addAdvancedMetric("ECaM", this.getExtendedCardosoMetric());
+		//json.addAdvancedMetric("ECaM", this.getExtendedCardosoMetric());
 		json.addAdvancedMetric("ECyM", this.sccExtractor.getEcym());
 		json.addAdvancedMetric("PF", this.sccExtractor.getCycle());
 		json.addAdvancedMetric("DSM", dsmExtractor.getDurfeeMetric());
@@ -146,21 +146,21 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("CLP", getConnectivityLevelBetweenPartecipants(),  this.numberProcess);
 		json.addAdvancedMetric("PDOPin", getProportionOfIncomingDataObjectsAndTotalDataObjects(), this.numberProcess);
 		json.addAdvancedMetric("PDOPout", getProportionOfOutgoingDataObjectsAndTotalDataObjects(), this.numberProcess);
-		json.addAdvancedMetric("TNT", getTotalNumberOfTasks(), this.numberProcess);
+		//json.addAdvancedMetric("TNT", getTotalNumberOfTasks(), this.numberProcess);
 		json.addAdvancedMetric("VOL", getVolume(), this.numberProcess);
 		json.addAdvancedMetric("RRPA", getRatioRolesActivities(), this.numberProcess);
 		json.addAdvancedMetric("PDOTout", getProportionOfDataObjectsAsOutgoingProducts(), this.numberProcess);
 		json.addAdvancedMetric("PLT", getProportionOfLanesAndTasks(), this.numberProcess);
-		json.addAdvancedMetric("TNCS", getNumberOfCollapsedSubProcesses(), this.numberProcess);
+		//json.addAdvancedMetric("TNCS", getNumberOfCollapsedSubProcesses(), this.numberProcess);
 		//json.addAdvancedMetric("TNA", getTotalNumberOfActivities());
-		json.addAdvancedMetric("TNDO", getTotalNumberOfDataObjects(), this.numberProcess);
-		json.addAdvancedMetric("TNG", getTotalNumberOfGateways(), this.numberProcess);
+		//json.addAdvancedMetric("TNDO", getTotalNumberOfDataObjects(), this.numberProcess);
+		//json.addAdvancedMetric("TNG", getTotalNumberOfGateways(), this.numberProcess);
 		json.addAdvancedMetric("S(df)", getDataFlowSize(), this.numberProcess);
 		json.addAdvancedMetric("C(df)", getDataFlowComplexity(), this.numberProcess);
-		json.addAdvancedMetric("TNEE", getTotalNumberOfEndEvents(), this.numberProcess);
-		json.addAdvancedMetric("TNIE", getTotalNumberOfIntermediateEvents(), this.numberProcess);
-		json.addAdvancedMetric("TNSE", getTotalNumberOfStartEvents(), this.numberProcess);
-		json.addAdvancedMetric("TNE", getTotalNumberOfEvents(), this.numberProcess);
+		//json.addAdvancedMetric("TNEE", getTotalNumberOfEndEvents(), this.numberProcess);
+		//json.addAdvancedMetric("TNIE", getTotalNumberOfIntermediateEvents(), this.numberProcess);
+		//json.addAdvancedMetric("TNSE", getTotalNumberOfStartEvents(), this.numberProcess);
+		//json.addAdvancedMetric("TNE", getTotalNumberOfEvents(), this.numberProcess);
 		json.addAdvancedMetric("CFC", getControlFlowComplexity(), this.numberProcess);
 		json.addAdvancedMetric("CFC(rel)", getRelativeControlFlowComplexity(), this.numberProcess);
 		json.addAdvancedMetric("PCFC", getParallelControlFlowComplexity(), this.numberProcess);
@@ -178,11 +178,11 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("AAI", getAverageActivityInput(), this.numberProcess);
 		json.addAdvancedMetric("NoO", getNumberOfActivityOutputs(), this.numberProcess);
 		json.addAdvancedMetric("AAO", getAverageActivityOutput(), this.numberProcess);
-		json.addAdvancedMetric("Length", getActivityLength(), this.numberProcess);
+		//json.addAdvancedMetric("Length", getActivityLength(), this.numberProcess);
 		json.addAdvancedMetric("IC", getInterfaceComplexityOfActivityMetric(), this.numberProcess);
 		json.addAdvancedMetric("FIO", getStructuralComplexity(), this.numberProcess);
 		json.addAdvancedMetric("NOF", getNumberOfControlFlow(), this.numberProcess);	
-		json.addAdvancedMetric("TNSF", getTotalNumberOfSequenceFlow(), this.numberProcess);	
+		//json.addAdvancedMetric("TNSF", getTotalNumberOfSequenceFlow(), this.numberProcess);	
 		json.addAdvancedMetric("CC", ccExtractor.calculateCrossConnectivity(), this.numberProcess);
 		json.addAdvancedMetric("ICP",getImportedCouplingOfProcess(), this.numberProcess);
 		json.addAdvancedMetric("ECP",getExportedCouplingOfProcess(), this.numberProcess);
@@ -207,7 +207,7 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("MCD", this.getMaximumConnectorDegree(), this.numberProcess);
 		json.addAdvancedMetric("GM", this.connectorInterplayMetricsExtractor.getGatewaysMismatchMetric(), this.numberProcess);
 		json.addAdvancedMetric("CH", this.connectorInterplayMetricsExtractor.getConnectorsHeterogeneityMetric(), this.numberProcess);
-		json.addAdvancedMetric("ECaM", this.getExtendedCardosoMetric(), this.numberProcess);
+		//json.addAdvancedMetric("ECaM", this.getExtendedCardosoMetric(), this.numberProcess);
 		json.addAdvancedMetric("ECyM", this.sccExtractor.getEcym(), this.numberProcess);
 		json.addAdvancedMetric("PF", this.sccExtractor.getCycle(), this.numberProcess);
 		json.addAdvancedMetric("DSM", dsmExtractor.getDurfeeMetric(), this.numberProcess);
@@ -289,7 +289,7 @@ public class BpmnAdvancedMetricsExtractor {
 	 */
 	public float getProportionOfIncomingDataObjectsAndTotalDataObjects() {
 		try {
-			float toReturn = (float)basicMetricsExtractor.getDataObjectsInput() / getTotalNumberOfDataObjects();
+			float toReturn = (float)basicMetricsExtractor.getDataObjectsInput() / this.basicMetricsExtractor.getDataObjects();
 			if (Float.isFinite(toReturn)) {
 				return toReturn;
 			}
@@ -307,7 +307,7 @@ public class BpmnAdvancedMetricsExtractor {
 	 */
 	public float getProportionOfOutgoingDataObjectsAndTotalDataObjects() {
 		try {
-			float toReturn = (float)basicMetricsExtractor.getDataObjectsOutput() / getTotalNumberOfDataObjects();
+			float toReturn = (float)basicMetricsExtractor.getDataObjectsOutput() / this.basicMetricsExtractor.getDataObjects();
 			if (Float.isFinite(toReturn)) {
 				return toReturn;
 			}
@@ -323,9 +323,9 @@ public class BpmnAdvancedMetricsExtractor {
 	 * Number of Tasks + Number of Task Looping + Number of Task Multiple Instances + Number of Task Compensation (TNT = NT + NTL + NTMI + NTC)
 	 * @return
 	 */
-	public int getTotalNumberOfTasks() {
+	/*public int getTotalNumberOfTasks() {
 		return basicMetricsExtractor.getTasks();
-	}
+	}*/
 	
 	/**
 	 * Metric: PDOTout
@@ -335,7 +335,7 @@ public class BpmnAdvancedMetricsExtractor {
 	 */
 	public float getProportionOfDataObjectsAsOutgoingProducts() {
 		try {
-			float toReturn = (float)basicMetricsExtractor.getDataObjectsOutput() / getTotalNumberOfTasks();
+			float toReturn = (float)basicMetricsExtractor.getDataObjectsOutput() / basicMetricsExtractor.getTasks();
 			if (Float.isFinite(toReturn)) {
 				return toReturn;
 			}
@@ -353,7 +353,7 @@ public class BpmnAdvancedMetricsExtractor {
 	 */
 	public float getProportionOfLanesAndTasks() {
 		try {
-			float toReturn = (float)basicMetricsExtractor.getLanesProcess() / getTotalNumberOfTasks();
+			float toReturn = (float)basicMetricsExtractor.getLanesProcess() / basicMetricsExtractor.getTasks();
 			if (Float.isFinite(toReturn)) {
 				return toReturn;
 			}
@@ -371,7 +371,7 @@ public class BpmnAdvancedMetricsExtractor {
 	 */
 	public float getProportionOfPoolsAndTasks() {
 		try {
-			float toReturn = (float)basicMetricsExtractor.getPools() / getTotalNumberOfTasks();
+			float toReturn = (float)basicMetricsExtractor.getPools() / basicMetricsExtractor.getTasks();
 			if (Float.isFinite(toReturn)) {
 				return toReturn;
 			}
@@ -425,9 +425,9 @@ public class BpmnAdvancedMetricsExtractor {
 	 * (TNCS = NCS + NCSL + NCSMI + NCSC + NCSA)
 	 * @return
 	 */
-	public int getNumberOfCollapsedSubProcesses() {
+	/*public int getNumberOfCollapsedSubProcesses() {
 		return basicMetricsExtractor.getSubprocesses();
-	}
+	}*/
 	
 	/**
 	 * Metric: TNA
@@ -447,9 +447,9 @@ public class BpmnAdvancedMetricsExtractor {
 	 * Number of data objects which are input of activities + Number of data objects which are outputs of activities (TNDO = NDOIn + NDOOut)
 	 * @return
 	 */
-	public int getTotalNumberOfDataObjects() {
+	/*public int getTotalNumberOfDataObjects() {
 		return basicMetricsExtractor.getDataObjectsInput() + basicMetricsExtractor.getDataObjectsOutput();
-	}
+	}*/
 	
 	/**TODO
 	 * Metric: TNG
@@ -458,11 +458,11 @@ public class BpmnAdvancedMetricsExtractor {
 	 * (TNG = NEDDB + NEDEB + NID + NCD + NPF)
 	 * @return
 	 */
-	public int getTotalNumberOfGateways() {
+	/*public int getTotalNumberOfGateways() {
 		return basicMetricsExtractor.getExclusiveDataBasedDecisions() + basicMetricsExtractor.getExclusiveEventBasedDecisions() + basicMetricsExtractor.getInclusiveDecisions() + 
 				basicMetricsExtractor.getComplexDecisions() + basicMetricsExtractor.getParallelGateways();
 		//return basicMetricsExtractor.getGateways();
-	}
+	}*/
 	
 	/**TODO i vari tipi di End Events non sono presenti 
 	 * Metric: TNEE
@@ -472,9 +472,9 @@ public class BpmnAdvancedMetricsExtractor {
 	 * (TNEE = NENE + NEMsE + NEEE + NECaE + NECoE + NELE + NEMuE + NETE)
 	 * @return
 	 */
-	public int getTotalNumberOfEndEvents() {
+	/*public int getTotalNumberOfEndEvents() {
 		return basicMetricsExtractor.getEndEvents();
-	}
+	}*/
 	
 	/**
 	 * Metric: TNIE
@@ -485,9 +485,9 @@ public class BpmnAdvancedMetricsExtractor {
 	 * (TNIE = NINE + NITE + NIMsE + NIEE + NICaE + NICoE + NIRE + NILE + NIMuE)
 	 * @return
 	 */
-	public int getTotalNumberOfIntermediateEvents() {
+	/*public int getTotalNumberOfIntermediateEvents() {
 		return basicMetricsExtractor.getEvents() - basicMetricsExtractor.getStartEvents() - basicMetricsExtractor.getEndEvents();
-	}
+	}*/
 	
 	/**TODO i vari tipi di Start Events non sono presenti 
 	 * Metric: TNSE
@@ -497,9 +497,9 @@ public class BpmnAdvancedMetricsExtractor {
 	 * (TNSE = NSNE + NSTE + NSMsE + NSRE + NSLE + NSMuE)
 	 * @return
 	 */
-	public int getTotalNumberOfStartEvents() {
+	/*public int getTotalNumberOfStartEvents() {
 		return basicMetricsExtractor.getStartEvents();
-	}
+	}*/
 	
 	/**TODO 
 	 * Metric: TNE
@@ -508,9 +508,9 @@ public class BpmnAdvancedMetricsExtractor {
 	 * (TNE = TNSE + TNIE + TNEE)
 	 * @return
 	 */
-	public int getTotalNumberOfEvents() {
+	/*public int getTotalNumberOfEvents() {
 		return getTotalNumberOfStartEvents() + getTotalNumberOfIntermediateEvents() + getTotalNumberOfEndEvents();
-	}
+	}*/
 	
 	/**
 	 * Metric: CFC
@@ -622,7 +622,7 @@ public class BpmnAdvancedMetricsExtractor {
 		for (ModelElementInstance activity : activities) {
 			toReturn+=((FlowNode) activity).getIncoming().size()+((FlowNode) activity).getOutgoing().size();
 		}
-		toReturn = toReturn - basicMetricsExtractor.getEndEvents() + this.getTotalNumberOfGateways();
+		toReturn = toReturn - basicMetricsExtractor.getEndEvents() + this.basicMetricsExtractor.getGateways();
 		return toReturn;
 	}
 
@@ -782,7 +782,7 @@ public class BpmnAdvancedMetricsExtractor {
 	public double getArcCognitiveComplexity() {
 		try {
 		
-			return (double)(this.basicMetricsExtractor.getActivities() + (this.ndExtractor.getMaxNestingDepth()) * 14) + (basicMetricsExtractor.getCollectionOfElementType(InclusiveGateway.class).size()*7) + (basicMetricsExtractor.getCollectionOfElementType(ExclusiveGateway.class).size()*2) + (basicMetricsExtractor.getCollectionOfElementType(ParallelGateway.class).size()*4) + (this.getStructuralComplexity()*4) + (this.getTotalNumberOfSequenceFlow());
+			return (double)(this.basicMetricsExtractor.getActivities() + (this.ndExtractor.getMaxNestingDepth()) * 14) + (basicMetricsExtractor.getCollectionOfElementType(InclusiveGateway.class).size()*7) + (basicMetricsExtractor.getCollectionOfElementType(ExclusiveGateway.class).size()*2) + (basicMetricsExtractor.getCollectionOfElementType(ParallelGateway.class).size()*4) + (this.getStructuralComplexity()*4) + (this.basicMetricsExtractor.getSequenceFlows());
 		} 
 		catch (ArithmeticException e) {
 			return 0;	
@@ -813,9 +813,9 @@ public class BpmnAdvancedMetricsExtractor {
 	 *  MCC (McCabe's cyclomatic complexity).
 	 *  @return
 	 */
-	public int getActivityLength() {
+	/*public int getActivityLength() {
 		return basicMetricsExtractor.getActivities();
-	}
+	}*/
 	
 	/**
 	 * Metric: IC
@@ -826,7 +826,8 @@ public class BpmnAdvancedMetricsExtractor {
 	 * @return
 	 */
 	public double getInterfaceComplexityOfActivityMetric() {
-		return getActivityLength() * Math.pow((getNumberOfActivityInputs() * getNumberOfActivityOutputs()), 2);
+		//return getActivityLength() * Math.pow((getNumberOfActivityInputs() * getNumberOfActivityOutputs()), 2);
+		return this.basicMetricsExtractor.getActivities() * Math.pow((getNumberOfActivityInputs() * getNumberOfActivityOutputs()), 2);
 	}
 	
 	/**
@@ -855,9 +856,9 @@ public class BpmnAdvancedMetricsExtractor {
 	 * Total Number of Sequence Flows
 	 * @return
 	 */
-	public int getTotalNumberOfSequenceFlow(){
+	/*public int getTotalNumberOfSequenceFlow(){
 		return basicMetricsExtractor.getSequenceFlows();
-	}
+	}*/
 	
 	/**
 	 * Metric: VOL
@@ -1148,11 +1149,11 @@ public class BpmnAdvancedMetricsExtractor {
 	 */
 	public double getParallelism() {
 		try {
-			double result = (double)this.getTotalNumberOfTasks()/this.sizeExtractor.getDiam();
+			double result = (double)this.basicMetricsExtractor.getTasks()/this.sizeExtractor.getDiam();
 			if (!Double.isFinite(result)) 
 				return 0;
 			else
-				return  (double) this.getTotalNumberOfTasks()/this.sizeExtractor.getDiam();
+				return  (double) this.basicMetricsExtractor.getTasks()/this.sizeExtractor.getDiam();
 		} 
 		catch (ArithmeticException e) {
 			return 0;	
@@ -1274,9 +1275,9 @@ public class BpmnAdvancedMetricsExtractor {
 	 * It is the extension of CFC metric for Petri Nets.
 	 * @return
 	 */
-	public double getExtendedCardosoMetric(){
+	/*public double getExtendedCardosoMetric(){
 		return this.getControlFlowComplexity();
-	}
+	}*/
 	
 	/**
 	 * Metric: TS
