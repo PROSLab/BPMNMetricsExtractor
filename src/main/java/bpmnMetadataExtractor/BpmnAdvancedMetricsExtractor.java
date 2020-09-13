@@ -353,7 +353,7 @@ public class BpmnAdvancedMetricsExtractor {
 	 */
 	public float getProportionOfLanesAndTasks() {
 		try {
-			float toReturn = (float)basicMetricsExtractor.getLanesProcess() / basicMetricsExtractor.getTasks();
+			float toReturn = (float)basicMetricsExtractor.getLanes() / basicMetricsExtractor.getTasks();
 			if (Float.isFinite(toReturn)) {
 				return toReturn;
 			}
@@ -389,7 +389,7 @@ public class BpmnAdvancedMetricsExtractor {
 	 */
 	public float getProportionOfLanesAndActivities() {
 		try {
-			float toReturn = (float)basicMetricsExtractor.getLanesProcess() / basicMetricsExtractor.getActivities();
+			float toReturn = (float)basicMetricsExtractor.getLanes() / basicMetricsExtractor.getActivities();
 			if (Float.isFinite(toReturn)) {
 				return toReturn;
 			}
