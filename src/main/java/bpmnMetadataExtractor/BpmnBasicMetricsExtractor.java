@@ -1,6 +1,7 @@
 package bpmnMetadataExtractor;
 
 import java.util.Collection;
+
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.camunda.bpm.model.bpmn.instance.*;
 import org.camunda.bpm.model.bpmn.instance.Error;
@@ -246,6 +247,8 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NBNIESCEV", this.getNonInterruptingBoundaryEscalationEvents());
 		this.json.addBasicMetric("NBNIPMUEV", this.getNonInterruptingBoundaryParallelMultipleEvents());
 		this.json.addBasicMetric("TNIE", getTotalNumberOfIntermediateEvents());
+		//this.json.addBasicMetric("NG", getGroups());
+		this.json.addBasicMetric("NSL", getSwimlanes());
 	}
 	
 	public void runMetricsProcess() {
@@ -448,6 +451,8 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NBNIESCEV", this.getNonInterruptingBoundaryEscalationEvents(), this.numberProcess);
 		this.json.addBasicMetric("NBNIPMUEV", this.getNonInterruptingBoundaryParallelMultipleEvents(), this.numberProcess);
 		json.addBasicMetric("TNIE", getTotalNumberOfIntermediateEvents(), this.numberProcess);
+		//this.json.addBasicMetric("NG", getGroups(), this.numberProcess);
+		this.json.addBasicMetric("NSL", getSwimlanes(), this.numberProcess);
 
 	}
 	
@@ -559,6 +564,15 @@ public class BpmnBasicMetricsExtractor {
 	 */
 	public int getPools() {
 		return getNumberOfTypeElement(Participant.class);
+	}
+	
+	/**
+	 * Metric: NSL
+	 * 
+	 * @return number of Swimlanes
+	 */
+	public int getSwimlanes() {
+		return getPools() + getLanes();
 	}
 
 	/**
@@ -2239,6 +2253,15 @@ public class BpmnBasicMetricsExtractor {
 	public int getTextAnnotations() {
 		return getNumberOfTypeElement(TextAnnotation.class);
 	}
+	
+	/**
+	 * Metric: NG
+	 * 
+	 * @return number of Groups
+	 */
+	/*public int getGroups() {
+		return getNumberOfTypeElement(Group.class);
+	}*/
 	
 	/**
 	 * Metric: NTHEV

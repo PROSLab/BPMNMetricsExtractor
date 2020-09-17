@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.camunda.bpm.model.bpmn.instance.Activity;
+import org.camunda.bpm.model.bpmn.instance.BaseElement;
 import org.camunda.bpm.model.bpmn.instance.DataObject;
 import org.camunda.bpm.model.bpmn.instance.ExclusiveGateway;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;
@@ -139,6 +140,7 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("Layout_Complexity", dsmExtractor.getLayoutComplexityMetric());
 		json.addAdvancedMetric("Layout_Measure", this.lmExtractor.getLayoutMeasure());
 		//System.out.println("JSON adv: " + this.json.getString());
+		json.addAdvancedMetric("S", this.getNumberOfBPMNElements());
 	}
 	
 	public void runMetricsProcess(String conversion) {
@@ -238,7 +240,8 @@ public class BpmnAdvancedMetricsExtractor {
 				this.json.addAdvancedMetric("DOP", this.dopExtractor.getDop(), this.numberProcess);
 				ComplexityIndex ci = new ComplexityIndex(gm.getAdjacencyMatrix(), gal.getAdj());
 				this.json.addAdvancedMetric("CI",ci.getCI(), this.numberProcess);
-			}	
+			}
+			json.addAdvancedMetric("S", this.getNumberOfBPMNElements(), this.numberProcess);
 		}
 		//da controllare
 		for(String s : this.mc.getNotification())
@@ -1050,6 +1053,15 @@ public class BpmnAdvancedMetricsExtractor {
 	 */
 	public int getNumberOfNodes(){
 		return basicMetricsExtractor.getFlowNodes();
+	}
+	
+	/**
+	 * Metric: S
+	 * Number of BPMN elements 
+	 * @return
+	 */
+	public int getNumberOfBPMNElements(){
+		return basicMetricsExtractor.getModelInstance().getModelElementsByType(BaseElement.class).size();
 	}
 	
 	/**

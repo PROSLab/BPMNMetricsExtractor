@@ -275,3 +275,6 @@ AC %Aggregate indicator of process complexity	{absent}
 RT %Restrictiveness estimator 	{absent}
 T %Number of trees in a graph	{absent}
 CI %Complexity index	{absent}
+NG	%Number of Groups {Camunda API Instance Package}
+NSL	%Number of Swimlanes {Camunda API Instance Package}
+S	%Number of BPMN elements	{10.1007/978-3-540-89224-3}
