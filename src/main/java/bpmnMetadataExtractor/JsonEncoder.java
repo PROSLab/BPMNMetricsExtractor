@@ -20,7 +20,6 @@ import org.camunda.bpm.engine.impl.util.json.*;
  */
 public class JsonEncoder {
 	
-	
 	private JSONObject json;
 	private String fileName;
 	private Map<String, String[]> metricsInfos;  
@@ -58,8 +57,7 @@ public class JsonEncoder {
 	private void initializeJSON(){
 		JSONObject header = new JSONObject();
 		JSONObject process = new JSONObject();
-		JSONObject notes = new JSONObject();
-		this.json.put("header", header).put("notes", notes).put("process", process);
+		this.json.put("header", header).put("process", process);
 	}
 	
 	public void buildJSON(int i){
@@ -144,7 +142,6 @@ public class JsonEncoder {
 		advMetric.put("source", metricInfos[1]);
 		//edited
 		this.json.getJSONObject("process").getJSONObject("0").getJSONObject("advanced_metrics").put(metricName, advMetric);
-
 	}
 	
 	public void addAdvancedMetric(String metricName, double n, int i){
@@ -157,15 +154,6 @@ public class JsonEncoder {
 		advMetric.put("description", metricInfos[0]);
 		advMetric.put("source", metricInfos[1]);
 		this.json.getJSONObject("process").getJSONObject(Integer.toString(i)).getJSONObject("advanced_metrics").put(metricName, advMetric);
-	}
-	
-	/**
-	 * Metodo per aggiungere al json gli avvisi prodotti durante la conversione
-	 * @param processName nome del processo convertito
-	 * @param note avviso prodotto durante conversione
-	 */
-	public void addAlert(String processName, String note){
-		this.json.getJSONObject("notes").put(processName, note);
 	}
 	
 	public ArrayList<String> getBasicMetricsNames() {

@@ -240,12 +240,9 @@ public class BpmnAdvancedMetricsExtractor {
 				this.json.addAdvancedMetric("DOP", this.dopExtractor.getDop(), this.numberProcess);
 				ComplexityIndex ci = new ComplexityIndex(gm.getAdjacencyMatrix(), gal.getAdj());
 				this.json.addAdvancedMetric("CI",ci.getCI(), this.numberProcess);
-			}
-			json.addAdvancedMetric("S", this.getNumberOfBPMNElements(), this.numberProcess);
+				}
 		}
-		//da controllare
-		for(String s : this.mc.getNotification())
-			this.json.addAlert(this.basicMetricsExtractor.getProcess().getId(), s);
+		json.addAdvancedMetric("S", this.getNumberOfBPMNElements(), this.numberProcess);
 	}
 
 	/**
