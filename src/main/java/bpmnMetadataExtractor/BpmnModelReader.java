@@ -1,7 +1,7 @@
 package bpmnMetadataExtractor;
 
 import java.io.File;
-import java.io.IOException;
+//import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 
@@ -63,50 +63,6 @@ public class BpmnModelReader {
 		this.loadedFile = new File(filePath);
 	}
 	
-	/**
-	 * Metodo di test che viene richiamato dal main
-	 */
-	private void test() {
-		long startTime = System.currentTimeMillis();
-		BpmnModelInstance modelInstance = Bpmn.readModelFromFile(loadedFile);
-		JsonEncoder jsonEncoder = new JsonEncoder(loadedFile.getName());
-		int numberProcess = 0;
-		for(Process p: modelInstance.getModelElementsByType(Process.class)) {
-			jsonEncoder.buildJSON(numberProcess);
-			BpmnBasicMetricsExtractor basicExtractor = new BpmnBasicMetricsExtractor(modelInstance, p, jsonEncoder, numberProcess, this.extractionType);
-			//Model
-			ModelConverter mc = new ModelConverter(modelInstance);
-			BpmnAdvancedMetricsExtractor advExtractor = new BpmnAdvancedMetricsExtractor(mc, basicExtractor, jsonEncoder, numberProcess);
-			if(this.extractionType.equals("Process")) {
-				numberProcess++;
-				long loadTime = System.currentTimeMillis() - startTime;
-//				System.out.println("Tempo load del file: " + loadTime + "ms");
-				basicExtractor.runMetricsProcess();
-				long basicTime = System.currentTimeMillis() - loadTime - startTime;
-//				System.out.println("Tempo calcolo metriche di base: " + basicTime + "ms");
-				advExtractor.runMetricsProcess(this.conversionType);
-				long advTime = System.currentTimeMillis() - basicTime - startTime - loadTime;
-//				System.out.println("Tempo calcolo metriche avanzate: " + advTime + "ms");
-			} else {
-				long loadTime = System.currentTimeMillis() - startTime;
-//				System.out.println("Tempo load del file: " + loadTime + "ms");
-				basicExtractor.runMetrics();
-				long basicTime = System.currentTimeMillis() - loadTime - startTime;
-//				System.out.println("Tempo calcolo metriche di base: " + basicTime + "ms");
-				advExtractor.runMetrics();
-				long advTime = System.currentTimeMillis() - basicTime - startTime - loadTime;
-//				System.out.println("Tempo calcolo metriche avanzate: " + advTime + "ms");
-			}
-			jsonEncoder.exportJson();
-			MySqlInterface db = new MySqlInterface();
-			db.connect();
-//			db.createTables(jsonEncoder);
-//			db.createAndInsertMetricsInfosTable();
-//			db.saveMetrics(jsonEncoder);
-//			db.closeConnection();
-		}
-	}
-	
 	public String getJsonMetrics(InputStream fileStream, String fileName) {
 		BpmnModelInstance modelInstance = Bpmn.readModelFromStream(fileStream);
 		JsonEncoder jsonEncoder = new JsonEncoder(fileName);
@@ -138,9 +94,8 @@ public class BpmnModelReader {
 		return jsonEncoder.getJson().toString();
 	}
 
-	public static void main(String[] args) throws IOException{
+	/*public static void main(String[] args) throws IOException{
 		BpmnFileOpener fileOpener = new BpmnFileOpener();
-		BpmnModelReader modelReader = new BpmnModelReader(fileOpener.openFile());
-		modelReader.test();		
-	}
+		BpmnModelReader modelReader = new BpmnModelReader(fileOpener.openFile());		
+	}*/
 }

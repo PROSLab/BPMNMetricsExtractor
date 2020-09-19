@@ -83,6 +83,7 @@ public class ConnectorInterplayMetricsExtractor {
 		 * @param type - the calss of gateways of which relative frequency has to be calculated
 		 * @return the relative frequency of the specified gateway
 		 */
+		@SuppressWarnings("rawtypes")
 		private double getRelativeFrequencyOfGateway(Class type) {
 			Collection<ModelElementInstance> gateways = this.basicMetricExtractor.getCollectionOfElementType(Gateway.class);
 			Collection<ModelElementInstance> specificGateways = this.basicMetricExtractor.getCollectionOfElementType(type);

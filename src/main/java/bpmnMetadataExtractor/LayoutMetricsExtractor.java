@@ -120,6 +120,7 @@ public class LayoutMetricsExtractor {
 	 * @param w3
 	 * @return true if w3 lies on the [w1,w2] segment
 	 */
+	@SuppressWarnings("unused")
 	private boolean pointOnSegment(Waypoint w1, Waypoint w3, Waypoint w2){
 		double w1x = w1.getX();
 		double w1y = w1.getY();

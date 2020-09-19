@@ -190,6 +190,7 @@ public class StronglyConnectedComponentsMetricExtractor {
 			return node;
 		}
 
+		@SuppressWarnings("unused")
 		public void setNode(FlowNode node) {
 			this.node = node;
 		}

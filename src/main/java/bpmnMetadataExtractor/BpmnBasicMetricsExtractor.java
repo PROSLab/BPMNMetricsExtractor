@@ -27,11 +27,6 @@ public class BpmnBasicMetricsExtractor {
 	private int numberProcess;
 	private String extraction;
 
-	/*public BpmnBasicMetricsExtractor(BpmnModelInstance modelInstance, JsonEncoder jsonEncoder) {
-		this.modelInstance = modelInstance;
-		this.json = jsonEncoder;
-	}*/
-	
 	public BpmnBasicMetricsExtractor(BpmnModelInstance modelInstance, Process process, JsonEncoder jsonEncoder, int i, String e) {
 		this.modelInstance = modelInstance;
 		this.process = process;
@@ -2520,6 +2515,7 @@ public class BpmnBasicMetricsExtractor {
 	 * @param type: classe del tipo of elemento che si vuole analizzare
 	 * @return number of elementi della classe type che dividono flusso
 	 */
+	@SuppressWarnings("rawtypes")
 	private int getFlowDividingElementsOfType(Class type) {
 		int toReturn = 0;
 		Collection<ModelElementInstance> modelElementInstances = getCollectionOfElementType(type);
@@ -2536,6 +2532,7 @@ public class BpmnBasicMetricsExtractor {
 	 * @param type: classe del tipo of elemento che si vuole analizzare
 	 * @return number of elementi della classe type che uniscono flusso
 	 */
+	@SuppressWarnings("rawtypes")
 	private int getFlowJoiningElementsOfType(Class type) {
 		int toReturn = 0;
 		Collection<ModelElementInstance> modelElementInstances = getCollectionOfElementType(type);
@@ -2552,6 +2549,7 @@ public class BpmnBasicMetricsExtractor {
 	 * @param type: classe del tipo of elemento che si vuole analizzare
 	 * @return number of elementi della classe type  
 	 */
+	@SuppressWarnings("rawtypes")
 	private int getFlowJoiningAndDividingElementsOfType(Class type) {
 		int toReturn = 0;
 		Collection<ModelElementInstance> modelElementInstances = getCollectionOfElementType(type);
@@ -2572,10 +2570,12 @@ public class BpmnBasicMetricsExtractor {
 	 *            number
 	 * @return number of elementi del tipo "type"
 	 */
+	@SuppressWarnings("rawtypes")
 	public int getNumberOfTypeElement(Class type) {
 		return getCollectionOfElementType(type).size();
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Collection<ModelElementInstance> getCollectionOfElementType(Class type) {
 		ModelElementType modelElementType = modelInstance.getModel().getType(type);
 		//check for extraction type option

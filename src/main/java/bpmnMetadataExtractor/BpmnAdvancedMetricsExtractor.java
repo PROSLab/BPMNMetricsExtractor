@@ -10,11 +10,9 @@ import org.camunda.bpm.model.bpmn.instance.ExclusiveGateway;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;
 import org.camunda.bpm.model.bpmn.instance.Gateway;
 import org.camunda.bpm.model.bpmn.instance.InclusiveGateway;
-import org.camunda.bpm.model.bpmn.instance.Lane;
 import org.camunda.bpm.model.bpmn.instance.MessageFlow;
 import org.camunda.bpm.model.bpmn.instance.ParallelGateway;
 import org.camunda.bpm.model.bpmn.instance.Participant;
-import org.camunda.bpm.model.bpmn.instance.Process;
 import org.camunda.bpm.model.bpmn.instance.SequenceFlow;
 import org.camunda.bpm.model.xml.instance.ModelElementInstance;
 
@@ -44,7 +42,6 @@ public class BpmnAdvancedMetricsExtractor {
 	private StronglyConnectedComponentsMetricExtractor sccExtractor;
 	private CognitiveWeightMetricExtractor cwExtractor;
 	private LayoutMetricsExtractor lmExtractor;
-	//new addition
 	private ModelConverter mc;
 	private DOPMetricsExtractor dopExtractor;
 	private int numberProcess;
@@ -71,21 +68,12 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("CLP", getConnectivityLevelBetweenPartecipants());
 		json.addAdvancedMetric("PDOPin", getProportionOfIncomingDataObjectsAndTotalDataObjects());
 		json.addAdvancedMetric("PDOPout", getProportionOfOutgoingDataObjectsAndTotalDataObjects());
-		//json.addAdvancedMetric("TNT", getTotalNumberOfTasks());
 		json.addAdvancedMetric("VOL", getVolume());
 		json.addAdvancedMetric("RRPA", getRatioRolesActivities());
 		json.addAdvancedMetric("PDOTout", getProportionOfDataObjectsAsOutgoingProducts());
 		json.addAdvancedMetric("PLT", getProportionOfLanesAndTasks());
-		//json.addAdvancedMetric("TNCS", getNumberOfCollapsedSubProcesses());
-		//json.addAdvancedMetric("TNA", getTotalNumberOfActivities());
-		//json.addAdvancedMetric("TNDO", getTotalNumberOfDataObjects());
-		//json.addAdvancedMetric("TNG", getTotalNumberOfGateways());
 		json.addAdvancedMetric("S(df)", getDataFlowSize());
 		json.addAdvancedMetric("C(df)", getDataFlowComplexity());
-		//json.addAdvancedMetric("TNEE", getTotalNumberOfEndEvents());
-		//json.addAdvancedMetric("TNIE", getTotalNumberOfIntermediateEvents());
-		//json.addAdvancedMetric("TNSE", getTotalNumberOfStartEvents());
-		//json.addAdvancedMetric("TNE", getTotalNumberOfEvents());
 		json.addAdvancedMetric("CFC", getControlFlowComplexity());
 		json.addAdvancedMetric("CFC(rel)", getRelativeControlFlowComplexity());
 		json.addAdvancedMetric("PCFC", getParallelControlFlowComplexity());
@@ -103,11 +91,9 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("AAI", getAverageActivityInput());
 		json.addAdvancedMetric("NoO", getNumberOfActivityOutputs());
 		json.addAdvancedMetric("AAO", getAverageActivityOutput());
-		//json.addAdvancedMetric("Length", getActivityLength());
 		json.addAdvancedMetric("IC", getInterfaceComplexityOfActivityMetric());
 		json.addAdvancedMetric("FIO", getStructuralComplexity());
 		json.addAdvancedMetric("NOF", getNumberOfControlFlow());	
-		//json.addAdvancedMetric("TNSF", getTotalNumberOfSequenceFlow());	
 		json.addAdvancedMetric("CC", ccExtractor.calculateCrossConnectivity());
 		json.addAdvancedMetric("ICP",getImportedCouplingOfProcess());
 		json.addAdvancedMetric("ECP",getExportedCouplingOfProcess());
@@ -124,7 +110,6 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("Sequentiality", getSequentiality());
 		json.addAdvancedMetric("diam", sizeExtractor.getDiam());
 		json.addAdvancedMetric("Depth", partExtractor.getDepth());
-//		json.addAdvancedMetric("Structuredness", partExtractor.getStructuredness());
 		json.addAdvancedMetric("CYC", this.sccExtractor.getCyclicity());
 		json.addAdvancedMetric("TS", this.getTokenSplit());
 		json.addAdvancedMetric("Density", getDensity());
@@ -132,7 +117,6 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("MCD", this.getMaximumConnectorDegree());
 		json.addAdvancedMetric("GM", this.connectorInterplayMetricsExtractor.getGatewaysMismatchMetric());
 		json.addAdvancedMetric("CH", this.connectorInterplayMetricsExtractor.getConnectorsHeterogeneityMetric());
-		//json.addAdvancedMetric("ECaM", this.getExtendedCardosoMetric());
 		json.addAdvancedMetric("ECyM", this.sccExtractor.getEcym());
 		json.addAdvancedMetric("PF", this.sccExtractor.getCycle());
 		json.addAdvancedMetric("DSM", dsmExtractor.getDurfeeMetric());
@@ -148,21 +132,12 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("CLP", getConnectivityLevelBetweenPartecipants(),  this.numberProcess);
 		json.addAdvancedMetric("PDOPin", getProportionOfIncomingDataObjectsAndTotalDataObjects(), this.numberProcess);
 		json.addAdvancedMetric("PDOPout", getProportionOfOutgoingDataObjectsAndTotalDataObjects(), this.numberProcess);
-		//json.addAdvancedMetric("TNT", getTotalNumberOfTasks(), this.numberProcess);
 		json.addAdvancedMetric("VOL", getVolume(), this.numberProcess);
 		json.addAdvancedMetric("RRPA", getRatioRolesActivities(), this.numberProcess);
 		json.addAdvancedMetric("PDOTout", getProportionOfDataObjectsAsOutgoingProducts(), this.numberProcess);
 		json.addAdvancedMetric("PLT", getProportionOfLanesAndTasks(), this.numberProcess);
-		//json.addAdvancedMetric("TNCS", getNumberOfCollapsedSubProcesses(), this.numberProcess);
-		//json.addAdvancedMetric("TNA", getTotalNumberOfActivities());
-		//json.addAdvancedMetric("TNDO", getTotalNumberOfDataObjects(), this.numberProcess);
-		//json.addAdvancedMetric("TNG", getTotalNumberOfGateways(), this.numberProcess);
 		json.addAdvancedMetric("S(df)", getDataFlowSize(), this.numberProcess);
 		json.addAdvancedMetric("C(df)", getDataFlowComplexity(), this.numberProcess);
-		//json.addAdvancedMetric("TNEE", getTotalNumberOfEndEvents(), this.numberProcess);
-		//json.addAdvancedMetric("TNIE", getTotalNumberOfIntermediateEvents(), this.numberProcess);
-		//json.addAdvancedMetric("TNSE", getTotalNumberOfStartEvents(), this.numberProcess);
-		//json.addAdvancedMetric("TNE", getTotalNumberOfEvents(), this.numberProcess);
 		json.addAdvancedMetric("CFC", getControlFlowComplexity(), this.numberProcess);
 		json.addAdvancedMetric("CFC(rel)", getRelativeControlFlowComplexity(), this.numberProcess);
 		json.addAdvancedMetric("PCFC", getParallelControlFlowComplexity(), this.numberProcess);
@@ -180,11 +155,9 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("AAI", getAverageActivityInput(), this.numberProcess);
 		json.addAdvancedMetric("NoO", getNumberOfActivityOutputs(), this.numberProcess);
 		json.addAdvancedMetric("AAO", getAverageActivityOutput(), this.numberProcess);
-		//json.addAdvancedMetric("Length", getActivityLength(), this.numberProcess);
 		json.addAdvancedMetric("IC", getInterfaceComplexityOfActivityMetric(), this.numberProcess);
 		json.addAdvancedMetric("FIO", getStructuralComplexity(), this.numberProcess);
 		json.addAdvancedMetric("NOF", getNumberOfControlFlow(), this.numberProcess);	
-		//json.addAdvancedMetric("TNSF", getTotalNumberOfSequenceFlow(), this.numberProcess);	
 		json.addAdvancedMetric("CC", ccExtractor.calculateCrossConnectivity(), this.numberProcess);
 		json.addAdvancedMetric("ICP",getImportedCouplingOfProcess(), this.numberProcess);
 		json.addAdvancedMetric("ECP",getExportedCouplingOfProcess(), this.numberProcess);
@@ -201,7 +174,6 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("Sequentiality", getSequentiality(), this.numberProcess);
 		json.addAdvancedMetric("diam", sizeExtractor.getDiam(), this.numberProcess);
 		json.addAdvancedMetric("Depth", partExtractor.getDepth(), this.numberProcess);
-//		json.addAdvancedMetric("Structuredness", partExtractor.getStructuredness());
 		json.addAdvancedMetric("CYC", this.sccExtractor.getCyclicity(), this.numberProcess);
 		json.addAdvancedMetric("TS", this.getTokenSplit(), this.numberProcess);
 		json.addAdvancedMetric("Density", getDensity(), this.numberProcess);
@@ -209,7 +181,6 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("MCD", this.getMaximumConnectorDegree(), this.numberProcess);
 		json.addAdvancedMetric("GM", this.connectorInterplayMetricsExtractor.getGatewaysMismatchMetric(), this.numberProcess);
 		json.addAdvancedMetric("CH", this.connectorInterplayMetricsExtractor.getConnectorsHeterogeneityMetric(), this.numberProcess);
-		//json.addAdvancedMetric("ECaM", this.getExtendedCardosoMetric(), this.numberProcess);
 		json.addAdvancedMetric("ECyM", this.sccExtractor.getEcym(), this.numberProcess);
 		json.addAdvancedMetric("PF", this.sccExtractor.getCycle(), this.numberProcess);
 		json.addAdvancedMetric("DSM", dsmExtractor.getDurfeeMetric(), this.numberProcess);
@@ -234,7 +205,7 @@ public class BpmnAdvancedMetricsExtractor {
 			this.json.addAdvancedMetric("RT",(double) Math.round(rt.getRT() * 1000d) / 1000d, this.numberProcess);
 			TreesNumber t = new TreesNumber(gm.getAdjacencyMatrix());
 			this.json.addAdvancedMetric("T", t.getT(), this.numberProcess);
-			//compute metricss on acyclical graph
+			//compute metrics on acyclical graph
 			if(!cyclical) {
 				this.dopExtractor.setDop(this.basicMetricsExtractor.getProcess());
 				this.json.addAdvancedMetric("DOP", this.dopExtractor.getDop(), this.numberProcess);
@@ -316,16 +287,6 @@ public class BpmnAdvancedMetricsExtractor {
 			return 0.0f;
 		}
 	}
-	
-	/**TODO gi� presente in quelle base
-	 * Metric: TNT
-	 * Total number of task 
-	 * Number of Tasks + Number of Task Looping + Number of Task Multiple Instances + Number of Task Compensation (TNT = NT + NTL + NTMI + NTC)
-	 * @return
-	 */
-	/*public int getTotalNumberOfTasks() {
-		return basicMetricsExtractor.getTasks();
-	}*/
 	
 	/**
 	 * Metric: PDOTout
@@ -418,101 +379,6 @@ public class BpmnAdvancedMetricsExtractor {
 	}
 	
 	/**
-	 * Metric: TNCS
-	 * Total number of collapsed sub-processes
-	 * Number of Collapsed Sub-Processes + Number of Collapsed Sub-Processes Looping + Number of Collapsed Sub-Processes Multiple Instance
-	 *    + Number of Collapsed Sub-Processes Compensation + Number of Collapsed Sub-Processes Ad-Hoc
-	 * (TNCS = NCS + NCSL + NCSMI + NCSC + NCSA)
-	 * @return
-	 */
-	/*public int getNumberOfCollapsedSubProcesses() {
-		return basicMetricsExtractor.getSubprocesses();
-	}*/
-	
-	/**
-	 * Metric: TNA
-	 * Total number of activities
-	 * Total number of Tasks + Total number of Collapsed Sub-Processes(TNA = TNT + TNCS)
-	 * @return
-	 */
-	/*public int getTotalNumberOfActivities() {
-		return getTotalNumberOfTasks() + getNumberOfCollapsedSubProcesses();
-	}*/
-	
-	
-	
-	/**
-	 * Metric: TNDO
-	 * Total number of Data Objects in the model
-	 * Number of data objects which are input of activities + Number of data objects which are outputs of activities (TNDO = NDOIn + NDOOut)
-	 * @return
-	 */
-	/*public int getTotalNumberOfDataObjects() {
-		return basicMetricsExtractor.getDataObjectsInput() + basicMetricsExtractor.getDataObjectsOutput();
-	}*/
-	
-	/**TODO
-	 * Metric: TNG
-	 * Total number of gateways
-	 * Number of exclusive data-based decision + Number of exclusive event-based decision + Number of inclusive decision + Number of complex decision + Number of parallel forking
-	 * (TNG = NEDDB + NEDEB + NID + NCD + NPF)
-	 * @return
-	 */
-	/*public int getTotalNumberOfGateways() {
-		return basicMetricsExtractor.getExclusiveDataBasedDecisions() + basicMetricsExtractor.getExclusiveEventBasedDecisions() + basicMetricsExtractor.getInclusiveDecisions() + 
-				basicMetricsExtractor.getComplexDecisions() + basicMetricsExtractor.getParallelGateways();
-		//return basicMetricsExtractor.getGateways();
-	}*/
-	
-	/**TODO i vari tipi di End Events non sono presenti 
-	 * Metric: TNEE
-	 * Total number of End Events
-	 * Number of End None Events + Number of End Message Events + Number of End Error Events + Number of End Cancel Events +
-	 *      + Number of End Compensation Events + Number of End Link Events + Number of End Multiple Events + Number of End Terminate Events  
-	 * (TNEE = NENE + NEMsE + NEEE + NECaE + NECoE + NELE + NEMuE + NETE)
-	 * @return
-	 */
-	/*public int getTotalNumberOfEndEvents() {
-		return basicMetricsExtractor.getEndEvents();
-	}*/
-	
-	/**
-	 * Metric: TNIE
-	 * Total number of Intermediate Events
-	 * Number of Intermediate None Events  + Number of Intermediate Timer Events + Number of Intermediate Message Events + Number of Intermediate Error Events + 
-	 *     + Number of Intermediate Cancel Events + Number of Intermediate Compensation Event + Number of Intermediate Rule Events +
-	 *     + Number of Intermediate Link Events + Number of Intermediate Multiple Events
-	 * (TNIE = NINE + NITE + NIMsE + NIEE + NICaE + NICoE + NIRE + NILE + NIMuE)
-	 * @return
-	 */
-	/*public int getTotalNumberOfIntermediateEvents() {
-		return basicMetricsExtractor.getEvents() - basicMetricsExtractor.getStartEvents() - basicMetricsExtractor.getEndEvents();
-	}*/
-	
-	/**TODO i vari tipi di Start Events non sono presenti 
-	 * Metric: TNSE
-	 * Total number of Start Events
-	 * Number of Start None Events + Number of Start Timer Events + Number of Start Message Events + Number of Start Rule Events + Number of Start Link Events + 
-	 *     + Number of Start Multiple Events 
-	 * (TNSE = NSNE + NSTE + NSMsE + NSRE + NSLE + NSMuE)
-	 * @return
-	 */
-	/*public int getTotalNumberOfStartEvents() {
-		return basicMetricsExtractor.getStartEvents();
-	}*/
-	
-	/**TODO 
-	 * Metric: TNE
-	 * Total number of Events
-	 * Total number of Start Events + Total number of Intermediate Events + Total number of End Events
-	 * (TNE = TNSE + TNIE + TNEE)
-	 * @return
-	 */
-	/*public int getTotalNumberOfEvents() {
-		return getTotalNumberOfStartEvents() + getTotalNumberOfIntermediateEvents() + getTotalNumberOfEndEvents();
-	}*/
-	
-	/**
 	 * Metric: CFC
 	 * Control-flow Complexity metric. It captures a weighted sum of all split connectors that are used in a process model.
 	 * @return
@@ -523,7 +389,7 @@ public class BpmnAdvancedMetricsExtractor {
 		Collection<ModelElementInstance> exclusiveGateways = basicMetricsExtractor.getCollectionOfElementType(ExclusiveGateway.class);
 		Collection<ModelElementInstance> inclusiveGateways = basicMetricsExtractor.getCollectionOfElementType(InclusiveGateway.class);
 		Collection<ModelElementInstance> parallelGateways = basicMetricsExtractor.getCollectionOfElementType(ParallelGateway.class);
-		Collection<ModelElementInstance> activities = basicMetricsExtractor.getCollectionOfElementType(Activity.class);
+		//Collection<ModelElementInstance> activities = basicMetricsExtractor.getCollectionOfElementType(Activity.class);
 		//The CFC of a xor-split is given by the number of his outgoing flows
 		for (ModelElementInstance exGateway : exclusiveGateways) {
 			if (((FlowNode) exGateway).getOutgoing().size() > 1)
@@ -565,7 +431,7 @@ public class BpmnAdvancedMetricsExtractor {
 		Collection<ModelElementInstance> exclusiveGateways = basicMetricsExtractor.getCollectionOfElementType(ExclusiveGateway.class);
 		Collection<ModelElementInstance> inclusiveGateways = basicMetricsExtractor.getCollectionOfElementType(InclusiveGateway.class);
 		Collection<ModelElementInstance> parallelGateways = basicMetricsExtractor.getCollectionOfElementType(ParallelGateway.class);
-		Collection<ModelElementInstance> activities = basicMetricsExtractor.getCollectionOfElementType(Activity.class);
+		//Collection<ModelElementInstance> activities = basicMetricsExtractor.getCollectionOfElementType(Activity.class);
 		//The JC of a xor-split is given by the number of his incoming flows
 		for (ModelElementInstance exGateway : exclusiveGateways) {
 			if (((FlowNode) exGateway).getIncoming().size() > 1)
@@ -806,18 +672,6 @@ public class BpmnAdvancedMetricsExtractor {
 	}
 	
 	/**
-	 * Metric: Length
-	 * Activity length. The length is 1 if the activity is a black box; if it is a white box,
-	 *  the length can be calculated using traditional software engineering metrics
-	 *  that have been previously presented, namely the LOC (line of code) and
-	 *  MCC (McCabe's cyclomatic complexity).
-	 *  @return
-	 */
-	/*public int getActivityLength() {
-		return basicMetricsExtractor.getActivities();
-	}*/
-	
-	/**
 	 * Metric: IC
 	 * Interface complexity of an activity metric. IC = Length * (NoI * NoO)^2, where 
 	 *  the length of the activity can be calculated using traditional Software Engineering metrics
@@ -826,7 +680,6 @@ public class BpmnAdvancedMetricsExtractor {
 	 * @return
 	 */
 	public double getInterfaceComplexityOfActivityMetric() {
-		//return getActivityLength() * Math.pow((getNumberOfActivityInputs() * getNumberOfActivityOutputs()), 2);
 		return this.basicMetricsExtractor.getActivities() * Math.pow((getNumberOfActivityInputs() * getNumberOfActivityOutputs()), 2);
 	}
 	
@@ -850,15 +703,6 @@ public class BpmnAdvancedMetricsExtractor {
 		toReturn = basicMetricsExtractor.getSequenceFlows();
 		return toReturn;
 	}
-	
-	/**TODO Same as basic metric
-	 * Metric: TNSF
-	 * Total Number of Sequence Flows
-	 * @return
-	 */
-	/*public int getTotalNumberOfSequenceFlow(){
-		return basicMetricsExtractor.getSequenceFlows();
-	}*/
 	
 	/**
 	 * Metric: VOL
@@ -1058,6 +902,8 @@ public class BpmnAdvancedMetricsExtractor {
 	 * @return
 	 */
 	public int getNumberOfBPMNElements(){
+		if(this.basicMetricsExtractor.getExtractionType().equals("Process"))
+			return basicMetricsExtractor.getProcess().getChildElementsByType(BaseElement.class).size();
 		return basicMetricsExtractor.getModelInstance().getModelElementsByType(BaseElement.class).size();
 	}
 	
@@ -1278,15 +1124,6 @@ public class BpmnAdvancedMetricsExtractor {
 		else 
 			return 0.0f;
 	}
-	
-	/**
-	 * Metric ECaM
-	 * It is the extension of CFC metric for Petri Nets.
-	 * @return
-	 */
-	/*public double getExtendedCardosoMetric(){
-		return this.getControlFlowComplexity();
-	}*/
 	
 	/**
 	 * Metric: TS

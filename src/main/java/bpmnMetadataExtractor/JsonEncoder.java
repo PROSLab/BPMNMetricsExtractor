@@ -157,7 +157,7 @@ public class JsonEncoder {
 	}
 	
 	public ArrayList<String> getBasicMetricsNames() {
-		//to do
+		//to edit
 		JSONArray namesArray = this.json.getJSONObject("basic_metrics").names();
 		ArrayList<String> names = new ArrayList<String>();
 		for (int i = 0; i < namesArray.length(); ++i) {
@@ -167,7 +167,7 @@ public class JsonEncoder {
 	}
 	
 	public ArrayList<String>  getAdvancedMetricsNames() {
-		//to do
+		//to edit
 		JSONArray namesArray = this.json.getJSONObject("advanced_metrics").names();
 		ArrayList<String> names = new ArrayList<String>();
 		for (int i = 0; i < namesArray.length(); ++i) {
@@ -177,7 +177,7 @@ public class JsonEncoder {
 	}
 	
 	public ArrayList<Integer> getBasicMetricsValues() {
-		//to do
+		//to edit
 		JSONObject basicMetrics = this.json.getJSONObject("basic_metrics");
 		JSONArray namesArray = basicMetrics.names();
 		ArrayList<Integer> values = new ArrayList<Integer>();
@@ -188,7 +188,7 @@ public class JsonEncoder {
 	}
 	
 	public ArrayList<Double> getAdvancedMetricsValues() {
-		//to do
+		//to edit
 		JSONObject advancedMetrics = this.json.getJSONObject("advanced_metrics");
 		JSONArray namesArray = advancedMetrics.names();
 		ArrayList<Double> values = new ArrayList<Double>();

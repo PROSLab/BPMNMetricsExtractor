@@ -18,7 +18,7 @@ import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
 @Path("/api")
-public class MetricsExtractorRouterMultiPart {/*
+public class MetricsExtractorRouterMultiPart {
 	@Path("/fileUploadMultiPart")
 	@POST
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -40,6 +40,6 @@ public class MetricsExtractorRouterMultiPart {/*
 		return  Response.ok((Object)json).
 				header("Content-Disposition","attachment; filename = " + fileName + ".json").
 				build();
-	}*/
+	}
 }
 
