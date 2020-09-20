@@ -18,6 +18,7 @@ import org.camunda.bpm.model.xml.instance.ModelElementInstance;
 
 import metricsOnGraph.BindingStructure;
 import metricsOnGraph.Diameter;
+import metricsOnGraph.ProcessBreadth;
 import graphElements.GraphMatrixes;
 import graphElements.ModelConverter;
 import metricsOnGraph.ComplexityIndex;
@@ -201,6 +202,10 @@ public class BpmnAdvancedMetricsExtractor {
 			this.json.addAdvancedMetric("D", (double) Math.round(d.getD() * 1000d) / 1000d, this.numberProcess);
 			AggregateIndicator ac = new AggregateIndicator(l.getL(),b.getB(),d.getD());
 			this.json.addAdvancedMetric("AC",(double) Math.round(ac.getAC() * 1000d) / 1000d, this.numberProcess);
+			
+			ProcessBreadth pb = new ProcessBreadth(gm.getAdjacencyMatrix(), gm.getReachabilityMatrix(), gal.getAdj());
+			this.json.addAdvancedMetric("Process Breadth", pb.getProcessBreadth(), this.numberProcess);
+			
 			RestrictivenessEstimator rt = new RestrictivenessEstimator(gm.getVertix(),gm.getReachabilityMatrix());
 			this.json.addAdvancedMetric("RT",(double) Math.round(rt.getRT() * 1000d) / 1000d, this.numberProcess);
 			TreesNumber t = new TreesNumber(gm.getAdjacencyMatrix());
@@ -212,8 +217,11 @@ public class BpmnAdvancedMetricsExtractor {
 				ComplexityIndex ci = new ComplexityIndex(gm.getAdjacencyMatrix(), gal.getAdj());
 				this.json.addAdvancedMetric("CI",ci.getCI(), this.numberProcess);
 				}
+			
 		}
 		json.addAdvancedMetric("S", this.getNumberOfBPMNElements(), this.numberProcess);
+		json.addAdvancedMetric("MCC", this.getMCC(), this.numberProcess);
+		json.addAdvancedMetric("Inter-process Complexity", this.getInterProcessComplexity(), this.numberProcess);
 	}
 
 	/**
@@ -304,6 +312,21 @@ public class BpmnAdvancedMetricsExtractor {
 		} catch (ArithmeticException e) {
 			return 0.0f;
 		}
+	}
+	
+	/**
+	 * Metric: Inter-process Complexity 
+	 * Total number of DataInputAssociations + Total number of DataOutputAssociations (Inter-process Complexity = Fan-In + Fan-Out)
+	 * @return
+	 */
+	public int getInterProcessComplexity() {
+		int icp = 0;
+		if(this.basicMetricsExtractor.getExtractionType().equals("Process")) {
+			for(Activity a: this.basicMetricsExtractor.getProcess().getChildElementsByType(Activity.class))
+				icp += a.getDataInputAssociations().size() + + a.getDataOutputAssociations().size();
+			return icp;
+		}
+		return this.basicMetricsExtractor.getDataInputAssociations() + this.basicMetricsExtractor.getDataOutputAssociations();
 	}
 	
 	/**
@@ -418,6 +441,15 @@ public class BpmnAdvancedMetricsExtractor {
 		}*/
 		return toReturn;
 		
+	}
+	
+	/**
+	 * Metric: MCC
+	 * McCabe’s Cyclomatic Number counts the number of linearly independent paths through a process 
+	 * @return
+	 */
+	public int getMCC() {
+		return this.basicMetricsExtractor.getSequenceFlows() - this.basicMetricsExtractor.getFlowNodes() + 2;
 	}
 	
 	/**
