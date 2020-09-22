@@ -2,6 +2,7 @@ package bpmnMetadataExtractor;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Vector;
 
 import org.camunda.bpm.model.bpmn.instance.Activity;
 import org.camunda.bpm.model.bpmn.instance.BaseElement;
@@ -126,6 +127,7 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("Layout_Measure", this.lmExtractor.getLayoutMeasure());
 		//System.out.println("JSON adv: " + this.json.getString());
 		json.addAdvancedMetric("S", this.getNumberOfBPMNElements());
+		json.addAdvancedMetric("DE", this.getDuplicatedElements());
 	}
 	
 	public void runMetricsProcess(String conversion) {
@@ -222,6 +224,7 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("S", this.getNumberOfBPMNElements(), this.numberProcess);
 		json.addAdvancedMetric("MCC", this.getMCC(), this.numberProcess);
 		json.addAdvancedMetric("Inter-process Complexity", this.getInterProcessComplexity(), this.numberProcess);
+		json.addAdvancedMetric("DE", this.getDuplicatedElements(), this.numberProcess);
 	}
 
 	/**
@@ -1303,6 +1306,27 @@ public class BpmnAdvancedMetricsExtractor {
 			System.out.println(e);
 		}
 		return toReturn;
+	}
+	
+	/**TODO not only for flow nodes, but never for sequence flows
+	 * Metric DE
+	 * Duplicated elements is defined as the sum of flow nodes of the same type and with the same label
+	 * @return
+	 */
+	public int getDuplicatedElements() {
+		int n = 0;
+		Vector<String> ispectioned = new Vector<String>();
+		Collection<ModelElementInstance> elements = this.basicMetricsExtractor.getCollectionOfElementType(FlowNode.class);
+		for(ModelElementInstance original : this.basicMetricsExtractor.getCollectionOfElementType(FlowNode.class))
+			if(((FlowNode) original).getName() != null && !ispectioned.contains(((FlowNode) original).getName()))
+				for(ModelElementInstance duplicated : elements)
+					if(((FlowNode) duplicated).getName() != null)
+						if(original.getElementType().getTypeName().equals(duplicated.getElementType().getTypeName()) && ((FlowNode) original).getName().equals(((FlowNode) duplicated).getName()) && !((FlowNode) original).getId().equals(((FlowNode) duplicated).getId())) {
+							n++;
+							ispectioned.add(((FlowNode) original).getName());
+						}
+		return n;
+			
 	}
 
 }
