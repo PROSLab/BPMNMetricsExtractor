@@ -25,6 +25,7 @@ import graphElements.ModelConverter;
 import metricsOnGraph.ComplexityIndex;
 import metricsOnGraph.TreesNumber;
 import metricsOnGraph.RestrictivenessEstimator;
+import metricsOnGraph.Separability;
 import metricsOnGraph.AggregateIndicator;
 import graphElements.CycleDetector;
 import graphElements.GraphAdjacencyList;
@@ -207,6 +208,8 @@ public class BpmnAdvancedMetricsExtractor {
 			
 			ProcessBreadth pb = new ProcessBreadth(gm.getAdjacencyMatrix(), gm.getReachabilityMatrix(), gal.getAdj());
 			this.json.addAdvancedMetric("Process Breadth", pb.getProcessBreadth(), this.numberProcess);
+			Separability s = new Separability(gm.getAdjacencyMatrix());
+			this.json.addAdvancedMetric("Sep",(double) Math.round(s.getSeparability() * 1000d) / 1000d, this.numberProcess);
 			
 			RestrictivenessEstimator rt = new RestrictivenessEstimator(gm.getVertix(),gm.getReachabilityMatrix());
 			this.json.addAdvancedMetric("RT",(double) Math.round(rt.getRT() * 1000d) / 1000d, this.numberProcess);

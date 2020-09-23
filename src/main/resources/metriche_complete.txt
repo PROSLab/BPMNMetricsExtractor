@@ -282,3 +282,4 @@ Process Breadth %Number of distinct paths	{absent}
 MCC %McCabe’s Cyclomatic Number	{absent}
 Inter-process Complexity %Inter-process Complexity	{absent}
 DE %Duplicated Elements	{absent}
+Sep %Separability	{absent}
