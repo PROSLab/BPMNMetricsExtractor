@@ -60,6 +60,27 @@ public class JsonEncoder {
 		this.json.put("header", header).put("process", process);
 	}
 	
+	/*
+	 * Method that builds JSON for process type extraction
+	 */
+	public void buildJSON(int i, String id, String name, String processId){
+		JSONObject newProcess = new JSONObject();
+		JSONObject basicMetrics = new JSONObject();
+		JSONObject advancedMetrics = new JSONObject();
+		JSONObject participant = new JSONObject();
+		newProcess.put("basic_metrics", basicMetrics).put("advanced_metrics", advancedMetrics);
+		participant.put("id", id);
+		participant.put("name", name);
+		participant.put("process", processId);
+		newProcess.put("participant", participant);
+		this.json.getJSONObject("process").put(Integer.toString(i), newProcess);
+		//to access nested elements of json object using getJSONArray method
+		this.json.getJSONObject("process").getJSONObject(Integer.toString(i)).getJSONObject("basic_metrics").put("NT", 0);
+	}
+	
+	/*
+	 * Method that builds JSON for model type extraction
+	 */
 	public void buildJSON(int i){
 		JSONObject newProcess = new JSONObject();
 		JSONObject basicMetrics = new JSONObject();
@@ -117,6 +138,9 @@ public class JsonEncoder {
 		this.json.getJSONObject("process").getJSONObject("0").getJSONObject("basic_metrics").put(metricName, basicMetric);
 	}
 	
+	/*
+	 * Method that adds basic metrics to JSON for process type extraction
+	 */
 	public void addBasicMetric(String metricName, int n, int i){
 		JSONObject basicMetric = new JSONObject();
 		String metricInfos[] = metricsInfos.get(metricName);
@@ -144,6 +168,9 @@ public class JsonEncoder {
 		this.json.getJSONObject("process").getJSONObject("0").getJSONObject("advanced_metrics").put(metricName, advMetric);
 	}
 	
+	/*
+	 * Method that adds advanced metrics to JSON for process type extraction
+	 */
 	public void addAdvancedMetric(String metricName, double n, int i){
 		JSONObject advMetric = new JSONObject();
 		String metricInfos[] = metricsInfos.get(metricName);
@@ -157,7 +184,7 @@ public class JsonEncoder {
 	}
 	
 	public ArrayList<String> getBasicMetricsNames() {
-		//to edit
+		//TODO
 		JSONArray namesArray = this.json.getJSONObject("basic_metrics").names();
 		ArrayList<String> names = new ArrayList<String>();
 		for (int i = 0; i < namesArray.length(); ++i) {
@@ -167,7 +194,7 @@ public class JsonEncoder {
 	}
 	
 	public ArrayList<String>  getAdvancedMetricsNames() {
-		//to edit
+		//TODO
 		JSONArray namesArray = this.json.getJSONObject("advanced_metrics").names();
 		ArrayList<String> names = new ArrayList<String>();
 		for (int i = 0; i < namesArray.length(); ++i) {
@@ -177,7 +204,7 @@ public class JsonEncoder {
 	}
 	
 	public ArrayList<Integer> getBasicMetricsValues() {
-		//to edit
+		//TODO
 		JSONObject basicMetrics = this.json.getJSONObject("basic_metrics");
 		JSONArray namesArray = basicMetrics.names();
 		ArrayList<Integer> values = new ArrayList<Integer>();
@@ -188,7 +215,7 @@ public class JsonEncoder {
 	}
 	
 	public ArrayList<Double> getAdvancedMetricsValues() {
-		//to edit
+		//TODO
 		JSONObject advancedMetrics = this.json.getJSONObject("advanced_metrics");
 		JSONArray namesArray = advancedMetrics.names();
 		ArrayList<Double> values = new ArrayList<Double>();
@@ -250,6 +277,22 @@ public class JsonEncoder {
 		this.json.getJSONObject("header").put("creation_date", date);
 		String id = createFileId(now);
 		this.json.getJSONObject("header").put("id", id);
+	}
+	
+	public void populateHeader(LocalDateTime now, int processNumber) {
+		this.json.getJSONObject("header").put("file_name", fileName);
+		String hour = appendLeadingZero(now.getHour());
+		String minute = appendLeadingZero(now.getMinute());
+		String second = appendLeadingZero(now.getSecond());
+		String time = hour + ":" + minute + ":" + second;
+		this.json.getJSONObject("header").put("creation_time", time);
+		String month = appendLeadingZero(now.getMonthValue());
+		String day = appendLeadingZero(now.getDayOfMonth());
+		String date = now.getYear() + "-" + month + "-" + day;
+		this.json.getJSONObject("header").put("creation_date", date);
+		String id = createFileId(now);
+		this.json.getJSONObject("header").put("id", id);
+		this.json.getJSONObject("header").put("number of process", processNumber);
 	}
 
 	private String appendLeadingZero(int number) {

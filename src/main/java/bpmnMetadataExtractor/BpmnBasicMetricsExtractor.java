@@ -35,6 +35,13 @@ public class BpmnBasicMetricsExtractor {
 		this.extraction = e;
 	}
 	
+	public BpmnBasicMetricsExtractor(BpmnModelInstance modelInstance, JsonEncoder jsonEncoder, int i, String e) {
+		this.modelInstance = modelInstance;
+		this.json = jsonEncoder;
+		this.numberProcess = i;
+		this.extraction = e;
+	}
+	
 	public String getExtractionType() {
 		return this.extraction;
 	}
@@ -43,7 +50,6 @@ public class BpmnBasicMetricsExtractor {
 	 * Metodo principale per runnare tutti i metodi che ottengono le metriche
 	 */
 	public void runMetrics() {
-
 		this.json.addBasicMetric("NT", this.getTasks());
 		this.json.addBasicMetric("NCD", this.getComplexDecisions());
 		this.json.addBasicMetric("NDOin", this.getDataObjectsInput());
@@ -247,7 +253,6 @@ public class BpmnBasicMetricsExtractor {
 	}
 	
 	public void runMetricsProcess() {
-
 		this.json.addBasicMetric("NT", this.getTasks(), this.numberProcess);
 		this.json.addBasicMetric("NCD", this.getComplexDecisions(), this.numberProcess);
 		this.json.addBasicMetric("NDOin", this.getDataObjectsInput(), this.numberProcess);
