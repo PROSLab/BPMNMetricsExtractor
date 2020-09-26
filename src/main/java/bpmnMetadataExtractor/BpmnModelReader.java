@@ -83,7 +83,7 @@ public class BpmnModelReader {
 			BpmnBasicMetricsExtractor basicExtractor = new BpmnBasicMetricsExtractor(modelInstance, jsonEncoder, numberProcess, this.extractionType);
 			BpmnAdvancedMetricsExtractor advExtractor = new BpmnAdvancedMetricsExtractor(new ModelConverter(modelInstance), basicExtractor, jsonEncoder, numberProcess);
 			basicExtractor.runMetrics();
-			advExtractor.runMetrics();
+			advExtractor.runMetrics(this.conversionType);
 			jsonEncoder.populateHeader(LocalDateTime.now());
 		}
 		/*MySqlInterface db = new MySqlInterface();

@@ -11,6 +11,7 @@ import org.camunda.bpm.model.bpmn.instance.BoundaryEvent;
 import org.camunda.bpm.model.bpmn.instance.EndEvent;
 import org.camunda.bpm.model.bpmn.instance.FlowElement;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;
+import org.camunda.bpm.model.bpmn.instance.MessageFlow;
 import org.camunda.bpm.model.bpmn.instance.Process;
 import org.camunda.bpm.model.bpmn.instance.SequenceFlow;
 import org.camunda.bpm.model.bpmn.instance.StartEvent;
@@ -196,7 +197,49 @@ public class ModelConverter {
         return gm;
 	}
 	
-		
+	public GraphMatrixes convertEntireModel(String opzione) {
+		/*if(process.getChildElementsByType(StartEvent.class).isEmpty() 
+				|| process.getChildElementsByType(EndEvent.class).isEmpty()
+				|| process.getChildElementsByType(SequenceFlow.class).isEmpty()) {
+			this.notification.add("Incomplete process: "+process.getId());
+			return null;
+		}*/
+		Vector<Node> nodes = new Vector<Node>();
+        Vector<Edge> edges = new Vector<Edge>();
+		//colleziona tutti i flownode e i sequenceflow del processo
+		Collection<FlowNode> flowNodes = this.modelInstance.getModelElementsByType(FlowNode.class);
+		Collection<SequenceFlow> sequenceFlows = this.modelInstance.getModelElementsByType(SequenceFlow.class);
+		//elimina tutti i flow node disconnessi
+		/*Iterator<FlowNode> i = flowNodes.iterator();
+		while(i.hasNext()) {
+			FlowNode fn = i.next();
+			if(fn.getIncoming().isEmpty() && fn.getOutgoing().isEmpty()) {
+				i.remove();
+				this.notification.add("Disconnected node in "+process.getId()+": "+fn.getId());
+			}	
+		}*/
+        //cancella ogni boundary event e il source dei suoi outgoing diventa l'id dell'attività al quale è attaccato
+		//TODO
+        //this.resolveBoundaryEvent(process,flowNodes);
+        //controlla l'opzione per la conversione scelta
+		//TODO
+        /*if(opzione.equals("WhiteBox"))
+        	this.whiteboxSubprocessConversion(edges, process, flowNodes, sequenceFlows);*/
+        //crea un nuovo nodo per il grafo per ogni flownode del processo
+        int vertexNumber = 0;
+        for(FlowNode fn : flowNodes) {
+        	nodes.add(new Node(fn.getId(),vertexNumber));
+        	vertexNumber++;
+        }
+        //crea un nuovo arco per il grafo per ogni sequenceflow del processo
+        for(SequenceFlow sf : sequenceFlows)
+        	edges.add(new Edge(sf.getSource().getId(), sf.getTarget().getId()));
+        for(MessageFlow mf : this.modelInstance.getModelElementsByType(MessageFlow.class))
+    		edges.add(new Edge(mf.getSource().getId(), mf.getTarget().getId()));
+        //crea la matrice di adiacenza convertita dal modello
+        GraphMatrixes gm = new GraphMatrixes(edges,nodes);
+        return gm;
+	}	
 
 }
 
