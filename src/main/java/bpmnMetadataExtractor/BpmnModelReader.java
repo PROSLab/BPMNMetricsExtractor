@@ -67,8 +67,8 @@ public class BpmnModelReader {
 		BpmnModelInstance modelInstance = Bpmn.readModelFromStream(fileStream);
 		JsonEncoder jsonEncoder = new JsonEncoder(fileName);
 		int numberProcess = 0;
-		Collection<Participant> participant = modelInstance.getModelElementsByType(Participant.class);
 		if(this.extractionType.equals("Process")){
+			Collection<Participant> participant = modelInstance.getModelElementsByType(Participant.class);
 			for(Participant p: participant) {
 				jsonEncoder.buildJSON(numberProcess, p.getId(), p.getName(), p.getProcess().getId());
 				BpmnBasicMetricsExtractor basicExtractor = new BpmnBasicMetricsExtractor(modelInstance, p.getProcess(), jsonEncoder, numberProcess, this.extractionType);

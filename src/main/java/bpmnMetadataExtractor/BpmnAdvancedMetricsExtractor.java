@@ -16,6 +16,7 @@ import org.camunda.bpm.model.bpmn.instance.ParallelGateway;
 import org.camunda.bpm.model.bpmn.instance.Participant;
 import org.camunda.bpm.model.bpmn.instance.SequenceFlow;
 import org.camunda.bpm.model.xml.instance.ModelElementInstance;
+import org.camunda.bpm.model.bpmn.instance.Process;
 
 import metricsOnGraph.BindingStructure;
 import metricsOnGraph.Diameter;
@@ -152,9 +153,9 @@ public class BpmnAdvancedMetricsExtractor {
 			this.json.addAdvancedMetric("T", t.getT(), this.numberProcess);
 			//compute metrics on acyclical graph
 			if(!cyclical) {
-				//TODO
-				//this.dopExtractor.setDop(this.basicMetricsExtractor.getProcess());
-				//this.json.addAdvancedMetric("DOP", this.dopExtractor.getDop(), this.numberProcess);
+				for(Process p : mc.getProcesses())
+					this.dopExtractor.setDop(p);
+				this.json.addAdvancedMetric("DOP", this.dopExtractor.getDop(), this.numberProcess);
 				ComplexityIndex ci = new ComplexityIndex(gm.getAdjacencyMatrix(), gal.getAdj());
 				this.json.addAdvancedMetric("CI",ci.getCI(), this.numberProcess);
 				}

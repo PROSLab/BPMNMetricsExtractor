@@ -36,8 +36,11 @@ public class ModelConverter {
 	}
 	
 	private void whiteboxSubprocessConversion(Vector<Edge> edges,BaseElement process, Collection<FlowNode> fn, Collection<SequenceFlow> sf) { 
+		Collection<SubProcess> subprocesses;
 		//raccoglie tutti i sottoprocessi del processo/sotto-processo in esame
-		Collection<SubProcess> subprocesses = process.getChildElementsByType(SubProcess.class); 
+		if(process == null)
+			subprocesses = this.modelInstance.getModelElementsByType(SubProcess.class);
+		else subprocesses = process.getChildElementsByType(SubProcess.class); 
 		for(SubProcess subprocess : subprocesses) {
 			//check per verificare che il sotto-processo sia connesso
 			if(subprocess.getIncoming().isEmpty() || subprocess.getOutgoing().isEmpty())
@@ -133,8 +136,12 @@ public class ModelConverter {
 	 */
 	
 	private void resolveBoundaryEvent(BaseElement process, Collection<FlowNode> flowNodes) {
+		Collection<BoundaryEvent> events;
+		if(process == null)
+			events = this.modelInstance.getModelElementsByType(BoundaryEvent.class);
+		else events = process.getChildElementsByType(BoundaryEvent.class);
 		//rende ogni boundary event parte dello stesso sequence flow al quale è attaccato 
-        for(BoundaryEvent be : process.getChildElementsByType(BoundaryEvent.class)) {
+        for(BoundaryEvent be : events) {
         	for(SequenceFlow sfbe: be.getOutgoing()) {
         		sfbe.setSource(be.getAttachedTo());
         		//aggiunge sequence flow nell'outgoing del nuovo source, utile in caso di sottoprocesso
@@ -219,12 +226,10 @@ public class ModelConverter {
 			}	
 		}*/
         //cancella ogni boundary event e il source dei suoi outgoing diventa l'id dell'attività al quale è attaccato
-		//TODO
-        //this.resolveBoundaryEvent(process,flowNodes);
+        this.resolveBoundaryEvent(null, flowNodes);
         //controlla l'opzione per la conversione scelta
-		//TODO
-        /*if(opzione.equals("WhiteBox"))
-        	this.whiteboxSubprocessConversion(edges, process, flowNodes, sequenceFlows);*/
+		if(opzione.equals("WhiteBox"))
+        	this.whiteboxSubprocessConversion(edges, null, flowNodes, sequenceFlows);
         //crea un nuovo nodo per il grafo per ogni flownode del processo
         int vertexNumber = 0;
         for(FlowNode fn : flowNodes) {
