@@ -26,13 +26,15 @@ public class BpmnBasicMetricsExtractor {
 	private Process process;
 	private int numberProcess;
 	private String extraction;
+	private String conversion;
 
-	public BpmnBasicMetricsExtractor(BpmnModelInstance modelInstance, Process process, JsonEncoder jsonEncoder, int i, String e) {
+	public BpmnBasicMetricsExtractor(BpmnModelInstance modelInstance, Process process, JsonEncoder jsonEncoder, int i, String e, String c) {
 		this.modelInstance = modelInstance;
 		this.process = process;
 		this.json = jsonEncoder;
 		this.numberProcess = i;
 		this.extraction = e;
+		this.conversion = c;
 	}
 	
 	public BpmnBasicMetricsExtractor(BpmnModelInstance modelInstance, JsonEncoder jsonEncoder, int i, String e) {
@@ -260,10 +262,10 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NID", this.getInclusiveDecisions(), this.numberProcess);
 		this.json.addBasicMetric("NEDDB", this.getExclusiveDataBasedDecisions(), this.numberProcess);
 		this.json.addBasicMetric("NEDEB", this.getExclusiveEventBasedDecisions(), this.numberProcess);
-		this.json.addBasicMetric("NL", this.getLanes(), this.numberProcess);
+		//this.json.addBasicMetric("NL", this.getLanes(), this.numberProcess);
 		this.json.addBasicMetric("NMF", this.getMessageFlows(), this.numberProcess);
 		this.json.addBasicMetric("NP", this.getPools(), this.numberProcess);
-		this.json.addBasicMetric("NEP", this.getEmptyPools(), this.numberProcess);
+		//this.json.addBasicMetric("NEP", this.getEmptyPools(), this.numberProcess);
 		this.json.addBasicMetric("NSFE", this.getSequenceFlowsFromEvents(), this.numberProcess);
 		this.json.addBasicMetric("NSFG", this.getSequenceFlowsFromGateways(), this.numberProcess);
 		this.json.addBasicMetric("NSFA", this.getSequenceFlowsBetweenActivities(), this.numberProcess);
@@ -520,15 +522,12 @@ public class BpmnBasicMetricsExtractor {
 	}
 
 	/**
-	 * Metrica: NL 
+	 * Metrica: NL
 	 * 
 	 * @return number of lanes
 	 */
 	public int getLanes() {
-		Collection<Participant> participants;
-		if(this.extraction.equals("Model"))
-			participants = this.modelInstance.getModelElementsByType(Participant.class);
-		else participants = this.process.getChildElementsByType(Participant.class);
+		Collection<Participant> participants = this.modelInstance.getModelElementsByType(Participant.class);
 		int numberOfLanes = 0;
 		for (Participant p : participants) {
 
@@ -584,7 +583,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<Event> events;
 		if(this.extraction.equals("Model"))
 			events = this.modelInstance.getModelElementsByType(Event.class);
-		else events = this.process.getChildElementsByType(Event.class);
+		else {
+			events = this.process.getChildElementsByType(Event.class);
+			this.getEventsSubProcess(events, process);
+		}
 		int numberOfOutgoingSequenceFlows = 0;
 		for (Event e : events) {
 			numberOfOutgoingSequenceFlows += e.getOutgoing().size();
@@ -601,14 +603,17 @@ public class BpmnBasicMetricsExtractor {
 		Collection<Gateway> gateways;
 		if(this.extraction.equals("Model"))
 			gateways = this.modelInstance.getModelElementsByType(Gateway.class);
-		else gateways = this.process.getChildElementsByType(Gateway.class);
+		else {
+			gateways = this.process.getChildElementsByType(Gateway.class);
+			this.getGatewaysSubProcess(gateways, process);
+		}
 		int numberOfOutgoingSequenceFlows = 0;
 		for (Gateway g : gateways) {
 			numberOfOutgoingSequenceFlows += g.getOutgoing().size();
 		}
 		return numberOfOutgoingSequenceFlows;
 	}
-	
+
 	/**
 	 * Metrica: NSFA 
 	 * 
@@ -616,9 +621,12 @@ public class BpmnBasicMetricsExtractor {
 	 */
 	public int getSequenceFlowsBetweenActivities() {
 		Collection<Activity> activities;
-		if(this.extraction.equals("Process"))
+		if(this.extraction.equals("Model")) 
+			activities =  this.modelInstance.getModelElementsByType(Activity.class);
+		else {
 			activities = this.process.getChildElementsByType(Activity.class);
-		else activities = this.modelInstance.getModelElementsByType(Activity.class);
+			this.getActivitiesSubProcess(activities, process);
+		}
 		Collection<SequenceFlow> outgoingFlows;
 		int numberOfSequenceFlows = 0;
 		for (Activity a : activities) {
@@ -716,7 +724,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<BoundaryEvent> boundaryEvents;
 		if(this.extraction.equals("Model"))
 			boundaryEvents = this.modelInstance.getModelElementsByType(BoundaryEvent.class);
-		else boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
+		else {
+			boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
+			this.getBoundaryEventsSubProcess(boundaryEvents, process);
+		}
 		int toReturn = 0;
 		for (BoundaryEvent event: boundaryEvents) {
 			if (event.cancelActivity()) {
@@ -735,7 +746,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<BoundaryEvent> boundaryEvents;
 		if(this.extraction.equals("Model"))
 			boundaryEvents = this.modelInstance.getModelElementsByType(BoundaryEvent.class);
-		else boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
+		else {
+			boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
+			this.getBoundaryEventsSubProcess(boundaryEvents, process);
+		}
 		return this.getInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.MessageEventDefinitionImpl");
 	}
 	
@@ -748,7 +762,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<BoundaryEvent> boundaryEvents;
 		if(this.extraction.equals("Model"))
 			boundaryEvents = this.modelInstance.getModelElementsByType(BoundaryEvent.class);
-		else boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
+		else {
+			boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
+			this.getBoundaryEventsSubProcess(boundaryEvents, process);
+		}
 		return this.getInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.TimerEventDefinitionImpl");
 	}
 	
@@ -761,7 +778,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<BoundaryEvent> boundaryEvents;
 		if(this.extraction.equals("Model"))
 			boundaryEvents = this.modelInstance.getModelElementsByType(BoundaryEvent.class);
-		else boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
+		else {
+			boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
+			this.getBoundaryEventsSubProcess(boundaryEvents, process);
+		}
 		return this.getInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.ConditionalEventDefinitionImpl");
 	}
 	
@@ -774,7 +794,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<BoundaryEvent> boundaryEvents;
 		if(this.extraction.equals("Model"))
 			boundaryEvents = this.modelInstance.getModelElementsByType(BoundaryEvent.class);
-		else boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
+		else {
+			boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
+			this.getBoundaryEventsSubProcess(boundaryEvents, process);
+		}
 		return this.getInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.SignalEventDefinitionImpl");
 	}
 	
@@ -787,7 +810,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<BoundaryEvent> boundaryEvents;
 		if(this.extraction.equals("Model"))
 			boundaryEvents = this.modelInstance.getModelElementsByType(BoundaryEvent.class);
-		else boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
+		else {
+			boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
+			this.getBoundaryEventsSubProcess(boundaryEvents, process);
+		}
 		return this.getInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.EscalationEventDefinitionImpl");
 	}
 	
@@ -800,7 +826,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<BoundaryEvent> boundaryEvents;
 		if(this.extraction.equals("Model"))
 			boundaryEvents = this.modelInstance.getModelElementsByType(BoundaryEvent.class);
-		else boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
+		else {
+			boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
+			this.getBoundaryEventsSubProcess(boundaryEvents, process);
+		}
 		return this.getInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.CancelEventDefinitionImpl");
 	}
 	
@@ -813,7 +842,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<BoundaryEvent> boundaryEvents;
 		if(this.extraction.equals("Model"))
 			boundaryEvents = this.modelInstance.getModelElementsByType(BoundaryEvent.class);
-		else boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
+		else {
+			boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
+			this.getBoundaryEventsSubProcess(boundaryEvents, process);
+		}
 		return this.getInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.ErrorEventDefinitionImpl");
 		}
 	
@@ -826,7 +858,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<BoundaryEvent> boundaryEvents;
 		if(this.extraction.equals("Model"))
 			boundaryEvents = this.modelInstance.getModelElementsByType(BoundaryEvent.class);
-		else boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
+		else {
+			boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
+			this.getBoundaryEventsSubProcess(boundaryEvents, process);
+		}
 		return this.getInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.CompensateEventDefinitionImpl");
 	}
 	
@@ -838,7 +873,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<BoundaryEvent> boundaryEvents;
 		if(this.extraction.equals("Model"))
 			boundaryEvents = this.modelInstance.getModelElementsByType(BoundaryEvent.class);
-		else boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
+		else {
+			boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
+			this.getBoundaryEventsSubProcess(boundaryEvents, process);
+		}
 		int toReturn = 0;
 		 for (BoundaryEvent event: boundaryEvents) {
 			 if (!event.cancelActivity()) {
@@ -856,7 +894,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<BoundaryEvent> boundaryEvents;
 		if(this.extraction.equals("Model"))
 			boundaryEvents = this.modelInstance.getModelElementsByType(BoundaryEvent.class);
-		else boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
+		else {
+			boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
+			this.getBoundaryEventsSubProcess(boundaryEvents, process);
+		}
 		return this.getNonInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.MessageEventDefinitionImpl");
 	}
 	
@@ -868,7 +909,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<BoundaryEvent> boundaryEvents;
 		if(this.extraction.equals("Model"))
 			boundaryEvents = this.modelInstance.getModelElementsByType(BoundaryEvent.class);
-		else boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
+		else {
+			boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
+			this.getBoundaryEventsSubProcess(boundaryEvents, process);
+		}
 		return this.getNonInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.TimerEventDefinitionImpl");
 	}
 	
@@ -880,7 +924,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<BoundaryEvent> boundaryEvents;
 		if(this.extraction.equals("Model"))
 			boundaryEvents = this.modelInstance.getModelElementsByType(BoundaryEvent.class);
-		else boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
+		else {
+			boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
+			this.getBoundaryEventsSubProcess(boundaryEvents, process);
+		}
 		return this.getNonInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.ConditionalEventDefinitionImpl");
 	}
 	
@@ -892,7 +939,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<BoundaryEvent> boundaryEvents;
 		if(this.extraction.equals("Model"))
 			boundaryEvents = this.modelInstance.getModelElementsByType(BoundaryEvent.class);
-		else boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
+		else {
+			boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
+			this.getBoundaryEventsSubProcess(boundaryEvents, process);
+		}
 		return this.getNonInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.SignalEventDefinitionImpl");
 	}
 	
@@ -904,7 +954,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<BoundaryEvent> boundaryEvents;
 		if(this.extraction.equals("Model"))
 			boundaryEvents = this.modelInstance.getModelElementsByType(BoundaryEvent.class);
-		else boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
+		else {
+			boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
+			this.getBoundaryEventsSubProcess(boundaryEvents, process);
+		}
 		return this.getNonInterruptingBoundaryEventsEventDefinitions(boundaryEvents, "org.camunda.bpm.model.bpmn.impl.instance.EscalationEventDefinitionImpl");
 	}
 	
@@ -917,7 +970,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<BoundaryEvent> boundaryEvents;
 		if(this.extraction.equals("Model"))
 			boundaryEvents = this.modelInstance.getModelElementsByType(BoundaryEvent.class);
-		else boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
+		else {
+			boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
+			this.getBoundaryEventsSubProcess(boundaryEvents, process);
+		}
 		for (BoundaryEvent event: boundaryEvents) {
 			if (!event.cancelActivity() && event.getEventDefinitions().size() > 1) {
 				toReturn += 1;
@@ -936,7 +992,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<BoundaryEvent> boundaryEvents;
 		if(this.extraction.equals("Model"))
 			boundaryEvents = this.modelInstance.getModelElementsByType(BoundaryEvent.class);
-		else boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
+		else {
+			boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
+			this.getBoundaryEventsSubProcess(boundaryEvents, process);
+		}
 		for (BoundaryEvent event: boundaryEvents) {
 			if (!event.cancelActivity() && event.isParallelMultiple()) {
 				toReturn++;
@@ -1265,7 +1324,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<ThrowEvent> events;
 		if(this.extraction.equals("Model"))
 			events = this.modelInstance.getModelElementsByType(ThrowEvent.class);
-		else events = this.process.getChildElementsByType(ThrowEvent.class);
+		else {
+			events = this.process.getChildElementsByType(ThrowEvent.class);
+			this.getThrowEventsSubProcess(events, process);
+		}
 		return this.getNumberOfEventDefinitionsOfThrowEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.EndEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.MessageEventDefinitionImpl");
 
 	}
@@ -1279,7 +1341,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<ThrowEvent> events;
 		if(this.extraction.equals("Model"))
 			events = this.modelInstance.getModelElementsByType(ThrowEvent.class);
-		else events = this.process.getChildElementsByType(ThrowEvent.class);
+		else {
+			events = this.process.getChildElementsByType(ThrowEvent.class);
+			this.getThrowEventsSubProcess(events, process);
+		}
 		return this.getNumberOfEventDefinitionsOfThrowEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.EndEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.EscalationEventDefinitionImpl");
 
 	}
@@ -1293,7 +1358,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<ThrowEvent> events;
 		if(this.extraction.equals("Model"))
 			events = this.modelInstance.getModelElementsByType(ThrowEvent.class);
-		else events = this.process.getChildElementsByType(ThrowEvent.class);
+		else {
+			events = this.process.getChildElementsByType(ThrowEvent.class);
+			this.getThrowEventsSubProcess(events, process);
+		}
 		return this.getNumberOfEventDefinitionsOfThrowEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.EndEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.SignalEventDefinitionImpl");
 
 	}
@@ -1307,7 +1375,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<ThrowEvent> events;
 		if(this.extraction.equals("Model"))
 			events = this.modelInstance.getModelElementsByType(ThrowEvent.class);
-		else events = this.process.getChildElementsByType(ThrowEvent.class);
+		else {
+			events = this.process.getChildElementsByType(ThrowEvent.class);
+			this.getThrowEventsSubProcess(events, process);
+		}
 		return this.getNumberOfEventDefinitionsOfThrowEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.EndEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.ErrorEventDefinitionImpl");
 
 	}
@@ -1321,7 +1392,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<ThrowEvent> events;
 		if(this.extraction.equals("Model"))
 			events = this.modelInstance.getModelElementsByType(ThrowEvent.class);
-		else events = this.process.getChildElementsByType(ThrowEvent.class);
+		else {
+			events = this.process.getChildElementsByType(ThrowEvent.class);
+			this.getThrowEventsSubProcess(events, process);
+		}
 		return this.getNumberOfEventDefinitionsOfThrowEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.EndEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.CancelEventDefinitionImpl");
 
 	}
@@ -1335,7 +1409,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<ThrowEvent> events;
 		if(this.extraction.equals("Model"))
 			events = this.modelInstance.getModelElementsByType(ThrowEvent.class);
-		else events = this.process.getChildElementsByType(ThrowEvent.class);
+		else {
+			events = this.process.getChildElementsByType(ThrowEvent.class);
+			this.getThrowEventsSubProcess(events, process);
+		}
 		return this.getNumberOfEventDefinitionsOfThrowEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.EndEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.CompensateEventDefinitionImpl");
 
 	}
@@ -1349,7 +1426,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<ThrowEvent> events;
 		if(this.extraction.equals("Model"))
 			events = this.modelInstance.getModelElementsByType(ThrowEvent.class);
-		else events = this.process.getChildElementsByType(ThrowEvent.class);
+		else {
+			events = this.process.getChildElementsByType(ThrowEvent.class);
+			this.getThrowEventsSubProcess(events, process);
+		}
 		return this.getNumberOfEventDefinitionsOfThrowEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.EndEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.TerminateEventDefinitionImpl");
 	}
 	
@@ -1361,7 +1441,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<ThrowEvent> events;
 		if(this.extraction.equals("Model"))
 			events = this.modelInstance.getModelElementsByType(ThrowEvent.class);
-		else events = this.process.getChildElementsByType(ThrowEvent.class);
+		else {
+			events = this.process.getChildElementsByType(ThrowEvent.class);
+			this.getThrowEventsSubProcess(events, process);
+		}
 		return this.getThrowEventsMultipleDefinitions(events, "org.camunda.bpm.model.bpmn.impl.instance.EndEventImpl");
 	}
 	
@@ -1572,7 +1655,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<CatchEvent> events;
 		if(this.extraction.equals("Model"))
 			events = this.modelInstance.getModelElementsByType(CatchEvent.class);
-		else events = this.process.getChildElementsByType(CatchEvent.class);
+		else {
+			events = this.process.getChildElementsByType(CatchEvent.class);
+			this.getCatchEventsSubProcess(events, process);
+		}
 		return this.getNumberOfEventDefinitionsOfCatchEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateCatchEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.MessageEventDefinitionImpl");
 
 	}
@@ -1586,7 +1672,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<CatchEvent> events;
 		if(this.extraction.equals("Model"))
 			events = this.modelInstance.getModelElementsByType(CatchEvent.class);
-		else events = this.process.getChildElementsByType(CatchEvent.class);
+		else {
+			events = this.process.getChildElementsByType(CatchEvent.class);
+			this.getCatchEventsSubProcess(events, process);
+		}
 		return this.getNumberOfEventDefinitionsOfCatchEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateCatchEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.LinkEventDefinitionImpl");
 
 	}
@@ -1600,7 +1689,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<CatchEvent> events;
 		if(this.extraction.equals("Model"))
 			events = this.modelInstance.getModelElementsByType(CatchEvent.class);
-		else events = this.process.getChildElementsByType(CatchEvent.class);
+		else {
+			events = this.process.getChildElementsByType(CatchEvent.class);
+			this.getCatchEventsSubProcess(events, process);
+		}
 		return this.getNumberOfEventDefinitionsOfCatchEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateCatchEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.SignalEventDefinitionImpl");
 
 	}
@@ -1614,7 +1706,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<CatchEvent> events;
 		if(this.extraction.equals("Model"))
 			events = this.modelInstance.getModelElementsByType(CatchEvent.class);
-		else events = this.process.getChildElementsByType(CatchEvent.class);
+		else {
+			events = this.process.getChildElementsByType(CatchEvent.class);
+			this.getCatchEventsSubProcess(events, process);
+		}
 		return this.getNumberOfEventDefinitionsOfCatchEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateCatchEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.ConditionalEventDefinitionImpl");
 
 	}
@@ -1628,7 +1723,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<CatchEvent> events;
 		if(this.extraction.equals("Model"))
 			events = this.modelInstance.getModelElementsByType(CatchEvent.class);
-		else events = this.process.getChildElementsByType(CatchEvent.class);
+		else {
+			events = this.process.getChildElementsByType(CatchEvent.class);
+			this.getCatchEventsSubProcess(events, process);
+		}
 		return this.getNumberOfEventDefinitionsOfCatchEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateCatchEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.CompensateEventDefinitionImpl");
 	}
 	
@@ -1640,7 +1738,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<CatchEvent> events;
 		if(this.extraction.equals("Model"))
 			events = this.modelInstance.getModelElementsByType(CatchEvent.class);
-		else events = this.process.getChildElementsByType(CatchEvent.class);
+		else {
+			events = this.process.getChildElementsByType(CatchEvent.class);
+			this.getCatchEventsSubProcess(events, process);
+		}
 		return this.getCatchEventsMultipleDefinitions(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateCatchEventImpl");
 	}
 	
@@ -1653,7 +1754,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<IntermediateCatchEvent> events;
 		if(this.extraction.equals("Model"))
 			events = this.modelInstance.getModelElementsByType(IntermediateCatchEvent.class);
-		else events = this.process.getChildElementsByType(IntermediateCatchEvent.class);
+		else {
+			events = this.process.getChildElementsByType(IntermediateCatchEvent.class);
+			this.getInterEventsSubProcess(events, process);
+		}
 		for (IntermediateCatchEvent event: events) {
 			if (event.isParallelMultiple()) {
 				toReturn++;
@@ -1682,7 +1786,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<ThrowEvent> events;
 		if(this.extraction.equals("Model"))
 			events = this.modelInstance.getModelElementsByType(ThrowEvent.class);
-		else events = this.process.getChildElementsByType(ThrowEvent.class);
+		else {
+			events = this.process.getChildElementsByType(ThrowEvent.class);
+			this.getThrowEventsSubProcess(events, process);
+		}
 		return this.getNumberOfEventDefinitionsOfThrowEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateThrowEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.MessageEventDefinitionImpl");
 	}
 	
@@ -1695,7 +1802,10 @@ public class BpmnBasicMetricsExtractor {
 		 Collection<ThrowEvent> events;
 		 if(this.extraction.equals("Model"))
 			 events = this.modelInstance.getModelElementsByType(ThrowEvent.class);
-		 else events = this.process.getChildElementsByType(ThrowEvent.class);
+		 else {
+			 events = this.process.getChildElementsByType(ThrowEvent.class);
+			 this.getThrowEventsSubProcess(events, process);
+		 }
 		 return this.getNumberOfEventDefinitionsOfThrowEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateThrowEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.SignalEventDefinitionImpl");
 	 }
 	 
@@ -1708,7 +1818,10 @@ public class BpmnBasicMetricsExtractor {
 		 Collection<ThrowEvent> events;
 		 if(this.extraction.equals("Model"))
 			 events = this.modelInstance.getModelElementsByType(ThrowEvent.class);
-		 else events = this.process.getChildElementsByType(ThrowEvent.class);
+		 else {
+			 events = this.process.getChildElementsByType(ThrowEvent.class);
+			 this.getThrowEventsSubProcess(events, process);
+		 }
 		 return this.getNumberOfEventDefinitionsOfThrowEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateThrowEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.EscalationEventDefinitionImpl");
 	 }
 	 
@@ -1721,7 +1834,10 @@ public class BpmnBasicMetricsExtractor {
 		 Collection<ThrowEvent> events;
 		 if(this.extraction.equals("Model"))
 			 events = this.modelInstance.getModelElementsByType(ThrowEvent.class);
-		 else events = this.process.getChildElementsByType(ThrowEvent.class);
+		 else {
+			 events = this.process.getChildElementsByType(ThrowEvent.class);
+			 this.getThrowEventsSubProcess(events, process);
+		 }
 		 return this.getNumberOfEventDefinitionsOfThrowEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateThrowEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.LinkEventDefinitionImpl");
 	 }
 	 
@@ -1734,7 +1850,10 @@ public class BpmnBasicMetricsExtractor {
 		  Collection<ThrowEvent> events;
 			 if(this.extraction.equals("Model"))
 				 events = this.modelInstance.getModelElementsByType(ThrowEvent.class);
-			 else events = this.process.getChildElementsByType(ThrowEvent.class);
+			 else {
+				 events = this.process.getChildElementsByType(ThrowEvent.class);
+				 this.getThrowEventsSubProcess(events, process);
+			 }
 		 return this.getNumberOfEventDefinitionsOfThrowEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateThrowEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.CompensateEventDefinitionImpl");
 	 }
 	 
@@ -1746,7 +1865,10 @@ public class BpmnBasicMetricsExtractor {
 		 Collection<ThrowEvent> events;
 		 if(this.extraction.equals("Model"))
 			 events = this.modelInstance.getModelElementsByType(ThrowEvent.class);
-		 else events = this.process.getChildElementsByType(ThrowEvent.class);
+		 else {
+			 events = this.process.getChildElementsByType(ThrowEvent.class);
+			 this.getThrowEventsSubProcess(events, process);
+		 }
 		 return this.getThrowEventsMultipleDefinitions(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateThrowEventImpl");
 	 }
 	 
@@ -2119,7 +2241,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<CatchEvent> events;
 		if(this.extraction.equals("Model"))
 			events = this.modelInstance.getModelElementsByType(CatchEvent.class);
-		else events = this.process.getChildElementsByType(CatchEvent.class);
+		else {
+			events = this.process.getChildElementsByType(CatchEvent.class);
+			this.getCatchEventsSubProcess(events, process);
+		}
 		return this.getNumberOfEventDefinitionsOfCatchEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.StartEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.MessageEventDefinitionImpl");
 	}
 	
@@ -2132,7 +2257,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<CatchEvent> events;
 		if(this.extraction.equals("Model"))
 			events = this.modelInstance.getModelElementsByType(CatchEvent.class);
-		else events = this.process.getChildElementsByType(CatchEvent.class);
+		else {
+			events = this.process.getChildElementsByType(CatchEvent.class);
+			this.getCatchEventsSubProcess(events, process);
+		}
 		return this.getNumberOfEventDefinitionsOfCatchEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.StartEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.TimerEventDefinitionImpl");		
 	}
 	
@@ -2145,7 +2273,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<CatchEvent> events;
 		if(this.extraction.equals("Model"))
 			events = this.modelInstance.getModelElementsByType(CatchEvent.class);
-		else events = this.process.getChildElementsByType(CatchEvent.class);
+		else {
+			events = this.process.getChildElementsByType(CatchEvent.class);
+			this.getCatchEventsSubProcess(events, process);
+		}
 		return this.getNumberOfEventDefinitionsOfCatchEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.StartEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.ConditionalEventDefinitionImpl");
 
 	}
@@ -2159,7 +2290,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<CatchEvent> events;
 		if(this.extraction.equals("Model"))
 			events = this.modelInstance.getModelElementsByType(CatchEvent.class);
-		else events = this.process.getChildElementsByType(CatchEvent.class);
+		else {
+			events = this.process.getChildElementsByType(CatchEvent.class);
+			this.getCatchEventsSubProcess(events, process);
+		}
 		return this.getNumberOfEventDefinitionsOfCatchEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.StartEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.SignalEventDefinitionImpl");
 
 	}
@@ -2172,7 +2306,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<CatchEvent> events;
 		if(this.extraction.equals("Model"))
 			events = this.modelInstance.getModelElementsByType(CatchEvent.class);
-		else events = this.process.getChildElementsByType(CatchEvent.class);
+		else {
+			events = this.process.getChildElementsByType(CatchEvent.class);
+			this.getCatchEventsSubProcess(events, process);
+		}
 		return this.getCatchEventsMultipleDefinitions(events, "org.camunda.bpm.model.bpmn.impl.instance.StartEventImpl");
 	}
 	
@@ -2185,7 +2322,10 @@ public class BpmnBasicMetricsExtractor {
 		Collection<StartEvent> events;
 		if(this.extraction.equals("Model"))
 			events = this.modelInstance.getModelElementsByType(StartEvent.class);
-		else events = this.process.getChildElementsByType(StartEvent.class);
+		else {
+			events = this.process.getChildElementsByType(StartEvent.class);
+			this.getStartEventsSubProcess(events, process);
+		}
 		for (StartEvent event: events) {
 			if (event.isParallelMultiple()) {
 				toReturn++;
@@ -2580,12 +2720,19 @@ public class BpmnBasicMetricsExtractor {
 		return getCollectionOfElementType(type).size();
 	}
 	
+	//TODO
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Collection<ModelElementInstance> getCollectionOfElementType(Class type) {
 		ModelElementType modelElementType = modelInstance.getModel().getType(type);
 		//check for extraction type option
 		if(this.extraction.equals("Process"))
-			return this.process.getChildElementsByType(type);
+			if(this.conversion.equals("BlackBox"))
+				return this.process.getChildElementsByType(type);
+			else {
+				Collection<ModelElementInstance> c = this.process.getChildElementsByType(type);
+				for(SubProcess sub : this.process.getChildElementsByType(SubProcess.class))
+					c.addAll(sub.getChildElementsByType(type));	
+			}
 		return this.modelInstance.getModelElementsByType(modelElementType);
 	}
 	
@@ -2745,10 +2892,7 @@ public class BpmnBasicMetricsExtractor {
 
 		int numberOfEmptyPools = 0;
 		try{
-			Collection<Participant> participants;
-			if(this.extraction.equals("Model"))
-				participants = this.modelInstance.getModelElementsByType(Participant.class);
-			else participants = this.process.getChildElementsByType(Participant.class);
+			Collection<Participant> participants = this.modelInstance.getModelElementsByType(Participant.class);
 			
 			for (Participant p : participants) {
 
@@ -2765,6 +2909,83 @@ public class BpmnBasicMetricsExtractor {
 	return numberOfEmptyPools;
 
 	}
+	
+	//TODO
+	public void getEventsSubProcess(Collection<Event> events, BaseElement process){
+		if(conversion.equals("WhiteBox"))
+			for(SubProcess sub : process.getChildElementsByType(SubProcess.class)) {
+				for(Event event : sub.getChildElementsByType(Event.class))
+					events.add(event);
+				/*for(SubProcess nested : sub.getChildElementsByType(SubProcess.class))
+					this.getEventsSubProcess(events, nested);*/
+			}
+	}
+	
+	//TODO
+	private void getGatewaysSubProcess(Collection<Gateway> gateways, BaseElement process) {
+		if(conversion.equals("WhiteBox"))
+			for(SubProcess sub : process.getChildElementsByType(SubProcess.class)) {
+				for(Gateway gateway : sub.getChildElementsByType(Gateway.class))
+					gateways.add(gateway);
+				/*for(SubProcess nested : sub.getChildElementsByType(SubProcess.class))
+					this.getGatewaysSubProcess(gateways, nested);*/
+			}
+		
+	}
+	
+	//TODO
+	private void getActivitiesSubProcess(Collection<Activity> activities, BaseElement process) {
+		if(conversion.equals("WhiteBox"))
+			for(SubProcess sub : process.getChildElementsByType(SubProcess.class)) {
+				for(Activity activity : sub.getChildElementsByType(Activity.class))
+						activities.add(activity);
+				}
+	}
+	
+	//TODO
+	private void getBoundaryEventsSubProcess(Collection<BoundaryEvent> be, BaseElement process) {
+		if(conversion.equals("WhiteBox"))
+			for(SubProcess sub : process.getChildElementsByType(SubProcess.class)) {
+				for(BoundaryEvent bound : sub.getChildElementsByType(BoundaryEvent.class))
+					be.add(bound);
+				}
+		}
+	
+	//TODO
+	private void getThrowEventsSubProcess(Collection<ThrowEvent> te, BaseElement process) {
+		if(conversion.equals("WhiteBox"))
+			for(SubProcess sub : process.getChildElementsByType(SubProcess.class)) {
+				for(ThrowEvent t : sub.getChildElementsByType(ThrowEvent.class))
+					te.add(t);
+				}
+		}
+	
+	//TODO
+	private void getCatchEventsSubProcess(Collection<CatchEvent> ce, BaseElement process) {
+		if(conversion.equals("WhiteBox"))
+			for(SubProcess sub : process.getChildElementsByType(SubProcess.class)) {
+				for(CatchEvent c : sub.getChildElementsByType(CatchEvent.class))
+					ce.add(c);
+				}
+		}
+	
+	//TODO
+	private void getStartEventsSubProcess(Collection<StartEvent> se, BaseElement process) {
+		if(conversion.equals("WhiteBox"))
+			for(SubProcess sub : process.getChildElementsByType(SubProcess.class)) {
+				for(StartEvent s : sub.getChildElementsByType(StartEvent.class))
+					se.add(s);
+				}
+		}
+	
+	//TODO
+	private void getInterEventsSubProcess(Collection<IntermediateCatchEvent> i, BaseElement process) {
+		if(conversion.equals("WhiteBox"))
+			for(SubProcess sub : process.getChildElementsByType(SubProcess.class)) {
+				for(IntermediateCatchEvent c : sub.getChildElementsByType(IntermediateCatchEvent.class))
+					i.add(c);
+				}
+		}
 
 }
 
