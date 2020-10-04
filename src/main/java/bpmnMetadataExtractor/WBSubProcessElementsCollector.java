@@ -39,6 +39,7 @@ public class WBSubProcessElementsCollector {
 		
 	}
 	
+	//TODO add all subprocess to collection?
 	public void getActivitiesSubProcess(Collection<Activity> activities, BaseElement process) {
 		if(conversion.equals("WhiteBox"))
 			for(SubProcess sub : process.getChildElementsByType(SubProcess.class)) {

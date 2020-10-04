@@ -227,8 +227,8 @@ public class ModelConverter {
 		}*/
         //cancella ogni boundary event e il source dei suoi outgoing diventa l'id dell'attività al quale è attaccato
         this.resolveBoundaryEvent(null, flowNodes);
-        //controlla l'opzione per la conversione scelta
-		if(opzione.equals("WhiteBox"))
+        //controlla l'opzione per la conversione scelta 
+		if(opzione.equals("WhiteBox")) //TODO passare ogni processo del modello per convertire l'intero modello! 
         	this.whiteboxSubprocessConversion(edges, null, flowNodes, sequenceFlows);
         //crea un nuovo nodo per il grafo per ogni flownode del processo
         int vertexNumber = 0;
