@@ -162,7 +162,7 @@ public class BpmnAdvancedMetricsExtractor {
 			
 		}
 		json.addAdvancedMetric("S", this.getNumberOfBPMNElements(), this.numberProcess);
-		json.addAdvancedMetric("MCC", this.getMCC(), this.numberProcess);
+		//json.addAdvancedMetric("MCC", this.getMCC(), this.numberProcess);
 		json.addAdvancedMetric("Inter-process Complexity", this.getInterProcessComplexity(), this.numberProcess);
 		json.addAdvancedMetric("DE", this.getDuplicatedElements(), this.numberProcess);
 	}
@@ -214,15 +214,15 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("Sequentiality", getSequentiality(), this.numberProcess);
 		json.addAdvancedMetric("diam", sizeExtractor.getDiam(), this.numberProcess);
 		json.addAdvancedMetric("Depth", partExtractor.getDepth(), this.numberProcess);
-		json.addAdvancedMetric("CYC", this.sccExtractor.getCyclicity(), this.numberProcess);
+		//json.addAdvancedMetric("CYC", this.sccExtractor.getCyclicity(), this.numberProcess);
 		json.addAdvancedMetric("TS", this.getTokenSplit(), this.numberProcess);
 		json.addAdvancedMetric("Density", getDensity(), this.numberProcess);
 		json.addAdvancedMetric("ACD", this.getAverageConnectorDegree(), this.numberProcess);
 		json.addAdvancedMetric("MCD", this.getMaximumConnectorDegree(), this.numberProcess);
 		json.addAdvancedMetric("GM", this.connectorInterplayMetricsExtractor.getGatewaysMismatchMetric(), this.numberProcess);
 		json.addAdvancedMetric("CH", this.connectorInterplayMetricsExtractor.getConnectorsHeterogeneityMetric(), this.numberProcess);
-		json.addAdvancedMetric("ECyM", this.sccExtractor.getEcym(), this.numberProcess);
-		json.addAdvancedMetric("PF", this.sccExtractor.getCycle(), this.numberProcess);
+		//json.addAdvancedMetric("ECyM", this.sccExtractor.getEcym(), this.numberProcess);
+		//json.addAdvancedMetric("PF", this.sccExtractor.getCycle(), this.numberProcess);
 		json.addAdvancedMetric("DSM", dsmExtractor.getDurfeeMetric(), this.numberProcess);
 		json.addAdvancedMetric("PSM", dsmExtractor.getPerfectSquareMetric(), this.numberProcess);
 		json.addAdvancedMetric("Layout_Complexity", dsmExtractor.getLayoutComplexityMetric(), this.numberProcess);

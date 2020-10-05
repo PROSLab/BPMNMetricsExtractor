@@ -29,13 +29,9 @@ public class StronglyConnectedComponentsMetricExtractor {
 		this.basicMetricsExtractor = bpmnBasicExtractor;
 		this.nodesStack = new Stack<TarjanNode>();
 		//Creates a TarjanNode for each node in the model
-		if(this.basicMetricsExtractor.getExtractionType().equals("Model"))
-			for (FlowNode node: this.basicMetricsExtractor.getModelInstance().getModelElementsByType(FlowNode.class)) {
+		for (FlowNode node: this.basicMetricsExtractor.getModelInstance().getModelElementsByType(FlowNode.class)) {
 				this.nodes.add(new TarjanNode(node));
 			}
-		else for (FlowNode node: this.basicMetricsExtractor.getProcess().getChildElementsByType(FlowNode.class)) {
-			this.nodes.add(new TarjanNode(node));
-		}
 		//Initializes the successors of all the nodes
 		for (TarjanNode node: this.nodes) {
 			node.setSuccessors(this.nodes);
@@ -230,9 +226,5 @@ public class StronglyConnectedComponentsMetricExtractor {
 		}
 		
 	}
-	
-	
-	
-	
 	
 }

@@ -36,11 +36,8 @@ public class ModelConverter {
 	}
 	
 	private void whiteboxSubprocessConversion(Vector<Edge> edges,BaseElement process, Collection<FlowNode> fn, Collection<SequenceFlow> sf) { 
-		Collection<SubProcess> subprocesses;
 		//raccoglie tutti i sottoprocessi del processo/sotto-processo in esame
-		if(process == null)
-			subprocesses = this.modelInstance.getModelElementsByType(SubProcess.class);
-		else subprocesses = process.getChildElementsByType(SubProcess.class); 
+		Collection<SubProcess> subprocesses = process.getChildElementsByType(SubProcess.class); 
 		for(SubProcess subprocess : subprocesses) {
 			//check per verificare che il sotto-processo sia connesso
 			if(subprocess.getIncoming().isEmpty() || subprocess.getOutgoing().isEmpty())
@@ -228,8 +225,9 @@ public class ModelConverter {
         //cancella ogni boundary event e il source dei suoi outgoing diventa l'id dell'attività al quale è attaccato
         this.resolveBoundaryEvent(null, flowNodes);
         //controlla l'opzione per la conversione scelta 
-		if(opzione.equals("WhiteBox")) //TODO passare ogni processo del modello per convertire l'intero modello! 
-        	this.whiteboxSubprocessConversion(edges, null, flowNodes, sequenceFlows);
+		if(opzione.equals("WhiteBox"))
+			for(Process p : this.modelInstance.getModelElementsByType(Process.class))
+				this.whiteboxSubprocessConversion(edges, p, flowNodes, sequenceFlows);
         //crea un nuovo nodo per il grafo per ogni flownode del processo
         int vertexNumber = 0;
         for(FlowNode fn : flowNodes) {
