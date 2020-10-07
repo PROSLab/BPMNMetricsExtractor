@@ -310,7 +310,7 @@ public class BpmnAdvancedMetricsExtractor {
 	 */
 	public float getProportionOfIncomingDataObjectsAndTotalDataObjects() {
 		try {
-			float toReturn = (float)basicMetricsExtractor.getDataObjectsInput() / this.basicMetricsExtractor.getDataObjects();
+			float toReturn = (float)basicMetricsExtractor.getDataObjectsInput() / (this.basicMetricsExtractor.getDataObjectsInput() + this.basicMetricsExtractor.getDataObjectsOutput());
 			if (Float.isFinite(toReturn)) {
 				return toReturn;
 			}
@@ -328,7 +328,7 @@ public class BpmnAdvancedMetricsExtractor {
 	 */
 	public float getProportionOfOutgoingDataObjectsAndTotalDataObjects() {
 		try {
-			float toReturn = (float)basicMetricsExtractor.getDataObjectsOutput() / this.basicMetricsExtractor.getDataObjects();
+			float toReturn = (float)basicMetricsExtractor.getDataObjectsOutput() / (this.basicMetricsExtractor.getDataObjectsInput() + this.basicMetricsExtractor.getDataObjectsOutput());
 			if (Float.isFinite(toReturn)) {
 				return toReturn;
 			}
@@ -354,21 +354,6 @@ public class BpmnAdvancedMetricsExtractor {
 		} catch (ArithmeticException e) {
 			return 0.0f;
 		}
-	}
-	
-	/**
-	 * Metric: Inter-process Complexity 
-	 * Total number of DataInputAssociations + Total number of DataOutputAssociations (Inter-process Complexity = Fan-In + Fan-Out)
-	 * @return
-	 */
-	public int getInterProcessComplexity() {
-		int icp = 0;
-		if(this.basicMetricsExtractor.getExtractionType().equals("Process")) {
-			for(Activity a: this.basicMetricsExtractor.getProcess().getChildElementsByType(Activity.class))
-				icp += a.getDataInputAssociations().size() + + a.getDataOutputAssociations().size();
-			return icp;
-		}
-		return this.basicMetricsExtractor.getDataInputAssociations() + this.basicMetricsExtractor.getDataOutputAssociations();
 	}
 	
 	/**
@@ -483,15 +468,6 @@ public class BpmnAdvancedMetricsExtractor {
 		}*/
 		return toReturn;
 		
-	}
-	
-	/**
-	 * Metric: MCC
-	 * McCabe’s Cyclomatic Number counts the number of linearly independent paths through a process 
-	 * @return
-	 */
-	public int getMCC() {
-		return this.basicMetricsExtractor.getSequenceFlows() - this.basicMetricsExtractor.getFlowNodes() + 2;
 	}
 	
 	/**
@@ -971,17 +947,6 @@ public class BpmnAdvancedMetricsExtractor {
 	}
 	
 	/**
-	 * Metric: S
-	 * Number of BPMN elements 
-	 * @return
-	 */
-	public int getNumberOfBPMNElements(){
-		if(this.basicMetricsExtractor.getExtractionType().equals("Process"))
-			return basicMetricsExtractor.getProcess().getChildElementsByType(BaseElement.class).size();
-		return basicMetricsExtractor.getModelInstance().getModelElementsByType(BaseElement.class).size();
-	}
-	
-	/**
 	 * Metric: Lambda
 	 * "The density of the process graph refers to the number of arcs divided by the number of the maximum number
 	 *  of arcs for the same number of nodes"
@@ -1345,6 +1310,42 @@ public class BpmnAdvancedMetricsExtractor {
 			System.out.println(e);
 		}
 		return toReturn;
+	}
+	
+	/**
+	 * Metric: MCC
+	 * McCabe’s Cyclomatic Number counts the number of linearly independent paths through a process 
+	 * @return
+	 */
+	public int getMCC() {
+		return this.basicMetricsExtractor.getSequenceFlows() - this.basicMetricsExtractor.getFlowNodes() + 2;
+	}
+	
+	/**TODO
+	 * Metric: S
+	 * Number of BPMN elements 
+	 * @return
+	 */
+	public int getNumberOfBPMNElements(){
+		/*if(this.basicMetricsExtractor.getExtractionType().equals("Process"))
+			return basicMetricsExtractor.getProcess().getChildElementsByType(BaseElement.class).size();
+		return basicMetricsExtractor.getModelInstance().getModelElementsByType(BaseElement.class).size();*/
+		return this.basicMetricsExtractor.getNumberOfTypeElement(BaseElement.class);
+	}
+	
+	/**TODO
+	 * Metric: Inter-process Complexity 
+	 * Total number of DataInputAssociations + Total number of DataOutputAssociations (Inter-process Complexity = Fan-In + Fan-Out)
+	 * @return
+	 */
+	public int getInterProcessComplexity() {
+		int icp = 0;
+		if(this.basicMetricsExtractor.getExtractionType().equals("Process")) {
+			for(Activity a: this.basicMetricsExtractor.getProcess().getChildElementsByType(Activity.class))
+				icp += a.getDataInputAssociations().size() + + a.getDataOutputAssociations().size();
+			return icp;
+		}
+		return this.basicMetricsExtractor.getDataInputAssociations() + this.basicMetricsExtractor.getDataOutputAssociations();
 	}
 	
 	/**TODO not only for flow nodes, but never for sequence flows
