@@ -11,6 +11,7 @@ public class Diameter {
 		this.nodesNumber = adjMatrix.length;
 		this.shortestPaths = new Vector<Integer>();
 		for(int i = 0; i < adjMatrix.length; i++)
+			//TODO
 			this.dijkstra(adjMatrix, i);
 		this.L = this.setL();
 	}

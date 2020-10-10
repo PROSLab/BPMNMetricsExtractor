@@ -1321,19 +1321,16 @@ public class BpmnAdvancedMetricsExtractor {
 		return this.basicMetricsExtractor.getSequenceFlows() - this.basicMetricsExtractor.getFlowNodes() + 2;
 	}
 	
-	/**TODO
+	/**
 	 * Metric: S
 	 * Number of BPMN elements 
 	 * @return
 	 */
 	public int getNumberOfBPMNElements(){
-		/*if(this.basicMetricsExtractor.getExtractionType().equals("Process"))
-			return basicMetricsExtractor.getProcess().getChildElementsByType(BaseElement.class).size();
-		return basicMetricsExtractor.getModelInstance().getModelElementsByType(BaseElement.class).size();*/
 		return this.basicMetricsExtractor.getNumberOfTypeElement(BaseElement.class);
 	}
 	
-	/**TODO
+	/**
 	 * Metric: Inter-process Complexity 
 	 * Total number of DataInputAssociations + Total number of DataOutputAssociations (Inter-process Complexity = Fan-In + Fan-Out)
 	 * @return
@@ -1341,8 +1338,8 @@ public class BpmnAdvancedMetricsExtractor {
 	public int getInterProcessComplexity() {
 		int icp = 0;
 		if(this.basicMetricsExtractor.getExtractionType().equals("Process")) {
-			for(Activity a: this.basicMetricsExtractor.getProcess().getChildElementsByType(Activity.class))
-				icp += a.getDataInputAssociations().size() + + a.getDataOutputAssociations().size();
+			for(ModelElementInstance a: this.basicMetricsExtractor.getCollectionOfElementType(Activity.class))
+				icp += ((Activity) a).getDataInputAssociations().size() + ((Activity) a).getDataOutputAssociations().size();
 			return icp;
 		}
 		return this.basicMetricsExtractor.getDataInputAssociations() + this.basicMetricsExtractor.getDataOutputAssociations();
