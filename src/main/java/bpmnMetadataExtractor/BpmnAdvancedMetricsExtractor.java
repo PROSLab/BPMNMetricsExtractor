@@ -134,37 +134,38 @@ public class BpmnAdvancedMetricsExtractor {
 			boolean cyclical = new CycleDetector(gal.getAdj()).isCyclic();
 			//compute all metrics on graph
 			BindingStructure b = new BindingStructure(gm.getEdge(),gm.getVertix());
-			this.json.addAdvancedMetric("B", (double) Math.round(b.getB() * 1000d) / 1000d, this.numberProcess);
+			this.json.addAdvancedMetric("B", (double) Math.round(b.getB() * 1000d) / 1000d);
 			Diameter l = new Diameter(gm.getAdjacencyMatrix());
-			this.json.addAdvancedMetric("L", l.getL(), this.numberProcess);
+			this.json.addAdvancedMetric("L", l.getL());
 			StructureDiversity d = new StructureDiversity(gm.getAdjacencyMatrix(), gm.getReachabilityMatrix(), gal.getAdj());
-			this.json.addAdvancedMetric("D", (double) Math.round(d.getD() * 1000d) / 1000d, this.numberProcess);
+			this.json.addAdvancedMetric("D", (double) Math.round(d.getD() * 1000d) / 1000d);
 			AggregateIndicator ac = new AggregateIndicator(l.getL(),b.getB(),d.getD());
-			this.json.addAdvancedMetric("AC",(double) Math.round(ac.getAC() * 1000d) / 1000d, this.numberProcess);
+			this.json.addAdvancedMetric("AC",(double) Math.round(ac.getAC() * 1000d) / 1000d);
 			
 			ProcessBreadth pb = new ProcessBreadth(gm.getAdjacencyMatrix(), gm.getReachabilityMatrix(), gal.getAdj());
-			this.json.addAdvancedMetric("Process Breadth", pb.getProcessBreadth(), this.numberProcess);
+			this.json.addAdvancedMetric("Process Breadth", pb.getProcessBreadth());
+			this.json.addAdvancedMetric("NDOP", pb.getNDOP());
 			Separability s = new Separability(gm.getAdjacencyMatrix());
-			this.json.addAdvancedMetric("Sep",(double) Math.round(s.getSeparability() * 1000d) / 1000d, this.numberProcess);
+			this.json.addAdvancedMetric("Sep",(double) Math.round(s.getSeparability() * 1000d) / 1000d);
 			
 			RestrictivenessEstimator rt = new RestrictivenessEstimator(gm.getVertix(),gm.getReachabilityMatrix());
-			this.json.addAdvancedMetric("RT",(double) Math.round(rt.getRT() * 1000d) / 1000d, this.numberProcess);
+			this.json.addAdvancedMetric("RT",(double) Math.round(rt.getRT() * 1000d) / 1000d);
 			TreesNumber t = new TreesNumber(gm.getAdjacencyMatrix());
-			this.json.addAdvancedMetric("T", t.getT(), this.numberProcess);
+			this.json.addAdvancedMetric("T", t.getT());
 			//compute metrics on acyclical graph
 			if(!cyclical) {
 				for(Process p : mc.getProcesses())
 					this.dopExtractor.setDop(p);
-				this.json.addAdvancedMetric("DOP", this.dopExtractor.getDop(), this.numberProcess);
+				this.json.addAdvancedMetric("DOP", this.dopExtractor.getDop());
 				ComplexityIndex ci = new ComplexityIndex(gm.getAdjacencyMatrix(), gal.getAdj());
-				this.json.addAdvancedMetric("CI",ci.getCI(), this.numberProcess);
+				this.json.addAdvancedMetric("CI",ci.getCI());
 				}
 			
 		}
-		json.addAdvancedMetric("S", this.getNumberOfBPMNElements(), this.numberProcess);
-		//json.addAdvancedMetric("MCC", this.getMCC(), this.numberProcess);
-		json.addAdvancedMetric("Inter-process Complexity", this.getInterProcessComplexity(), this.numberProcess);
-		json.addAdvancedMetric("DE", this.getDuplicatedElements(), this.numberProcess);
+		json.addAdvancedMetric("S", this.getNumberOfBPMNElements());
+		//json.addAdvancedMetric("MCC", this.getMCC());
+		json.addAdvancedMetric("Inter-process Complexity", this.getInterProcessComplexity());
+		json.addAdvancedMetric("DE", this.getDuplicatedElements());
 	}
 	
 	public void runMetricsProcess(String conversion) {
@@ -244,6 +245,7 @@ public class BpmnAdvancedMetricsExtractor {
 			
 			ProcessBreadth pb = new ProcessBreadth(gm.getAdjacencyMatrix(), gm.getReachabilityMatrix(), gal.getAdj());
 			this.json.addAdvancedMetric("Process Breadth", pb.getProcessBreadth(), this.numberProcess);
+			this.json.addAdvancedMetric("NDOP", pb.getNDOP(), this.numberProcess);
 			Separability s = new Separability(gm.getAdjacencyMatrix());
 			this.json.addAdvancedMetric("Sep",(double) Math.round(s.getSeparability() * 1000d) / 1000d, this.numberProcess);
 			

@@ -283,3 +283,4 @@ MCC %McCabe’s Cyclomatic Number	{absent}
 Inter-process Complexity %Inter-process Complexity	{absent}
 DE %Duplicated Elements	{absent}
 Sep %Separability	{absent}
+NDOP %Number of different objects in all possible paths	{absent}

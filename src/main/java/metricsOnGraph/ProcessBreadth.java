@@ -8,18 +8,24 @@ public class ProcessBreadth {
 	private Vector<Integer> finalNodes;
 	private ArrayList<ArrayList<Integer>> adj;
 	private int pathNumber;
+	private int ndop;
 	
 	public ProcessBreadth(int[][] am, int [][] rm, ArrayList<ArrayList<Integer>> adj) {
 		this.initialNodes = new Vector<Integer>();
 		this.finalNodes = new Vector<Integer>();
 		this.adj = adj;
 		this.pathNumber = 0;
+		this.ndop = 0;
 		this.collectNodes(am);
 		this.setProcessBreadth(rm);
 	}
 	
 	public int getProcessBreadth() {
 		return this.pathNumber;
+	}
+	
+	public int getNDOP() {
+		return this.ndop;
 	}
 	
 	private void collectNodes(int [][] matrix) { 
@@ -51,6 +57,7 @@ public class ProcessBreadth {
         } 
         // Recur for all the vertices adjacent to this vertex 
         else { 
+        	this.ndop++;
         	for(Integer i : this.adj.get(u)) {
                 int n = i; 
                 pathCount = countPathsUtil(n, d, pathCount); 
