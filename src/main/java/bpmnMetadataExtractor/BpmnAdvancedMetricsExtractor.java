@@ -66,7 +66,6 @@ public class BpmnAdvancedMetricsExtractor {
 		this.dopExtractor = new DOPMetricsExtractor();
 		this.mc = mc;
 		this.numberProcess = i;
-		this.F = new StructurednessMetricExtractor();
 	}
 	
 	public void runMetrics(String conversion) {
@@ -170,7 +169,8 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("DE", this.getDuplicatedElements());
 		double structuredness = 0.0;
 		for(Process p : this.basicMetricsExtractor.getModelInstance().getModelElementsByType(Process.class)) {
-			this.F.setS(p);
+			this.F = new StructurednessMetricExtractor(p);
+			this.F.setS();
 			structuredness += this.F.getS();
 		} 
 		json.addAdvancedMetric("F", structuredness);
@@ -274,7 +274,8 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("MCC", this.getMCC(), this.numberProcess);
 		json.addAdvancedMetric("Inter-process Complexity", this.getInterProcessComplexity(), this.numberProcess);
 		json.addAdvancedMetric("DE", this.getDuplicatedElements(), this.numberProcess);
-		this.F.setS(this.basicMetricsExtractor.getProcess());
+		this.F = new StructurednessMetricExtractor(this.basicMetricsExtractor.getProcess());
+		this.F.setS();
 		json.addAdvancedMetric("F", this.F.getS(), this.numberProcess);
 	}
 
