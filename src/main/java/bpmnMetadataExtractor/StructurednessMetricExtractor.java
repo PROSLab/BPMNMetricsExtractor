@@ -16,15 +16,17 @@ import org.camunda.bpm.model.bpmn.instance.SequenceFlow;
 public class StructurednessMetricExtractor {
 	private double S;
 	private Process process;
-	private int originalNode;
-	private int reducedNodes;
-	private Vector<String> blocks;
+	private int graph;
+	private int reducedGraph;
+	private Vector<String> reducedNodes;
+	private Vector<String> gateways;
 	
-	public StructurednessMetricExtractor(Process p){
+	public StructurednessMetricExtractor(Process p) {
 		this.process =p;
-		this.originalNode = p.getChildElementsByType(FlowNode.class).size();
-		this.reducedNodes = originalNode;
-		this.blocks = new Vector<String>();
+		this.graph = p.getChildElementsByType(FlowNode.class).size();
+		this.reducedGraph = graph;
+		this.reducedNodes = new Vector<String>();
+		this.gateways = new Vector<String>();
 	}
 	
 	public double getS() {
@@ -32,75 +34,95 @@ public class StructurednessMetricExtractor {
 	}
 	
 	public void setS() {
-		for(Gateway split : this.process.getChildElementsByType(Gateway.class)) {
+		for(Gateway split : process.getChildElementsByType(Gateway.class)) {
 			this.reduceGraph(split);
 		}
-		//System.out.println(reducedNodes);
-		this.S = 1.0 - (((double)reducedNodes) / ((double) originalNode));	
+		//System.err.println(reducedGraph);
+		this.S = 1.0 - (((double)reducedGraph) / ((double) graph));	
 	}
 	
 	/*
-	 * studia gli archi uscenti dallo split e ricerca un join
+	 * studia gli archi uscenti dallo split e ricerca un join 
 	 */
-	private int search(FlowNode fn, Vector<String> visitedGateways) {
+	private int search(FlowNode fn, Vector<String> blocks) {
 		int cont = 0;
-		
-		//TODO far ripartire la ricerca se è uno split
-		if (fn instanceof Gateway && fn.getIncoming().size() == 1) {
-			this.reduceGraph((Gateway) fn);
-			}
-		else
-			if (fn instanceof Gateway) {
+		//check per verificare che il nodo non sia già ridotto
+		if(!this.reducedNodes.contains(fn.getId())) {
+			
+			//check per verificare la presenza di uno split annidato
+			if (fn instanceof Gateway && fn.getIncoming().size() == 1) {
+				//chiamata ricorsiva al metodo che gestisce la ricerca di blocchi strutturati
+				this.reduceGraph((Gateway) fn);
+				}
+			
+			if(fn instanceof Gateway && !this.gateways.contains(fn.getId()) && !this.reducedNodes.contains(fn.getId())) {
+				//se non è un join salva una stringa di avviso
 				if(fn.getOutgoing().size() != 1)
-					visitedGateways.add("NoJoin");
-				else 
-					if(!this.blocks.contains(fn.getId()))
-						visitedGateways.add(fn.getId());
+					blocks.add("NoJoin");
+				else blocks.add(fn.getId());
 				return cont;
 				}
+			
+			//se arriva all'end event il metodo termina
+			if (fn instanceof EndEvent) {
+				blocks.add(fn.getId());
+				return cont;
+			} 
+			else
+				//altrimenti cotinua la ricerca e aumenta il numero di nodi da ridurre 
+				for(SequenceFlow sf : fn.getOutgoing()) {
+					if(!this.reducedNodes.contains(fn.getId())) {
+						cont++;
+						this.reducedNodes.add(fn.getId());
+						}
+					else if(fn instanceof Gateway && this.gateways.contains(fn.getId())) {
+						cont++;
+						}	
+					cont+=search(sf.getTarget(), blocks);
+					}
+			} 
 		
-		if (fn instanceof EndEvent) {
-			visitedGateways.add(fn.getId());
-			return cont;
-		} 
-		else 
-			for(SequenceFlow sf : fn.getOutgoing()) {
-				cont++;
-				cont+=search(sf.getTarget(), visitedGateways);
-				}
+		else for(SequenceFlow sf : fn.getOutgoing()) {
+			cont += search(sf.getTarget(), blocks);	
+		}
+		
 		return cont;
 	}
-	
+		
 	/*
 	 * studia ogni gateway del grafo, elimina dal totale il numero di nodi che formano una struttura
 	 */
 	private void reduceGraph(Gateway split) {
-		if(split.getIncoming().size() == 1) {
-			
+		//check per verificare che il gateway esaminato sia uno split
+		if(split.getIncoming().size() == 1 && !this.reducedNodes.contains(split.getId())) {
+			//aggiunge il gateway alla lista di quelli esaminati
+			this.reducedNodes.add(split.getId());
 			int reduce = 0;
-			Vector<String> visitedGateways = new Vector<String>();
-			
+			//lista per salvare ogni join raggiunto dallo split in esame
+			Vector<String> blocks = new Vector<String>();
+			//salva il tipo di gateway
 			String type = split.getElementType().getTypeName();
-			//System.out.println(type);
-			for(SequenceFlow sf : split.getOutgoing())
-				reduce+= this.search(sf.getTarget(), visitedGateways);
 			
+			for(SequenceFlow sf : split.getOutgoing())
+				reduce+= this.search(sf.getTarget(), blocks);	
+			//check per verificare che lo split in esame sia collegato unicamente ad un join
 			boolean check = true;
-			for(String id : visitedGateways) {
-				//System.out.println(visitedGateways.get(0)+"   "+id);
-				if(!visitedGateways.get(0).equals(id))
+			for(String id : blocks) {
+				//System.out.println(id);
+				if(!blocks.get(0).equals(id))
 					check = false;
-			}
-				
-			//System.out.println(this.process.getModelInstance().getModelElementById(visitedGateways.get(0)).getElementType().getTypeName());
-			if(check && type.equals(this.process.getModelInstance().getModelElementById(visitedGateways.get(0)).getElementType().getTypeName())) {
-				reduce++;
-				this.reducedNodes = this.reducedNodes - reduce;
-				this.blocks.add(split.getId()/*.concat(visitedGateways.get(0))*/);
-				//System.out.println(split.getId().concat(visitedGateways.get(0)));
 				}
-			//System.out.println(reduce);
-			} 
+			
+			if(blocks.get(0) !="NoJoin" && check && type.equals(process.getModelInstance().getModelElementById(blocks.get(0)).getElementType().getTypeName())) {
+				//salva l'id del join se compone una struttura
+				this.gateways.addAll(blocks);
+				//riduce il nodo corrispondente al join
+				reduce++;
+				this.reducedGraph = this.reducedGraph - reduce;
+				//System.out.println(reduce);
+				}
+			
+		} 
 	}
 
 }
