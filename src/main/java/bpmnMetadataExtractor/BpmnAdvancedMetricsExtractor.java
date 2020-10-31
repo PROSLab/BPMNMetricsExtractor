@@ -631,7 +631,7 @@ public class BpmnAdvancedMetricsExtractor {
 			return 0.0;
 	}
 	
-	/**
+	/**TODO
 	 * Metric: NoI or Fanin
 	 * Number of activity inputs. The fan-in of a procedure A is the number of local flows
 	 *  into procedure A plus the number of data structures from which procedure A retrieves information.
@@ -659,7 +659,7 @@ public class BpmnAdvancedMetricsExtractor {
 		}
 	}
 	
-	/**
+	/**TODO
 	 * Metric: NoO or Fanout
      * Number of activity outputs. The fan-out of a procedure A is the number of local flows
      *  from procedure A plus the number of data structures which procedure A updates.
@@ -756,7 +756,7 @@ public class BpmnAdvancedMetricsExtractor {
 		return Math.pow((getNumberOfActivityInputs() * getNumberOfActivityOutputs()), 2);
 	}
 	
-	/**
+	/**TODO
 	 * Metric: NOF
 	 * Number of control flow connections (number of arcs)
 	 * @return
@@ -950,7 +950,7 @@ public class BpmnAdvancedMetricsExtractor {
 		return toReturn;
 	}
 	
-	/**
+	/**TODO
 	 * Metric: Sn
 	 * Number of nodes (activities + routing elements)
 	 * @return
@@ -1103,7 +1103,7 @@ public class BpmnAdvancedMetricsExtractor {
 		}
 	}
 	
-	/**
+	/**TODO
 	 * Metric: RRPA
 	 * Ratio of Roles and Activities
 	 * @return NP/NACT
@@ -1368,6 +1368,7 @@ public class BpmnAdvancedMetricsExtractor {
 		Vector<String> ispectioned = new Vector<String>();
 		Collection<ModelElementInstance> elements = this.basicMetricsExtractor.getCollectionOfElementType(FlowNode.class);
 		for(ModelElementInstance original : this.basicMetricsExtractor.getCollectionOfElementType(FlowNode.class))
+			//TODO add check for " " label
 			if(((FlowNode) original).getName() != null && !ispectioned.contains(((FlowNode) original).getName()))
 				for(ModelElementInstance duplicated : elements)
 					if(((FlowNode) duplicated).getName() != null)

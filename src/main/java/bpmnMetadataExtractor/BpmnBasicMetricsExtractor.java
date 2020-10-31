@@ -2396,7 +2396,7 @@ public class BpmnBasicMetricsExtractor {
 		return getNumberOfTypeElement(TextAnnotation.class);
 	}
 	
-	/**
+	/**TODO
 	 * Metric: NG
 	 * 
 	 * @return number of Groups
@@ -2731,8 +2731,7 @@ public class BpmnBasicMetricsExtractor {
 				return this.process.getChildElementsByType(type);
 			else {
 				Collection<ModelElementInstance> c = this.process.getChildElementsByType(type);
-				for(SubProcess sub : this.process.getChildElementsByType(SubProcess.class))
-					c.addAll(sub.getChildElementsByType(type));
+				ec.getCollectionOfElementTypeWBProcess(c, this.process, type);
 				return c;
 			}
 		return this.modelInstance.getModelElementsByType(modelElementType);
@@ -2877,7 +2876,7 @@ public class BpmnBasicMetricsExtractor {
 	 * @return
 	 */
 	public BpmnModelInstance getModelInstance() {
-		return modelInstance;
+		return this.modelInstance;
 	}
 	
 	public Process getProcess() {

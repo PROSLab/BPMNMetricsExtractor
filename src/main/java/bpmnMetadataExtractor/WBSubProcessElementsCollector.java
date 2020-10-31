@@ -12,6 +12,7 @@ import org.camunda.bpm.model.bpmn.instance.IntermediateCatchEvent;
 import org.camunda.bpm.model.bpmn.instance.StartEvent;
 import org.camunda.bpm.model.bpmn.instance.SubProcess;
 import org.camunda.bpm.model.bpmn.instance.ThrowEvent;
+import org.camunda.bpm.model.xml.instance.ModelElementInstance;
 
 public class WBSubProcessElementsCollector {
 	private String conversion;
@@ -39,7 +40,8 @@ public class WBSubProcessElementsCollector {
 		
 	}
 	
-	//TODO add all subprocess to collection?
+	
+	//method used by getSequenceFlowsBetweenActivities() in BpmnBasicMetricsExtractor class
 	public void getActivitiesSubProcess(Collection<Activity> activities, BaseElement process) {
 		if(conversion.equals("WhiteBox"))
 			for(SubProcess sub : process.getChildElementsByType(SubProcess.class)) {
@@ -93,5 +95,15 @@ public class WBSubProcessElementsCollector {
 				getInterEventsSubProcess(i, sub);
 			}
 		}
+	
+	//method used by getCollectionOfElementType(Class type) in BpmnBasicMetricsExtractor class
+	//it recursively collects elements in subprocess
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void getCollectionOfElementTypeWBProcess(Collection<ModelElementInstance> c, BaseElement process, Class type) {
+		for(SubProcess sub : process.getChildElementsByType(SubProcess.class)) {
+			c.addAll(sub.getChildElementsByType(type));
+			this.getCollectionOfElementTypeWBProcess(c, sub, type);
+		}		
+	}
 
 }
