@@ -8,9 +8,11 @@ import org.camunda.bpm.model.bpmn.instance.Activity;
 import org.camunda.bpm.model.bpmn.instance.BaseElement;
 import org.camunda.bpm.model.bpmn.instance.DataObject;
 import org.camunda.bpm.model.bpmn.instance.ExclusiveGateway;
+import org.camunda.bpm.model.bpmn.instance.FlowElement;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;
 import org.camunda.bpm.model.bpmn.instance.Gateway;
 import org.camunda.bpm.model.bpmn.instance.InclusiveGateway;
+import org.camunda.bpm.model.bpmn.instance.Lane;
 import org.camunda.bpm.model.bpmn.instance.MessageFlow;
 import org.camunda.bpm.model.bpmn.instance.ParallelGateway;
 import org.camunda.bpm.model.bpmn.instance.Participant;
@@ -223,7 +225,7 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("Sequentiality", getSequentiality(), this.numberProcess);
 		json.addAdvancedMetric("diam", sizeExtractor.getDiam(), this.numberProcess);
 		json.addAdvancedMetric("Depth", partExtractor.getDepth(), this.numberProcess);
-		//json.addAdvancedMetric("CYC", this.sccExtractor.getCyclicity(), this.numberProcess);
+		json.addAdvancedMetric("CYC", this.sccExtractor.getCyclicity(), this.numberProcess);
 		json.addAdvancedMetric("TS", this.getTokenSplit(), this.numberProcess);
 		json.addAdvancedMetric("Density", getDensity(), this.numberProcess);
 		json.addAdvancedMetric("ACD", this.getAverageConnectorDegree(), this.numberProcess);
@@ -231,7 +233,7 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("GM", this.connectorInterplayMetricsExtractor.getGatewaysMismatchMetric(), this.numberProcess);
 		json.addAdvancedMetric("CH", this.connectorInterplayMetricsExtractor.getConnectorsHeterogeneityMetric(), this.numberProcess);
 		//json.addAdvancedMetric("ECyM", this.sccExtractor.getEcym(), this.numberProcess);
-		//json.addAdvancedMetric("PF", this.sccExtractor.getCycle(), this.numberProcess);
+		json.addAdvancedMetric("PF", this.sccExtractor.getCycle(), this.numberProcess);
 		json.addAdvancedMetric("DSM", dsmExtractor.getDurfeeMetric(), this.numberProcess);
 		json.addAdvancedMetric("PSM", dsmExtractor.getPerfectSquareMetric(), this.numberProcess);
 		json.addAdvancedMetric("Layout_Complexity", dsmExtractor.getLayoutComplexityMetric(), this.numberProcess);
@@ -1358,24 +1360,70 @@ public class BpmnAdvancedMetricsExtractor {
 		return this.basicMetricsExtractor.getDataInputAssociations() + this.basicMetricsExtractor.getDataOutputAssociations();
 	}
 	
-	/**TODO not only for flow nodes, but never for sequence flows
+	/**
 	 * Metric DE
-	 * Duplicated elements is defined as the sum of flow nodes of the same type and with the same label
+	 * Duplicated elements is defined as the sum of participants, lanes, message flows or flow elements 
+	 * (but not sequence flows) of the same type with the same label
 	 * @return
 	 */
 	public int getDuplicatedElements() {
 		int n = 0;
+		Collection<ModelElementInstance> elements = this.basicMetricsExtractor.getCollectionOfElementType(FlowElement.class);
 		Vector<String> ispectioned = new Vector<String>();
-		Collection<ModelElementInstance> elements = this.basicMetricsExtractor.getCollectionOfElementType(FlowNode.class);
-		for(ModelElementInstance original : this.basicMetricsExtractor.getCollectionOfElementType(FlowNode.class))
+		for(ModelElementInstance original : this.basicMetricsExtractor.getCollectionOfElementType(FlowElement.class)) {
 			//TODO add check for " " label
-			if(((FlowNode) original).getName() != null && !ispectioned.contains(((FlowNode) original).getName()))
+			if(((FlowElement) original).getName() != null && !ispectioned.contains(((FlowElement) original).getName()))
 				for(ModelElementInstance duplicated : elements)
-					if(((FlowNode) duplicated).getName() != null)
-						if(original.getElementType().getTypeName().equals(duplicated.getElementType().getTypeName()) && ((FlowNode) original).getName().equals(((FlowNode) duplicated).getName()) && !((FlowNode) original).getId().equals(((FlowNode) duplicated).getId())) {
+					if(((FlowElement) duplicated).getName() != null && !(duplicated instanceof SequenceFlow))
+						if(original.getElementType().getTypeName().equals(duplicated.getElementType().getTypeName()) 
+								&& ((FlowElement) original).getName().equals(((FlowElement) duplicated).getName()) 
+								&& !((FlowElement) original).getId().equals(((FlowElement) duplicated).getId())) {
 							n++;
-							ispectioned.add(((FlowNode) original).getName());
+							ispectioned.add(((FlowElement) original).getName());
 						}
+		}	
+		elements = this.basicMetricsExtractor.getCollectionOfElementType(Participant.class);
+		ispectioned = new Vector<String>();
+		for(ModelElementInstance original : this.basicMetricsExtractor.getCollectionOfElementType(Participant.class)) {
+			//TODO add check for " " label
+			if(((Participant) original).getName() != null && !ispectioned.contains(((Participant) original).getName()))
+				for(ModelElementInstance duplicated : elements)
+					if(((Participant) duplicated).getName() != null)
+						if(original.getElementType().getTypeName().equals(duplicated.getElementType().getTypeName()) 
+								&& ((Participant) original).getName().equals(((Participant) duplicated).getName()) 
+								&& !((Participant) original).getId().equals(((Participant) duplicated).getId())) {
+							n++;
+							ispectioned.add(((Participant) original).getName());
+						}
+		}	
+		elements = this.basicMetricsExtractor.getCollectionOfElementType(Lane.class);
+		ispectioned = new Vector<String>();
+		for(ModelElementInstance original : this.basicMetricsExtractor.getCollectionOfElementType(Lane.class)) {
+			//TODO add check for " " label
+			if(((Lane) original).getName() != null && !ispectioned.contains(((Lane) original).getName()))
+				for(ModelElementInstance duplicated : elements)
+					if(((Lane) duplicated).getName() != null)
+						if(original.getElementType().getTypeName().equals(duplicated.getElementType().getTypeName()) 
+								&& ((Lane) original).getName().equals(((Lane) duplicated).getName()) 
+								&& !((Lane) original).getId().equals(((Lane) duplicated).getId())) {
+							n++;
+							ispectioned.add(((Lane) original).getName());
+						}
+		}	
+		elements = this.basicMetricsExtractor.getCollectionOfElementType(MessageFlow.class);
+		ispectioned = new Vector<String>();
+		for(ModelElementInstance original : this.basicMetricsExtractor.getCollectionOfElementType(MessageFlow.class)) {
+			//TODO add check for " " label
+			if(((MessageFlow) original).getName() != null && !ispectioned.contains(((MessageFlow) original).getName()))
+				for(ModelElementInstance duplicated : elements)
+					if(((MessageFlow) duplicated).getName() != null)
+						if(original.getElementType().getTypeName().equals(duplicated.getElementType().getTypeName()) 
+								&& ((MessageFlow) original).getName().equals(((MessageFlow) duplicated).getName()) 
+								&& !((MessageFlow) original).getId().equals(((MessageFlow) duplicated).getId())) {
+							n++;
+							ispectioned.add(((MessageFlow) original).getName());
+						}
+		}	
 		return n;
 			
 	}
