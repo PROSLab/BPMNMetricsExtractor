@@ -40,7 +40,7 @@ public class DOPMetricsExtractor {
 		return d;
 	}
 	
-	//Il metodo checkSubProcess calcola il dop di un sotto-processo
+	//Il metodo checkSubProcess calcola il dop di un sotto-processo TODO stringa conversione per entrambi i tipi di estrazione
 	
 	private int checkSubProcess(FlowNode subprocess, Vector<String> activityId,Vector<String> visit) {
 		visit.add(subprocess.getId());

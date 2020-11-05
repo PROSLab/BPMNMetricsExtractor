@@ -43,7 +43,7 @@ public class BpmnAdvancedMetricsExtractor {
 	private ConnectorInterplayMetricsExtractor connectorInterplayMetricsExtractor;
 	private DurfeeSquareMetricExtractor dsmExtractor;
 	private PartitionabilityMetricsExtractor partExtractor;
-	private SizeMetricsExtractor sizeExtractor;
+	//private SizeMetricsExtractor sizeExtractor;
 	private NestingDepthMetricsExtractor ndExtractor;
 	private StronglyConnectedComponentsMetricExtractor sccExtractor;
 	private CognitiveWeightMetricExtractor cwExtractor;
@@ -60,7 +60,7 @@ public class BpmnAdvancedMetricsExtractor {
 		this.connectorInterplayMetricsExtractor = new ConnectorInterplayMetricsExtractor(basicMetricsExtractor);
 		this.dsmExtractor = new DurfeeSquareMetricExtractor(basicMetricsExtractor);
 		this.partExtractor = new PartitionabilityMetricsExtractor(basicMetricsExtractor);
-		this.sizeExtractor = new SizeMetricsExtractor(basicMetricsExtractor);
+		//this.sizeExtractor = new SizeMetricsExtractor(basicMetricsExtractor);
 		this.ndExtractor = new NestingDepthMetricsExtractor(basicMetricsExtractor);
 		this.sccExtractor = new StronglyConnectedComponentsMetricExtractor(basicMetricsExtractor);
 		this.cwExtractor = new CognitiveWeightMetricExtractor(basicMetricsExtractor);
@@ -108,14 +108,14 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("MaxND", ndExtractor.getMaxNestingDepth());
 		json.addAdvancedMetric("CP", getProcessCoupling());
 		json.addAdvancedMetric("WCP", getWeightedProcessCoupling());
-		json.addAdvancedMetric("Par", getParallelism());
+		//json.addAdvancedMetric("Par", getParallelism());
 		json.addAdvancedMetric("CNC^2", this.getCoefficientOfNetworkComplexity());
 		json.addAdvancedMetric("CNC", this.getCoefficientComplexity());
 		json.addAdvancedMetric("NCA", this.getActivityCoupling());
 		json.addAdvancedMetric("MeanND", ndExtractor.getMeanNestingDepth());
 		json.addAdvancedMetric("Sn", getNumberOfNodes());
 		json.addAdvancedMetric("Sequentiality", getSequentiality());
-		json.addAdvancedMetric("diam", sizeExtractor.getDiam());
+		//json.addAdvancedMetric("diam", sizeExtractor.getDiam());
 		json.addAdvancedMetric("Depth", partExtractor.getDepth());
 		json.addAdvancedMetric("CYC", this.sccExtractor.getCyclicity());
 		json.addAdvancedMetric("TS", this.getTokenSplit());
@@ -144,17 +144,19 @@ public class BpmnAdvancedMetricsExtractor {
 			this.json.addAdvancedMetric("D", (double) Math.round(d.getD() * 1000d) / 1000d);
 			AggregateIndicator ac = new AggregateIndicator(l.getL(),b.getB(),d.getD());
 			this.json.addAdvancedMetric("AC",(double) Math.round(ac.getAC() * 1000d) / 1000d);
-			
+			RestrictivenessEstimator rt = new RestrictivenessEstimator(gm.getVertix(),gm.getReachabilityMatrix());
+			this.json.addAdvancedMetric("RT",(double) Math.round(rt.getRT() * 1000d) / 1000d);
+			TreesNumber t = new TreesNumber(gm.getAdjacencyMatrix());
+			this.json.addAdvancedMetric("T", t.getT());
 			ProcessBreadth pb = new ProcessBreadth(gm.getAdjacencyMatrix(), gm.getReachabilityMatrix(), gal.getAdj());
 			this.json.addAdvancedMetric("Process Breadth", pb.getProcessBreadth());
 			this.json.addAdvancedMetric("NDOP", pb.getNDOP());
 			Separability s = new Separability(gm.getAdjacencyMatrix());
 			this.json.addAdvancedMetric("Sep",(double) Math.round(s.getSeparability() * 1000d) / 1000d);
-			
-			RestrictivenessEstimator rt = new RestrictivenessEstimator(gm.getVertix(),gm.getReachabilityMatrix());
-			this.json.addAdvancedMetric("RT",(double) Math.round(rt.getRT() * 1000d) / 1000d);
-			TreesNumber t = new TreesNumber(gm.getAdjacencyMatrix());
-			this.json.addAdvancedMetric("T", t.getT());
+			//sizeExtractor moved here, it uses adjacency list
+			SizeMetricsExtractor sizeExtractor = new SizeMetricsExtractor(gm.getVertix(), gal.getAdj());
+			json.addAdvancedMetric("diam", sizeExtractor.getDiam());
+			json.addAdvancedMetric("Par", getParallelism(sizeExtractor.getDiam()));
 			//compute metrics on acyclical graph
 			if(!cyclical) {
 				for(Process p : mc.getProcesses())
@@ -216,14 +218,14 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("MaxND", ndExtractor.getMaxNestingDepth(), this.numberProcess);
 		json.addAdvancedMetric("CP", getProcessCoupling(), this.numberProcess);
 		json.addAdvancedMetric("WCP", getWeightedProcessCoupling(), this.numberProcess);
-		json.addAdvancedMetric("Par", getParallelism(), this.numberProcess);
+		//json.addAdvancedMetric("Par", getParallelism(), this.numberProcess);
 		json.addAdvancedMetric("CNC^2", this.getCoefficientOfNetworkComplexity(), this.numberProcess);
 		json.addAdvancedMetric("CNC", this.getCoefficientComplexity(), this.numberProcess);
 		json.addAdvancedMetric("NCA", this.getActivityCoupling(), this.numberProcess);
 		json.addAdvancedMetric("MeanND", ndExtractor.getMeanNestingDepth(), this.numberProcess);
 		json.addAdvancedMetric("Sn", getNumberOfNodes(), this.numberProcess);
 		json.addAdvancedMetric("Sequentiality", getSequentiality(), this.numberProcess);
-		json.addAdvancedMetric("diam", sizeExtractor.getDiam(), this.numberProcess);
+		//json.addAdvancedMetric("diam", sizeExtractor.getDiam(), this.numberProcess);
 		json.addAdvancedMetric("Depth", partExtractor.getDepth(), this.numberProcess);
 		json.addAdvancedMetric("CYC", this.sccExtractor.getCyclicity(), this.numberProcess);
 		json.addAdvancedMetric("TS", this.getTokenSplit(), this.numberProcess);
@@ -252,17 +254,19 @@ public class BpmnAdvancedMetricsExtractor {
 			this.json.addAdvancedMetric("D", (double) Math.round(d.getD() * 1000d) / 1000d, this.numberProcess);
 			AggregateIndicator ac = new AggregateIndicator(l.getL(),b.getB(),d.getD());
 			this.json.addAdvancedMetric("AC",(double) Math.round(ac.getAC() * 1000d) / 1000d, this.numberProcess);
-			
+			RestrictivenessEstimator rt = new RestrictivenessEstimator(gm.getVertix(),gm.getReachabilityMatrix());
+			this.json.addAdvancedMetric("RT",(double) Math.round(rt.getRT() * 1000d) / 1000d, this.numberProcess);
+			TreesNumber t = new TreesNumber(gm.getAdjacencyMatrix());
+			this.json.addAdvancedMetric("T", t.getT(), this.numberProcess);
 			ProcessBreadth pb = new ProcessBreadth(gm.getAdjacencyMatrix(), gm.getReachabilityMatrix(), gal.getAdj());
 			this.json.addAdvancedMetric("Process Breadth", pb.getProcessBreadth(), this.numberProcess);
 			this.json.addAdvancedMetric("NDOP", pb.getNDOP(), this.numberProcess);
 			Separability s = new Separability(gm.getAdjacencyMatrix());
 			this.json.addAdvancedMetric("Sep",(double) Math.round(s.getSeparability() * 1000d) / 1000d, this.numberProcess);
-			
-			RestrictivenessEstimator rt = new RestrictivenessEstimator(gm.getVertix(),gm.getReachabilityMatrix());
-			this.json.addAdvancedMetric("RT",(double) Math.round(rt.getRT() * 1000d) / 1000d, this.numberProcess);
-			TreesNumber t = new TreesNumber(gm.getAdjacencyMatrix());
-			this.json.addAdvancedMetric("T", t.getT(), this.numberProcess);
+			//sizeExtractor moved here, it uses adjacency list
+			SizeMetricsExtractor sizeExtractor = new SizeMetricsExtractor(gm.getVertix(), gal.getAdj());
+			json.addAdvancedMetric("diam", sizeExtractor.getDiam(), this.numberProcess);
+			json.addAdvancedMetric("Par", getParallelism(sizeExtractor.getDiam()), this.numberProcess);
 			//compute metrics on acyclical graph
 			if(!cyclical) {
 				this.dopExtractor.setDop(this.basicMetricsExtractor.getProcess());
@@ -416,24 +420,6 @@ public class BpmnAdvancedMetricsExtractor {
 	public float getProportionOfLanesAndActivities() {
 		try {
 			float toReturn = (float)basicMetricsExtractor.getLanes() / basicMetricsExtractor.getActivities();
-			if (Float.isFinite(toReturn)) {
-				return toReturn;
-			}
-			return 0.0f;
-		} catch (ArithmeticException e) {
-			return 0.0f;
-		}
-	}
-	
-	/**
-	 * Metric: PPA
-	 * Proportion of pools and activities
-	 * Number of Pools / Total number of Activities (PPA = NP/A)
-	 * @return
-	 */
-	public float getProportionOfPoolsAndActivities() {
-		try {
-			float toReturn = (float)basicMetricsExtractor.getPools() / basicMetricsExtractor.getActivities();
 			if (Float.isFinite(toReturn)) {
 				return toReturn;
 			}
@@ -1056,13 +1042,13 @@ public class BpmnAdvancedMetricsExtractor {
 	 * Calculate the degree of Parallelism
 	 * @return TNT/Diam
 	 */
-	public double getParallelism() {
+	public double getParallelism(double diam) {
 		try {
-			double result = (double)this.basicMetricsExtractor.getTasks()/this.sizeExtractor.getDiam();
+			double result = (double)this.basicMetricsExtractor.getTasks()/diam;
 			if (!Double.isFinite(result)) 
 				return 0;
 			else
-				return  (double) this.basicMetricsExtractor.getTasks()/this.sizeExtractor.getDiam();
+				return  (double) this.basicMetricsExtractor.getTasks()/diam;
 		} 
 		catch (ArithmeticException e) {
 			return 0;	
@@ -1105,18 +1091,26 @@ public class BpmnAdvancedMetricsExtractor {
 		}
 	}
 	
-	/**TODO
-	 * Metric: RRPA
+	/**
+	 * Metric: RPRA
 	 * Ratio of Roles and Activities
 	 * @return NP/NACT
 	 */
 	public double getRatioRolesActivities() {
 		try {
+			if(basicMetricsExtractor.getPools() > 0) {
 			double result = (double)basicMetricsExtractor.getPools()/basicMetricsExtractor.getActivities();
 			if (!Double.isFinite(result)) 
 				return 0;
 			else
 				return (double)basicMetricsExtractor.getPools()/basicMetricsExtractor.getActivities();
+			} else {
+				double result = (double)basicMetricsExtractor.getProcesses()/basicMetricsExtractor.getActivities();
+				if (!Double.isFinite(result)) 
+					return 0;
+				else
+					return (double)basicMetricsExtractor.getProcesses()/basicMetricsExtractor.getActivities();
+			}
 		} 
 		catch (ArithmeticException e) {
 			return 0;	

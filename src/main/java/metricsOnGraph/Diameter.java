@@ -10,9 +10,14 @@ public class Diameter {
 	public Diameter(int[][] adjMatrix) {
 		this.nodesNumber = adjMatrix.length;
 		this.shortestPaths = new Vector<Integer>();
-		for(int i = 0; i < adjMatrix.length; i++)
-			//TODO
-			this.dijkstra(adjMatrix, i);
+		//find all start events
+		for(int i = 0; i < adjMatrix.length; i++) {
+			int sum = 0;
+			for(int j = 0; j <adjMatrix[i].length; j++)
+				sum+= adjMatrix[j][i];
+			if(sum == 0)
+				this.dijkstra(adjMatrix, i);
+			}
 		this.L = this.setL();
 	}
 	

@@ -8,7 +8,7 @@ import org.camunda.bpm.model.bpmn.instance.Gateway;
 import org.camunda.bpm.model.bpmn.instance.Process;
 import org.camunda.bpm.model.bpmn.instance.SequenceFlow;
 
-/**
+/**TODO integrare istanza BpmnBasicMetricsExtractor???
  * In a block-structured process model, each split element has a corresponding join element of the
  * same type, and split-join pairs are properly nested
  */
