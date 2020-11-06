@@ -65,7 +65,6 @@ public class BpmnAdvancedMetricsExtractor {
 		this.sccExtractor = new StronglyConnectedComponentsMetricExtractor(basicMetricsExtractor);
 		this.cwExtractor = new CognitiveWeightMetricExtractor(basicMetricsExtractor);
 		this.lmExtractor = new LayoutMetricsExtractor(basicMetricsExtractor);
-		this.dopExtractor = new DOPMetricsExtractor();
 		this.mc = mc;
 		this.numberProcess = i;
 	}
@@ -154,6 +153,7 @@ public class BpmnAdvancedMetricsExtractor {
 			json.addAdvancedMetric("diam", sizeExtractor.getDiam());
 			json.addAdvancedMetric("Par", getParallelism(sizeExtractor.getDiam()));
 			//compute metrics on acyclical graph
+			this.dopExtractor = new DOPMetricsExtractor(conversion);
 			if(!cyclical) {
 				for(Process p : mc.getProcesses())
 					this.dopExtractor.setDop(p);
@@ -161,19 +161,13 @@ public class BpmnAdvancedMetricsExtractor {
 				ComplexityIndex ci = new ComplexityIndex(gm.getAdjacencyMatrix(), gal.getAdj());
 				this.json.addAdvancedMetric("CI",ci.getCI());
 				}
-			
 		}
 		json.addAdvancedMetric("S", this.getNumberOfBPMNElements());
 		//json.addAdvancedMetric("MCC", this.getMCC());
 		json.addAdvancedMetric("Inter-process Complexity", this.getInterProcessComplexity());
 		json.addAdvancedMetric("DE", this.getDuplicatedElements());
-		double structuredness = 0.0;
-		for(Process p : this.basicMetricsExtractor.getModelInstance().getModelElementsByType(Process.class)) {
-			this.F = new StructurednessMetricExtractor(p);
-			this.F.setS();
-			structuredness += this.F.getS();
-		} 
-		json.addAdvancedMetric("F", structuredness);
+		this.F = new StructurednessMetricExtractor(basicMetricsExtractor, conversion);
+		json.addAdvancedMetric("F", this.F.getS());
 	}
 	
 	public void runMetricsProcess(String conversion) {
@@ -260,20 +254,19 @@ public class BpmnAdvancedMetricsExtractor {
 			json.addAdvancedMetric("diam", sizeExtractor.getDiam(), this.numberProcess);
 			json.addAdvancedMetric("Par", getParallelism(sizeExtractor.getDiam()), this.numberProcess);
 			//compute metrics on acyclical graph
+			this.dopExtractor = new DOPMetricsExtractor(conversion);
 			if(!cyclical) {
 				this.dopExtractor.setDop(this.basicMetricsExtractor.getProcess());
 				this.json.addAdvancedMetric("DOP", this.dopExtractor.getDop(), this.numberProcess);
 				ComplexityIndex ci = new ComplexityIndex(gm.getAdjacencyMatrix(), gal.getAdj());
 				this.json.addAdvancedMetric("CI",ci.getCI(), this.numberProcess);
 				}
-			
 		}
 		json.addAdvancedMetric("S", this.getNumberOfBPMNElements(), this.numberProcess);
 		json.addAdvancedMetric("MCC", this.getMCC(), this.numberProcess);
 		json.addAdvancedMetric("Inter-process Complexity", this.getInterProcessComplexity(), this.numberProcess);
 		json.addAdvancedMetric("DE", this.getDuplicatedElements(), this.numberProcess);
-		this.F = new StructurednessMetricExtractor(this.basicMetricsExtractor.getProcess());
-		this.F.setS();
+		this.F = new StructurednessMetricExtractor(basicMetricsExtractor, conversion);
 		json.addAdvancedMetric("F", this.F.getS(), this.numberProcess);
 	}
 

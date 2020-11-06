@@ -17,10 +17,12 @@ import org.camunda.bpm.model.bpmn.instance.Process;
 public class DOPMetricsExtractor {
 	private int dop;
 	private Vector<String> activityId;
+	private String conversion;
 	
-	public DOPMetricsExtractor() {
+	public DOPMetricsExtractor(String s) {
 		this.dop = 1;
 		this.activityId = new Vector<String>();
+		this.conversion = s;
 	}
 	
 	public int getDop() {
@@ -40,7 +42,7 @@ public class DOPMetricsExtractor {
 		return d;
 	}
 	
-	//Il metodo checkSubProcess calcola il dop di un sotto-processo TODO stringa conversione per entrambi i tipi di estrazione
+	//Il metodo checkSubProcess calcola il dop di un sotto-processo
 	
 	private int checkSubProcess(FlowNode subprocess, Vector<String> activityId,Vector<String> visit) {
 		visit.add(subprocess.getId());
@@ -86,7 +88,7 @@ public class DOPMetricsExtractor {
 				//se è un attività, ma non un sottoprocesso, il degree of parallelism aumenta
 				if(se.getTarget() instanceof Activity) {
 					//se è un sottoprocesso
-					if(se.getTarget() instanceof SubProcess) 
+					if(se.getTarget() instanceof SubProcess && this.conversion.equals("WhiteBox")) 
 						dop+= this.checkSubProcess(se.getTarget(), activityId, visit);
 					 else { 
 						 dop++;
@@ -104,7 +106,7 @@ public class DOPMetricsExtractor {
 				int tempDop = 0;
 				if(seg.getTarget() instanceof Activity) { 
 					//se è un sottoprocesso
-					if(seg.getTarget() instanceof SubProcess)
+					if(seg.getTarget() instanceof SubProcess && this.conversion.equals("WhiteBox"))
 						tempDop+=this.checkSubProcess(seg.getTarget(), activityId, visit);
 					else {
 						tempDop++;
@@ -126,7 +128,7 @@ public class DOPMetricsExtractor {
 	public void setDop(Process process) {
 		for(BoundaryEvent be : process.getChildElementsByType(BoundaryEvent.class)) {
 			if(!be.cancelActivity()) {
-				if(!(be.getAttachedTo() instanceof SubProcess))
+				if(!(be.getAttachedTo() instanceof SubProcess) || this.conversion.equals("BlackBox"))
 					//salva id dell'attività che ha attaccato un boundary event non interrupting
 					this.activityId.add(be.getAttachedTo().getId());
 				else {

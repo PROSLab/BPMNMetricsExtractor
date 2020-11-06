@@ -1,7 +1,9 @@
 package bpmnMetadataExtractor;
 
+import java.util.Collection;
 import java.util.Vector;
 
+import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.camunda.bpm.model.bpmn.instance.EndEvent;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;
 import org.camunda.bpm.model.bpmn.instance.Gateway;
@@ -16,25 +18,40 @@ import org.camunda.bpm.model.bpmn.instance.SequenceFlow;
 public class StructurednessMetricExtractor {
 	private double S;
 	private Process process;
+	private BpmnModelInstance model;
+	private String extractionType;
+	private String conversionType;
 	private int graph;
 	private int reducedGraph;
 	private Vector<String> reducedNodes;
 	private Vector<String> gateways;
 	
-	public StructurednessMetricExtractor(Process p) {
-		this.process =p;
-		this.graph = p.getChildElementsByType(FlowNode.class).size();
+	public StructurednessMetricExtractor(BpmnBasicMetricsExtractor bme, String conversion) {
+		this.process = bme.getProcess();
+		this.model = bme.getModelInstance();
+		this.extractionType = bme.getExtractionType();
+		this.conversionType = conversion;
+		this.graph = bme.getNumberOfTypeElement(FlowNode.class);
 		this.reducedGraph = graph;
 		this.reducedNodes = new Vector<String>();
 		this.gateways = new Vector<String>();
+		this.setS();
 	}
 	
 	public double getS() {
 		return this.S;
 	}
 	
-	public void setS() {
-		for(Gateway split : process.getChildElementsByType(Gateway.class)) {
+	private void setS() {
+		Collection<Gateway> gateways;
+		if(this.extractionType.equals("Model"))
+			gateways = this.model.getModelElementsByType(Gateway.class);
+		else {
+			gateways = this.process.getChildElementsByType(Gateway.class);
+			WBSubProcessElementsCollector ec = new WBSubProcessElementsCollector(this.conversionType);
+			ec.getGatewaysSubProcess(gateways, process);
+		}
+		for(Gateway split : gateways) {
 			this.reduceGraph(split);
 		}
 		//System.err.println(reducedGraph);
@@ -113,15 +130,29 @@ public class StructurednessMetricExtractor {
 					check = false;
 				}
 			
-			if(blocks.get(0) !="NoJoin" && check && type.equals(process.getModelInstance().getModelElementById(blocks.get(0)).getElementType().getTypeName())) {
-				//salva l'id del join se compone una struttura
-				this.gateways.addAll(blocks);
-				//riduce il nodo corrispondente al join
-				reduce++;
-				this.reducedGraph = this.reducedGraph - reduce;
-				//System.out.println(reduce);
-				}
+			if(this.extractionType.equals("Model")) {
+				
+				if(blocks.get(0) !="NoJoin" && check && type.equals(model.getModelElementById(blocks.get(0)).getElementType().getTypeName())) {
+					//salva l'id del join se compone una struttura
+					this.gateways.addAll(blocks);
+					//riduce il nodo corrispondente al join
+					reduce++;
+					this.reducedGraph = this.reducedGraph - reduce;
+					//System.out.println(reduce);
+					}
+			}
 			
+			else {
+				
+				if(blocks.get(0) !="NoJoin" && check && type.equals(process.getModelInstance().getModelElementById(blocks.get(0)).getElementType().getTypeName())) {
+					//salva l'id del join se compone una struttura
+					this.gateways.addAll(blocks);
+					//riduce il nodo corrispondente al join
+					reduce++;
+					this.reducedGraph = this.reducedGraph - reduce;
+					//System.out.println(reduce);
+					}
+			}	
 		} 
 	}
 
