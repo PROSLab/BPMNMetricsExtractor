@@ -76,7 +76,7 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("PDOPin", getProportionOfIncomingDataObjectsAndTotalDataObjects());
 		json.addAdvancedMetric("PDOPout", getProportionOfOutgoingDataObjectsAndTotalDataObjects());
 		json.addAdvancedMetric("VOL", getVolume());
-		json.addAdvancedMetric("RRPA", getRatioRolesActivities());
+		json.addAdvancedMetric("RPRA", getRatioRolesActivities());
 		json.addAdvancedMetric("PDOTout", getProportionOfDataObjectsAsOutgoingProducts());
 		json.addAdvancedMetric("PLT", getProportionOfLanesAndTasks());
 		json.addAdvancedMetric("S(df)", getDataFlowSize());
@@ -94,13 +94,10 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("HPC_D", getHalsteadBasedProcessComplexityDifficulty());
 		json.addAdvancedMetric("HPC_N", getHalsteadBasedProcessComplexityLength());
 		json.addAdvancedMetric("HPC_V", getHalsteadBasedProcessComplexityVolume());
-		json.addAdvancedMetric("NoI", getNumberOfActivityInputs());
 		json.addAdvancedMetric("AAI", getAverageActivityInput());
-		json.addAdvancedMetric("NoO", getNumberOfActivityOutputs());
 		json.addAdvancedMetric("AAO", getAverageActivityOutput());
 		json.addAdvancedMetric("IC", getInterfaceComplexityOfActivityMetric());
-		json.addAdvancedMetric("FIO", getStructuralComplexity());
-		json.addAdvancedMetric("NOF", getNumberOfControlFlow());	
+		json.addAdvancedMetric("FIO", getStructuralComplexity());	
 		json.addAdvancedMetric("CC", ccExtractor.calculateCrossConnectivity());
 		json.addAdvancedMetric("ICP",getImportedCouplingOfProcess());
 		json.addAdvancedMetric("ECP",getExportedCouplingOfProcess());
@@ -113,7 +110,6 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("CNC", this.getCoefficientComplexity());
 		json.addAdvancedMetric("NCA", this.getActivityCoupling());
 		json.addAdvancedMetric("MeanND", ndExtractor.getMeanNestingDepth());
-		json.addAdvancedMetric("Sn", getNumberOfNodes());
 		json.addAdvancedMetric("Sequentiality", getSequentiality());
 		//json.addAdvancedMetric("diam", sizeExtractor.getDiam());
 		json.addAdvancedMetric("Depth", partExtractor.getDepth());
@@ -186,7 +182,7 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("PDOPin", getProportionOfIncomingDataObjectsAndTotalDataObjects(), this.numberProcess);
 		json.addAdvancedMetric("PDOPout", getProportionOfOutgoingDataObjectsAndTotalDataObjects(), this.numberProcess);
 		json.addAdvancedMetric("VOL", getVolume(), this.numberProcess);
-		json.addAdvancedMetric("RRPA", getRatioRolesActivities(), this.numberProcess);
+		json.addAdvancedMetric("RPRA", getRatioRolesActivities(), this.numberProcess);
 		json.addAdvancedMetric("PDOTout", getProportionOfDataObjectsAsOutgoingProducts(), this.numberProcess);
 		json.addAdvancedMetric("PLT", getProportionOfLanesAndTasks(), this.numberProcess);
 		json.addAdvancedMetric("S(df)", getDataFlowSize(), this.numberProcess);
@@ -204,13 +200,10 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("HPC_D", getHalsteadBasedProcessComplexityDifficulty(), this.numberProcess);
 		json.addAdvancedMetric("HPC_N", getHalsteadBasedProcessComplexityLength(), this.numberProcess);
 		json.addAdvancedMetric("HPC_V", getHalsteadBasedProcessComplexityVolume(), this.numberProcess);
-		json.addAdvancedMetric("NoI", getNumberOfActivityInputs(), this.numberProcess);
 		json.addAdvancedMetric("AAI", getAverageActivityInput(), this.numberProcess);
-		json.addAdvancedMetric("NoO", getNumberOfActivityOutputs(), this.numberProcess);
 		json.addAdvancedMetric("AAO", getAverageActivityOutput(), this.numberProcess);
 		json.addAdvancedMetric("IC", getInterfaceComplexityOfActivityMetric(), this.numberProcess);
 		json.addAdvancedMetric("FIO", getStructuralComplexity(), this.numberProcess);
-		json.addAdvancedMetric("NOF", getNumberOfControlFlow(), this.numberProcess);	
 		json.addAdvancedMetric("CC", ccExtractor.calculateCrossConnectivity(), this.numberProcess);
 		json.addAdvancedMetric("ICP",getImportedCouplingOfProcess(), this.numberProcess);
 		json.addAdvancedMetric("ECP",getExportedCouplingOfProcess(), this.numberProcess);
@@ -223,7 +216,6 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("CNC", this.getCoefficientComplexity(), this.numberProcess);
 		json.addAdvancedMetric("NCA", this.getActivityCoupling(), this.numberProcess);
 		json.addAdvancedMetric("MeanND", ndExtractor.getMeanNestingDepth(), this.numberProcess);
-		json.addAdvancedMetric("Sn", getNumberOfNodes(), this.numberProcess);
 		json.addAdvancedMetric("Sequentiality", getSequentiality(), this.numberProcess);
 		//json.addAdvancedMetric("diam", sizeExtractor.getDiam(), this.numberProcess);
 		json.addAdvancedMetric("Depth", partExtractor.getDepth(), this.numberProcess);
@@ -619,16 +611,6 @@ public class BpmnAdvancedMetricsExtractor {
 			return 0.0;
 	}
 	
-	/**TODO
-	 * Metric: NoI or Fanin
-	 * Number of activity inputs. The fan-in of a procedure A is the number of local flows
-	 *  into procedure A plus the number of data structures from which procedure A retrieves information.
-	 * @return
-	 */
-	public int getNumberOfActivityInputs() {
-		return basicMetricsExtractor.getDataInputAssociations();
-	}
-	
 	/**
 	 * Metric: AAI
 	 *  Average activity inputs, Total Number of Activity input / Total Number of Activity
@@ -636,25 +618,15 @@ public class BpmnAdvancedMetricsExtractor {
 	 */
 	public double getAverageActivityInput() {
 		try {
-			double result = (double)this.getNumberOfActivityInputs()/this.basicMetricsExtractor.getActivities();
+			double result = (double)this.basicMetricsExtractor.getDataInputAssociations()/this.basicMetricsExtractor.getActivities();
 			if (!Double.isFinite(result)) 
 				return 0;
 			else
-				return (double)this.getNumberOfActivityInputs()/this.basicMetricsExtractor.getActivities();
+				return (double)this.basicMetricsExtractor.getDataInputAssociations()/this.basicMetricsExtractor.getActivities();
 		} 
 		catch (ArithmeticException e) {
 			return 0;	
 		}
-	}
-	
-	/**TODO
-	 * Metric: NoO or Fanout
-     * Number of activity outputs. The fan-out of a procedure A is the number of local flows
-     *  from procedure A plus the number of data structures which procedure A updates.
-	 * @return
-	 */
-	public int getNumberOfActivityOutputs() {
-		return basicMetricsExtractor.getDataOutputAssociations();
 	}
 	
 	/**
@@ -664,11 +636,11 @@ public class BpmnAdvancedMetricsExtractor {
 	 */
 	public double getAverageActivityOutput() {
 		try {
-			double result = (double)this.getNumberOfActivityOutputs()/this.basicMetricsExtractor.getActivities();
+			double result = (double)this.basicMetricsExtractor.getDataOutputAssociations()/this.basicMetricsExtractor.getActivities();
 			if (!Double.isFinite(result)) 
 				return 0;
 			else
-				return (double)this.getNumberOfActivityOutputs()/this.basicMetricsExtractor.getActivities();
+				return (double)this.basicMetricsExtractor.getDataOutputAssociations()/this.basicMetricsExtractor.getActivities();
 		} 
 		catch (ArithmeticException e) {
 			return 0;	
@@ -715,7 +687,7 @@ public class BpmnAdvancedMetricsExtractor {
 	public double getProcessFlowComplexity() {
 		try {
 		
-			return (double) (this.getControlFlowComplexity()*(Math.pow(this.getNumberOfActivityInputs()+this.getNumberOfActivityOutputs(),2)));
+			return (double) (this.getControlFlowComplexity()*(Math.pow(this.basicMetricsExtractor.getDataInputAssociations()+this.basicMetricsExtractor.getDataOutputAssociations(),2)));
 		} 
 		catch (ArithmeticException e) {
 			return 0;	
@@ -731,7 +703,7 @@ public class BpmnAdvancedMetricsExtractor {
 	 * @return
 	 */
 	public double getInterfaceComplexityOfActivityMetric() {
-		return this.basicMetricsExtractor.getActivities() * Math.pow((getNumberOfActivityInputs() * getNumberOfActivityOutputs()), 2);
+		return this.basicMetricsExtractor.getActivities() * Math.pow((basicMetricsExtractor.getDataInputAssociations() * basicMetricsExtractor.getDataOutputAssociations()), 2);
 	}
 	
 	/**
@@ -741,18 +713,7 @@ public class BpmnAdvancedMetricsExtractor {
 	 * @return
 	 */
 	public double getStructuralComplexity() {
-		return Math.pow((getNumberOfActivityInputs() * getNumberOfActivityOutputs()), 2);
-	}
-	
-	/**TODO
-	 * Metric: NOF
-	 * Number of control flow connections (number of arcs)
-	 * @return
-	 */
-	public int getNumberOfControlFlow() {
-		int toReturn = 0;
-		toReturn = basicMetricsExtractor.getSequenceFlows();
-		return toReturn;
+		return Math.pow((basicMetricsExtractor.getDataInputAssociations() * basicMetricsExtractor.getDataOutputAssociations()), 2);
 	}
 	
 	/**
@@ -938,15 +899,6 @@ public class BpmnAdvancedMetricsExtractor {
 		return toReturn;
 	}
 	
-	/**TODO
-	 * Metric: Sn
-	 * Number of nodes (activities + routing elements)
-	 * @return
-	 */
-	public int getNumberOfNodes(){
-		return basicMetricsExtractor.getFlowNodes();
-	}
-	
 	/**
 	 * Metric: Lambda
 	 * "The density of the process graph refers to the number of arcs divided by the number of the maximum number
@@ -965,11 +917,11 @@ public class BpmnAdvancedMetricsExtractor {
 	 */
 	public double getCoefficientOfNetworkComplexity() {
 		try {
-			double result = (double)this.getNumberOfControlFlow()*this.getNumberOfControlFlow()/this.getNumberOfActivitiesJoinsAndSplits();
+			double result = (double)this.basicMetricsExtractor.getSequenceFlows()*this.basicMetricsExtractor.getSequenceFlows()/this.getNumberOfActivitiesJoinsAndSplits();
 			if (!Double.isFinite(result)) 
 				return 0;
 			else
-				return (double)this.getNumberOfControlFlow()*this.getNumberOfControlFlow()/this.getNumberOfActivitiesJoinsAndSplits();
+				return (double)this.basicMetricsExtractor.getSequenceFlows()*this.basicMetricsExtractor.getSequenceFlows()/this.getNumberOfActivitiesJoinsAndSplits();
 		} 
 		catch (ArithmeticException e) {
 			return 0;	
@@ -983,11 +935,11 @@ public class BpmnAdvancedMetricsExtractor {
 	 */
 	public double getCoefficientComplexity() {
 		try {
-			double result = (double)this.getNumberOfControlFlow()/this.getNumberOfActivitiesJoinsAndSplits();
+			double result = (double)this.basicMetricsExtractor.getSequenceFlows()/this.getNumberOfActivitiesJoinsAndSplits();
 			if (!Double.isFinite(result)) 
 				return 0;
 			else
-				return (double)this.getNumberOfControlFlow()/this.getNumberOfActivitiesJoinsAndSplits();
+				return (double)this.basicMetricsExtractor.getSequenceFlows()/this.getNumberOfActivitiesJoinsAndSplits();
 		} 
 		catch (ArithmeticException e) {
 			return 0;	
@@ -1062,11 +1014,11 @@ public class BpmnAdvancedMetricsExtractor {
 	 */
 	public double getActivityCoupling() {
 		try {
-			double result = (double)this.getNumberOfActivitiesJoinsAndSplits()/this.getNumberOfControlFlow();
+			double result = (double)this.getNumberOfActivitiesJoinsAndSplits()/this.basicMetricsExtractor.getSequenceFlows();
 			if (!Double.isFinite(result)) 
 				return 0;
 			else
-				return (double)this.getNumberOfActivitiesJoinsAndSplits()/this.getNumberOfControlFlow();
+				return (double)this.getNumberOfActivitiesJoinsAndSplits()/this.basicMetricsExtractor.getSequenceFlows();
 		} 
 		catch (ArithmeticException e) {
 			return 0;	
