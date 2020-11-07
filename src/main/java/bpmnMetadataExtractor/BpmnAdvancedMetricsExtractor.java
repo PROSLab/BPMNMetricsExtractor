@@ -104,13 +104,11 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("MaxND", ndExtractor.getMaxNestingDepth());
 		json.addAdvancedMetric("CP", getProcessCoupling());
 		json.addAdvancedMetric("WCP", getWeightedProcessCoupling());
-		//json.addAdvancedMetric("Par", getParallelism());
 		json.addAdvancedMetric("CNC^2", this.getCoefficientOfNetworkComplexity());
 		json.addAdvancedMetric("CNC", this.getCoefficientComplexity());
 		json.addAdvancedMetric("NCA", this.getActivityCoupling());
 		json.addAdvancedMetric("MeanND", ndExtractor.getMeanNestingDepth());
 		json.addAdvancedMetric("Sequentiality", getSequentiality());
-		//json.addAdvancedMetric("diam", sizeExtractor.getDiam());
 		json.addAdvancedMetric("Depth", partExtractor.getDepth());
 		json.addAdvancedMetric("CYC", this.sccExtractor.getCyclicity());
 		json.addAdvancedMetric("TS", this.getTokenSplit());
@@ -163,7 +161,7 @@ public class BpmnAdvancedMetricsExtractor {
 				}
 		}
 		json.addAdvancedMetric("S", this.getNumberOfBPMNElements());
-		//json.addAdvancedMetric("MCC", this.getMCC());
+		json.addAdvancedMetric("MCC", this.getMCC());
 		json.addAdvancedMetric("Inter-process Complexity", this.getInterProcessComplexity());
 		json.addAdvancedMetric("DE", this.getDuplicatedElements());
 		this.F = new StructurednessMetricExtractor(basicMetricsExtractor, conversion);
@@ -205,13 +203,11 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("MaxND", ndExtractor.getMaxNestingDepth(), this.numberProcess);
 		json.addAdvancedMetric("CP", getProcessCoupling(), this.numberProcess);
 		json.addAdvancedMetric("WCP", getWeightedProcessCoupling(), this.numberProcess);
-		//json.addAdvancedMetric("Par", getParallelism(), this.numberProcess);
 		json.addAdvancedMetric("CNC^2", this.getCoefficientOfNetworkComplexity(), this.numberProcess);
 		json.addAdvancedMetric("CNC", this.getCoefficientComplexity(), this.numberProcess);
 		json.addAdvancedMetric("NCA", this.getActivityCoupling(), this.numberProcess);
 		json.addAdvancedMetric("MeanND", ndExtractor.getMeanNestingDepth(), this.numberProcess);
 		json.addAdvancedMetric("Sequentiality", getSequentiality(), this.numberProcess);
-		//json.addAdvancedMetric("diam", sizeExtractor.getDiam(), this.numberProcess);
 		json.addAdvancedMetric("Depth", partExtractor.getDepth(), this.numberProcess);
 		json.addAdvancedMetric("CYC", this.sccExtractor.getCyclicity(), this.numberProcess);
 		json.addAdvancedMetric("TS", this.getTokenSplit(), this.numberProcess);
@@ -220,7 +216,7 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("MCD", this.getMaximumConnectorDegree(), this.numberProcess);
 		json.addAdvancedMetric("GM", this.connectorInterplayMetricsExtractor.getGatewaysMismatchMetric(), this.numberProcess);
 		json.addAdvancedMetric("CH", this.connectorInterplayMetricsExtractor.getConnectorsHeterogeneityMetric(), this.numberProcess);
-		//json.addAdvancedMetric("ECyM", this.sccExtractor.getEcym(), this.numberProcess);
+		json.addAdvancedMetric("ECyM", this.sccExtractor.getEcym(), this.numberProcess);
 		json.addAdvancedMetric("PF", this.sccExtractor.getCycle(), this.numberProcess);
 		json.addAdvancedMetric("DSM", dsmExtractor.getDurfeeMetric(), this.numberProcess);
 		json.addAdvancedMetric("PSM", dsmExtractor.getPerfectSquareMetric(), this.numberProcess);
@@ -1272,6 +1268,8 @@ public class BpmnAdvancedMetricsExtractor {
 	 * @return
 	 */
 	public int getMCC() {
+		if(this.basicMetricsExtractor.getExtractionType().equals("Model"))
+			return this.basicMetricsExtractor.getSequenceFlows() - this.basicMetricsExtractor.getFlowNodes() + 2*this.basicMetricsExtractor.getNumberOfTypeElement(Process.class);
 		return this.basicMetricsExtractor.getSequenceFlows() - this.basicMetricsExtractor.getFlowNodes() + 2;
 	}
 	
