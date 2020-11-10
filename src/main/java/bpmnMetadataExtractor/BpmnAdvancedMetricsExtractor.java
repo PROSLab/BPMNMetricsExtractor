@@ -25,6 +25,7 @@ import metricsOnGraph.Diameter;
 import metricsOnGraph.ProcessBreadth;
 import graphElements.GraphMatrixes;
 import graphElements.ModelConverter;
+import graphElements.StartEndNodesCollector;
 import metricsOnGraph.ComplexityIndex;
 import metricsOnGraph.TreesNumber;
 import metricsOnGraph.RestrictivenessEstimator;
@@ -127,13 +128,14 @@ public class BpmnAdvancedMetricsExtractor {
 		GraphMatrixes gm = this.mc.convertEntireModel(conversion);
 		if(gm != null) {
 			GraphAdjacencyList gal = new GraphAdjacencyList(gm.getAdjacencyMatrix());
+			StartEndNodesCollector senc = new StartEndNodesCollector(gm.getAdjacencyMatrix(), gal.getAdj());
 			boolean cyclical = new CycleDetector(gal.getAdj()).isCyclic();
 			//compute all metrics on graph
 			BindingStructure b = new BindingStructure(gm.getEdge(),gm.getVertix());
 			this.json.addAdvancedMetric("B", (double) Math.round(b.getB() * 1000d) / 1000d);
-			Diameter l = new Diameter(gm.getAdjacencyMatrix());
+			Diameter l = new Diameter(gm.getAdjacencyMatrix(), senc.getInitialNodes());
 			this.json.addAdvancedMetric("L", l.getL());
-			StructureDiversity d = new StructureDiversity(gm.getAdjacencyMatrix(), gm.getReachabilityMatrix(), gal.getAdj());
+			StructureDiversity d = new StructureDiversity(gm.getReachabilityMatrix(), gal.getAdj(), senc.getInitialNodes(), senc.getFinalNodes());
 			this.json.addAdvancedMetric("D", (double) Math.round(d.getD() * 1000d) / 1000d);
 			AggregateIndicator ac = new AggregateIndicator(l.getL(),b.getB(),d.getD());
 			this.json.addAdvancedMetric("AC",(double) Math.round(ac.getAC() * 1000d) / 1000d);
@@ -141,7 +143,7 @@ public class BpmnAdvancedMetricsExtractor {
 			this.json.addAdvancedMetric("RT",(double) Math.round(rt.getRT() * 1000d) / 1000d);
 			TreesNumber t = new TreesNumber(gm.getAdjacencyMatrix());
 			this.json.addAdvancedMetric("T", t.getT());
-			ProcessBreadth pb = new ProcessBreadth(gm.getAdjacencyMatrix(), gm.getReachabilityMatrix(), gal.getAdj());
+			ProcessBreadth pb = new ProcessBreadth(gm.getReachabilityMatrix(), gal.getAdj(), senc.getInitialNodes(), senc.getFinalNodes());
 			this.json.addAdvancedMetric("Process Breadth", pb.getProcessBreadth());
 			this.json.addAdvancedMetric("NDOP", pb.getNDOP());
 			Separability s = new Separability(gm.getAdjacencyMatrix());
@@ -226,13 +228,14 @@ public class BpmnAdvancedMetricsExtractor {
 		GraphMatrixes gm = this.mc.convertModel(this.basicMetricsExtractor.getProcess(), conversion);
 		if(gm != null) {
 			GraphAdjacencyList gal = new GraphAdjacencyList(gm.getAdjacencyMatrix());
+			StartEndNodesCollector senc = new StartEndNodesCollector(gm.getAdjacencyMatrix(), gal.getAdj());
 			boolean cyclical = new CycleDetector(gal.getAdj()).isCyclic();
 			//compute all metrics on graph
 			BindingStructure b = new BindingStructure(gm.getEdge(),gm.getVertix());
 			this.json.addAdvancedMetric("B", (double) Math.round(b.getB() * 1000d) / 1000d, this.numberProcess);
-			Diameter l = new Diameter(gm.getAdjacencyMatrix());
+			Diameter l = new Diameter(gm.getAdjacencyMatrix(), senc.getInitialNodes());
 			this.json.addAdvancedMetric("L", l.getL(), this.numberProcess);
-			StructureDiversity d = new StructureDiversity(gm.getAdjacencyMatrix(), gm.getReachabilityMatrix(), gal.getAdj());
+			StructureDiversity d = new StructureDiversity(gm.getReachabilityMatrix(), gal.getAdj(), senc.getInitialNodes(), senc.getFinalNodes());
 			this.json.addAdvancedMetric("D", (double) Math.round(d.getD() * 1000d) / 1000d, this.numberProcess);
 			AggregateIndicator ac = new AggregateIndicator(l.getL(),b.getB(),d.getD());
 			this.json.addAdvancedMetric("AC",(double) Math.round(ac.getAC() * 1000d) / 1000d, this.numberProcess);
@@ -240,7 +243,7 @@ public class BpmnAdvancedMetricsExtractor {
 			this.json.addAdvancedMetric("RT",(double) Math.round(rt.getRT() * 1000d) / 1000d, this.numberProcess);
 			TreesNumber t = new TreesNumber(gm.getAdjacencyMatrix());
 			this.json.addAdvancedMetric("T", t.getT(), this.numberProcess);
-			ProcessBreadth pb = new ProcessBreadth(gm.getAdjacencyMatrix(), gm.getReachabilityMatrix(), gal.getAdj());
+			ProcessBreadth pb = new ProcessBreadth(gm.getReachabilityMatrix(), gal.getAdj(), senc.getInitialNodes(), senc.getFinalNodes());
 			this.json.addAdvancedMetric("Process Breadth", pb.getProcessBreadth(), this.numberProcess);
 			this.json.addAdvancedMetric("NDOP", pb.getNDOP(), this.numberProcess);
 			Separability s = new Separability(gm.getAdjacencyMatrix());

@@ -269,3 +269,5 @@ Inter-process Complexity %Inter-process Complexity	{absent}
 DE %Duplicated Elements	{absent}
 Sep %Separability	{absent}
 NDOP %Number of different objects in all possible paths	{absent}
+PPT %Proportion of pools and tasks	{absent}
+PLA %Proportion of lanes and activities	{absent}

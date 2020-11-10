@@ -4,20 +4,15 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 public class ProcessBreadth {
-	private Vector<Integer> initialNodes;
-	private Vector<Integer> finalNodes;
 	private ArrayList<ArrayList<Integer>> adj;
 	private int pathNumber;
 	private int ndop;
 	
-	public ProcessBreadth(int[][] am, int [][] rm, ArrayList<ArrayList<Integer>> adj) {
-		this.initialNodes = new Vector<Integer>();
-		this.finalNodes = new Vector<Integer>();
+	public ProcessBreadth(int [][] rm, ArrayList<ArrayList<Integer>> adj, Vector<Integer> initialNodes, Vector<Integer> finalNodes) {
 		this.adj = adj;
 		this.pathNumber = 0;
 		this.ndop = 0;
-		this.collectNodes(am);
-		this.setProcessBreadth(rm);
+		this.setProcessBreadth(rm, initialNodes, finalNodes);
 	}
 	
 	public int getProcessBreadth() {
@@ -26,26 +21,6 @@ public class ProcessBreadth {
 	
 	public int getNDOP() {
 		return this.ndop;
-	}
-	
-	private void collectNodes(int [][] matrix) { 
-		//trova quelli finali dalla matrice di adiacenza
-		for(int index = 0; index < this.adj.size();index++) {
-    		ArrayList<Integer> x = this.adj.get(index);
-    		if(x.size()==0) 
-    			this.finalNodes.add(index);
-		}
-		//trova quelli iniziali da matrice di adiacenza
-		for(int i = 0; i < matrix.length; i++) {
-    		int sum = 0;
-    		for(int j = 0; j <matrix[i].length; j++)
-    			//somma tutti i valori della colonna
-    			sum+= matrix[j][i];
-    		//controlla se la somma della colonna è uguale a 1 
-    		//in questo caso esiste un solo arco entrante
-    		if(sum == 0)
-    			this.initialNodes.add(i);
-    	}
 	}
 	
 	// A recursive method to count all paths from 'u' to 'd'. 
@@ -76,9 +51,9 @@ public class ProcessBreadth {
     } 
   
     // Returns count of paths from initial nodes to final ones 
-    private void setProcessBreadth( int[][]reach) { 
-    	for(Integer finale : this.finalNodes) {
-    		for(Integer initial: this.initialNodes) {
+    private void setProcessBreadth( int[][]reach, Vector<Integer> initialNodes, Vector<Integer> finalNodes) { 
+    	for(Integer finale : finalNodes) {
+    		for(Integer initial: initialNodes) {
     			//se esiste almeno un path dal nodo iniziale a quello finale
     			if(reach[initial][finale]==1) {
     				this.pathNumber += this.countPaths(initial, finale);

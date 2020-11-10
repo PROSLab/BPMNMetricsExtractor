@@ -7,17 +7,12 @@ public class Diameter {
 	private int nodesNumber;
 	private Vector<Integer> shortestPaths;
 	
-	public Diameter(int[][] adjMatrix) {
+	public Diameter(int[][] adjMatrix, Vector<Integer> startNodes) {
 		this.nodesNumber = adjMatrix.length;
 		this.shortestPaths = new Vector<Integer>();
 		//find all start events
-		for(int i = 0; i < adjMatrix.length; i++) {
-			int sum = 0;
-			for(int j = 0; j <adjMatrix[i].length; j++)
-				sum+= adjMatrix[j][i];
-			if(sum == 0)
-				this.dijkstra(adjMatrix, i);
-			}
+		for(Integer i : startNodes)
+			this.dijkstra(adjMatrix, i);
 		this.L = this.setL();
 	}
 	
