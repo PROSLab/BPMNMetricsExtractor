@@ -132,22 +132,22 @@ public class BpmnAdvancedMetricsExtractor {
 			boolean cyclical = new CycleDetector(gal.getAdj()).isCyclic();
 			//compute all metrics on graph
 			BindingStructure b = new BindingStructure(gm.getEdge(),gm.getVertix());
-			this.json.addAdvancedMetric("B", (double) Math.round(b.getB() * 1000d) / 1000d);
+			this.json.addAdvancedMetric("B", b.getB());
 			Diameter l = new Diameter(gm.getAdjacencyMatrix(), senc.getInitialNodes());
 			this.json.addAdvancedMetric("L", l.getL());
 			StructureDiversity d = new StructureDiversity(gm.getReachabilityMatrix(), gal.getAdj(), senc.getInitialNodes(), senc.getFinalNodes());
-			this.json.addAdvancedMetric("D", (double) Math.round(d.getD() * 1000d) / 1000d);
+			this.json.addAdvancedMetric("D", d.getD());
 			AggregateIndicator ac = new AggregateIndicator(l.getL(),b.getB(),d.getD());
-			this.json.addAdvancedMetric("AC",(double) Math.round(ac.getAC() * 1000d) / 1000d);
+			this.json.addAdvancedMetric("AC", ac.getAC());
 			RestrictivenessEstimator rt = new RestrictivenessEstimator(gm.getVertix(),gm.getReachabilityMatrix());
-			this.json.addAdvancedMetric("RT",(double) Math.round(rt.getRT() * 1000d) / 1000d);
+			this.json.addAdvancedMetric("RT", rt.getRT());
 			TreesNumber t = new TreesNumber(gm.getAdjacencyMatrix());
 			this.json.addAdvancedMetric("T", t.getT());
 			ProcessBreadth pb = new ProcessBreadth(gm.getReachabilityMatrix(), gal.getAdj(), senc.getInitialNodes(), senc.getFinalNodes());
 			this.json.addAdvancedMetric("Process Breadth", pb.getProcessBreadth());
 			this.json.addAdvancedMetric("NDOP", pb.getNDOP());
 			Separability s = new Separability(gm.getAdjacencyMatrix());
-			this.json.addAdvancedMetric("Sep",(double) Math.round(s.getSeparability() * 1000d) / 1000d);
+			this.json.addAdvancedMetric("Sep",s.getSeparability());
 			//sizeExtractor moved here, it uses adjacency list
 			SizeMetricsExtractor sizeExtractor = new SizeMetricsExtractor(gm.getVertix(), gal.getAdj());
 			json.addAdvancedMetric("diam", sizeExtractor.getDiam());
@@ -232,22 +232,22 @@ public class BpmnAdvancedMetricsExtractor {
 			boolean cyclical = new CycleDetector(gal.getAdj()).isCyclic();
 			//compute all metrics on graph
 			BindingStructure b = new BindingStructure(gm.getEdge(),gm.getVertix());
-			this.json.addAdvancedMetric("B", (double) Math.round(b.getB() * 1000d) / 1000d, this.numberProcess);
+			this.json.addAdvancedMetric("B", b.getB(), this.numberProcess);
 			Diameter l = new Diameter(gm.getAdjacencyMatrix(), senc.getInitialNodes());
 			this.json.addAdvancedMetric("L", l.getL(), this.numberProcess);
 			StructureDiversity d = new StructureDiversity(gm.getReachabilityMatrix(), gal.getAdj(), senc.getInitialNodes(), senc.getFinalNodes());
-			this.json.addAdvancedMetric("D", (double) Math.round(d.getD() * 1000d) / 1000d, this.numberProcess);
+			this.json.addAdvancedMetric("D", d.getD(), this.numberProcess);
 			AggregateIndicator ac = new AggregateIndicator(l.getL(),b.getB(),d.getD());
-			this.json.addAdvancedMetric("AC",(double) Math.round(ac.getAC() * 1000d) / 1000d, this.numberProcess);
+			this.json.addAdvancedMetric("AC", ac.getAC(), this.numberProcess);
 			RestrictivenessEstimator rt = new RestrictivenessEstimator(gm.getVertix(),gm.getReachabilityMatrix());
-			this.json.addAdvancedMetric("RT",(double) Math.round(rt.getRT() * 1000d) / 1000d, this.numberProcess);
+			this.json.addAdvancedMetric("RT", rt.getRT(), this.numberProcess);
 			TreesNumber t = new TreesNumber(gm.getAdjacencyMatrix());
 			this.json.addAdvancedMetric("T", t.getT(), this.numberProcess);
 			ProcessBreadth pb = new ProcessBreadth(gm.getReachabilityMatrix(), gal.getAdj(), senc.getInitialNodes(), senc.getFinalNodes());
 			this.json.addAdvancedMetric("Process Breadth", pb.getProcessBreadth(), this.numberProcess);
 			this.json.addAdvancedMetric("NDOP", pb.getNDOP(), this.numberProcess);
 			Separability s = new Separability(gm.getAdjacencyMatrix());
-			this.json.addAdvancedMetric("Sep",(double) Math.round(s.getSeparability() * 1000d) / 1000d, this.numberProcess);
+			this.json.addAdvancedMetric("Sep", s.getSeparability(), this.numberProcess);
 			//sizeExtractor moved here, it uses adjacency list
 			SizeMetricsExtractor sizeExtractor = new SizeMetricsExtractor(gm.getVertix(), gal.getAdj());
 			json.addAdvancedMetric("diam", sizeExtractor.getDiam(), this.numberProcess);
@@ -1300,7 +1300,7 @@ public class BpmnAdvancedMetricsExtractor {
 		return this.basicMetricsExtractor.getDataInputAssociations() + this.basicMetricsExtractor.getDataOutputAssociations();
 	}
 	
-	/**
+	/**TODO add check for " " label?
 	 * Metric DE
 	 * Duplicated elements is defined as the sum of participants, lanes, message flows or flow elements 
 	 * (but not sequence flows) of the same type with the same label
@@ -1311,7 +1311,6 @@ public class BpmnAdvancedMetricsExtractor {
 		Collection<ModelElementInstance> elements = this.basicMetricsExtractor.getCollectionOfElementType(FlowElement.class);
 		Vector<String> ispectioned = new Vector<String>();
 		for(ModelElementInstance original : this.basicMetricsExtractor.getCollectionOfElementType(FlowElement.class)) {
-			//TODO add check for " " label
 			if(((FlowElement) original).getName() != null && !ispectioned.contains(((FlowElement) original).getName()))
 				for(ModelElementInstance duplicated : elements)
 					if(((FlowElement) duplicated).getName() != null && !(duplicated instanceof SequenceFlow))
@@ -1325,7 +1324,6 @@ public class BpmnAdvancedMetricsExtractor {
 		elements = this.basicMetricsExtractor.getCollectionOfElementType(Participant.class);
 		ispectioned = new Vector<String>();
 		for(ModelElementInstance original : this.basicMetricsExtractor.getCollectionOfElementType(Participant.class)) {
-			//TODO add check for " " label
 			if(((Participant) original).getName() != null && !ispectioned.contains(((Participant) original).getName()))
 				for(ModelElementInstance duplicated : elements)
 					if(((Participant) duplicated).getName() != null)
@@ -1339,7 +1337,6 @@ public class BpmnAdvancedMetricsExtractor {
 		elements = this.basicMetricsExtractor.getCollectionOfElementType(Lane.class);
 		ispectioned = new Vector<String>();
 		for(ModelElementInstance original : this.basicMetricsExtractor.getCollectionOfElementType(Lane.class)) {
-			//TODO add check for " " label
 			if(((Lane) original).getName() != null && !ispectioned.contains(((Lane) original).getName()))
 				for(ModelElementInstance duplicated : elements)
 					if(((Lane) duplicated).getName() != null)
@@ -1353,7 +1350,6 @@ public class BpmnAdvancedMetricsExtractor {
 		elements = this.basicMetricsExtractor.getCollectionOfElementType(MessageFlow.class);
 		ispectioned = new Vector<String>();
 		for(ModelElementInstance original : this.basicMetricsExtractor.getCollectionOfElementType(MessageFlow.class)) {
-			//TODO add check for " " label
 			if(((MessageFlow) original).getName() != null && !ispectioned.contains(((MessageFlow) original).getName()))
 				for(ModelElementInstance duplicated : elements)
 					if(((MessageFlow) duplicated).getName() != null)
