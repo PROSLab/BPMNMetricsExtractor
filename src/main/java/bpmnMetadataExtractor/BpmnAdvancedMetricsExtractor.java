@@ -143,18 +143,18 @@ public class BpmnAdvancedMetricsExtractor {
 			this.json.addAdvancedMetric("RT", rt.getRT());
 			TreesNumber t = new TreesNumber(gm.getAdjacencyMatrix());
 			this.json.addAdvancedMetric("T", t.getT());
-			ProcessBreadth pb = new ProcessBreadth(gm.getReachabilityMatrix(), gal.getAdj(), senc.getInitialNodes(), senc.getFinalNodes());
-			this.json.addAdvancedMetric("Process Breadth", pb.getProcessBreadth());
-			this.json.addAdvancedMetric("NDOP", pb.getNDOP());
 			Separability s = new Separability(gm.getAdjacencyMatrix());
 			this.json.addAdvancedMetric("Sep",s.getSeparability());
-			//sizeExtractor moved here, it uses adjacency list
-			SizeMetricsExtractor sizeExtractor = new SizeMetricsExtractor(gm.getVertix(), gal.getAdj());
-			json.addAdvancedMetric("diam", sizeExtractor.getDiam());
-			json.addAdvancedMetric("Par", getParallelism(sizeExtractor.getDiam()));
 			//compute metrics on acyclical graph
 			this.dopExtractor = new DOPMetricsExtractor(conversion);
 			if(!cyclical) {
+				ProcessBreadth pb = new ProcessBreadth(gm.getReachabilityMatrix(), gal.getAdj(), senc.getInitialNodes(), senc.getFinalNodes());
+				this.json.addAdvancedMetric("Process Breadth", pb.getProcessBreadth());
+				this.json.addAdvancedMetric("NDOP", pb.getNDOP());
+				//sizeExtractor moved here, it uses adjacency list
+				SizeMetricsExtractor sizeExtractor = new SizeMetricsExtractor(gm.getVertix(), gal.getAdj());
+				json.addAdvancedMetric("diam", sizeExtractor.getDiam());
+				json.addAdvancedMetric("Par", getParallelism(sizeExtractor.getDiam()));
 				for(Process p : mc.getProcesses())
 					this.dopExtractor.setDop(p);
 				this.json.addAdvancedMetric("DOP", this.dopExtractor.getDop());
@@ -243,18 +243,18 @@ public class BpmnAdvancedMetricsExtractor {
 			this.json.addAdvancedMetric("RT", rt.getRT(), this.numberProcess);
 			TreesNumber t = new TreesNumber(gm.getAdjacencyMatrix());
 			this.json.addAdvancedMetric("T", t.getT(), this.numberProcess);
-			ProcessBreadth pb = new ProcessBreadth(gm.getReachabilityMatrix(), gal.getAdj(), senc.getInitialNodes(), senc.getFinalNodes());
-			this.json.addAdvancedMetric("Process Breadth", pb.getProcessBreadth(), this.numberProcess);
-			this.json.addAdvancedMetric("NDOP", pb.getNDOP(), this.numberProcess);
 			Separability s = new Separability(gm.getAdjacencyMatrix());
 			this.json.addAdvancedMetric("Sep", s.getSeparability(), this.numberProcess);
-			//sizeExtractor moved here, it uses adjacency list
-			SizeMetricsExtractor sizeExtractor = new SizeMetricsExtractor(gm.getVertix(), gal.getAdj());
-			json.addAdvancedMetric("diam", sizeExtractor.getDiam(), this.numberProcess);
-			json.addAdvancedMetric("Par", getParallelism(sizeExtractor.getDiam()), this.numberProcess);
 			//compute metrics on acyclical graph
 			this.dopExtractor = new DOPMetricsExtractor(conversion);
 			if(!cyclical) {
+				ProcessBreadth pb = new ProcessBreadth(gm.getReachabilityMatrix(), gal.getAdj(), senc.getInitialNodes(), senc.getFinalNodes());
+				this.json.addAdvancedMetric("Process Breadth", pb.getProcessBreadth(), this.numberProcess);
+				this.json.addAdvancedMetric("NDOP", pb.getNDOP(), this.numberProcess);
+				//sizeExtractor moved here, it uses adjacency list
+				SizeMetricsExtractor sizeExtractor = new SizeMetricsExtractor(gm.getVertix(), gal.getAdj());
+				json.addAdvancedMetric("diam", sizeExtractor.getDiam(), this.numberProcess);
+				json.addAdvancedMetric("Par", getParallelism(sizeExtractor.getDiam()), this.numberProcess);
 				this.dopExtractor.setDop(this.basicMetricsExtractor.getProcess());
 				this.json.addAdvancedMetric("DOP", this.dopExtractor.getDop(), this.numberProcess);
 				ComplexityIndex ci = new ComplexityIndex(gm.getAdjacencyMatrix(), gal.getAdj());
@@ -981,7 +981,7 @@ public class BpmnAdvancedMetricsExtractor {
 	}
 	
 	
-	/**
+	/**TODO number of nodes / diam
 	 * Metric: Par
 	 * Calculate the degree of Parallelism
 	 * @return TNT/Diam

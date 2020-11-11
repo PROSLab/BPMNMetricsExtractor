@@ -1,5 +1,6 @@
 package graphElements;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Vector;
@@ -202,17 +203,21 @@ public class ModelConverter {
 	}
 	
 	public GraphMatrixes convertEntireModel(String opzione) {
-		/*if(process.getChildElementsByType(StartEvent.class).isEmpty() 
-				|| process.getChildElementsByType(EndEvent.class).isEmpty()
-				|| process.getChildElementsByType(SequenceFlow.class).isEmpty()) {
-			this.notification.add("Incomplete process: "+process.getId());
-			return null;
-		}*/
 		Vector<Node> nodes = new Vector<Node>();
         Vector<Edge> edges = new Vector<Edge>();
 		//colleziona tutti i flownode e i sequenceflow del processo
-		Collection<FlowNode> flowNodes = this.modelInstance.getModelElementsByType(FlowNode.class);
-		Collection<SequenceFlow> sequenceFlows = this.modelInstance.getModelElementsByType(SequenceFlow.class);
+		Collection<FlowNode> flowNodes = new ArrayList<FlowNode>();
+		Collection<SequenceFlow> sequenceFlows = new ArrayList<SequenceFlow>();
+		for(Process p : this.modelInstance.getModelElementsByType(Process.class)) {
+			/*if(p.getChildElementsByType(StartEvent.class).isEmpty() || p.getChildElementsByType(EndEvent.class).isEmpty() || p.getChildElementsByType(SequenceFlow.class).isEmpty()) {
+				this.notification.add("Incomplete process: "+p.getId());
+				return null;
+			}*/
+			Collection<FlowNode> flowNodesProcess = p.getChildElementsByType(FlowNode.class);
+			flowNodes.addAll(flowNodesProcess);
+			Collection<SequenceFlow> sequenceFlowsProcess = p.getChildElementsByType(SequenceFlow.class);
+			sequenceFlows.addAll(sequenceFlowsProcess);
+		}
 		//elimina tutti i flow node disconnessi
 		/*Iterator<FlowNode> i = flowNodes.iterator();
 		while(i.hasNext()) {
