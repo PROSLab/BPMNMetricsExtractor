@@ -55,10 +55,10 @@ public class ModelConverter {
        				else if(fe instanceof SequenceFlow)
        					sf.add((SequenceFlow) fe);
        			}
-        		//chiamata ricorsiva del metodo per ogni sotto-processo all'interno sotto-processo in esame
-        		this.whiteboxSubprocessConversion(edges, subprocess, fn, sf);
         		//cancella ogni boundary event e il source dei suoi outgoing diventa l'id dell'attività al quale è attaccato
         		this.resolveBoundaryEvent(subprocess, fn);
+        		//chiamata ricorsiva del metodo per ogni sotto-processo all'interno sotto-processo in esame
+        		this.whiteboxSubprocessConversion(edges, subprocess, fn, sf);
         		//check per verificare l'assenza di start event ed end event, allora sotto-processo contiene solo attività
         		if(subprocess.getChildElementsByType(StartEvent.class).isEmpty() &&
         				subprocess.getChildElementsByType(EndEvent.class).isEmpty()) {
@@ -134,12 +134,8 @@ public class ModelConverter {
 	 */
 	
 	private void resolveBoundaryEvent(BaseElement process, Collection<FlowNode> flowNodes) {
-		Collection<BoundaryEvent> events;
-		if(process == null)
-			events = this.modelInstance.getModelElementsByType(BoundaryEvent.class);
-		else events = process.getChildElementsByType(BoundaryEvent.class);
 		//rende ogni boundary event parte dello stesso sequence flow al quale è attaccato 
-        for(BoundaryEvent be : events) {
+		for(BoundaryEvent be : process.getChildElementsByType(BoundaryEvent.class)) {
         	for(SequenceFlow sfbe: be.getOutgoing()) {
         		sfbe.setSource(be.getAttachedTo());
         		//aggiunge sequence flow nell'outgoing del nuovo source, utile in caso di sottoprocesso
@@ -214,25 +210,24 @@ public class ModelConverter {
 				return null;
 			}*/
 			Collection<FlowNode> flowNodesProcess = p.getChildElementsByType(FlowNode.class);
+			//elimina tutti i flow node disconnessi
+			/*Iterator<FlowNode> i = flowNodesProcess.iterator();
+			while(i.hasNext()) {
+				FlowNode fn = i.next();
+				if(fn.getIncoming().isEmpty() && fn.getOutgoing().isEmpty()) {
+					i.remove();
+					this.notification.add("Disconnected node in "+p.getId()+": "+fn.getId());
+				}	
+			}*/
 			flowNodes.addAll(flowNodesProcess);
 			Collection<SequenceFlow> sequenceFlowsProcess = p.getChildElementsByType(SequenceFlow.class);
 			sequenceFlows.addAll(sequenceFlowsProcess);
+			//cancella ogni boundary event e il source dei suoi outgoing diventa l'id dell'attività al quale è attaccato
+	        this.resolveBoundaryEvent(p, flowNodes);
+	        //controlla l'opzione per la conversione scelta 
+	        if(opzione.equals("WhiteBox"))
+	        	this.whiteboxSubprocessConversion(edges, p, flowNodes, sequenceFlows);
 		}
-		//elimina tutti i flow node disconnessi
-		/*Iterator<FlowNode> i = flowNodes.iterator();
-		while(i.hasNext()) {
-			FlowNode fn = i.next();
-			if(fn.getIncoming().isEmpty() && fn.getOutgoing().isEmpty()) {
-				i.remove();
-				this.notification.add("Disconnected node in "+process.getId()+": "+fn.getId());
-			}	
-		}*/
-        //cancella ogni boundary event e il source dei suoi outgoing diventa l'id dell'attività al quale è attaccato
-        this.resolveBoundaryEvent(null, flowNodes);
-        //controlla l'opzione per la conversione scelta 
-		if(opzione.equals("WhiteBox"))
-			for(Process p : this.modelInstance.getModelElementsByType(Process.class))
-				this.whiteboxSubprocessConversion(edges, p, flowNodes, sequenceFlows);
         //crea un nuovo nodo per il grafo per ogni flownode del processo
         int vertexNumber = 0;
         for(FlowNode fn : flowNodes) {
@@ -242,6 +237,7 @@ public class ModelConverter {
         //crea un nuovo arco per il grafo per ogni sequenceflow del processo
         for(SequenceFlow sf : sequenceFlows)
         	edges.add(new Edge(sf.getSource().getId(), sf.getTarget().getId()));
+        //TODO message flow for participant?
         for(MessageFlow mf : this.modelInstance.getModelElementsByType(MessageFlow.class))
     		edges.add(new Edge(mf.getSource().getId(), mf.getTarget().getId()));
         //crea la matrice di adiacenza convertita dal modello
