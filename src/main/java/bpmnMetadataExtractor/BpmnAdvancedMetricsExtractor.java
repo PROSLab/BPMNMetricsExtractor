@@ -146,7 +146,7 @@ public class BpmnAdvancedMetricsExtractor {
 			Separability s = new Separability(gm.getAdjacencyMatrix());
 			this.json.addAdvancedMetric("Sep",s.getSeparability());
 			//compute metrics on acyclical graph
-			this.dopExtractor = new DOPMetricsExtractor(conversion);
+			this.dopExtractor = new DOPMetricsExtractor("WhiteBox");
 			if(!cyclical) {
 				ProcessBreadth pb = new ProcessBreadth(gm.getReachabilityMatrix(), gal.getAdj(), senc.getInitialNodes(), senc.getFinalNodes());
 				this.json.addAdvancedMetric("Process Breadth", pb.getProcessBreadth());
@@ -161,9 +161,9 @@ public class BpmnAdvancedMetricsExtractor {
 				ComplexityIndex ci = new ComplexityIndex(gm.getAdjacencyMatrix(), gal.getAdj());
 				this.json.addAdvancedMetric("CI",ci.getCI());
 				}
+			json.addAdvancedMetric("MCC", this.getMCC(gm.getEdge(), gm.getVertix()));
 		}
 		json.addAdvancedMetric("S", this.getNumberOfBPMNElements());
-		json.addAdvancedMetric("MCC", this.getMCC());
 		json.addAdvancedMetric("Inter-process Complexity", this.getInterProcessComplexity());
 		json.addAdvancedMetric("DE", this.getDuplicatedElements());
 		this.F = new StructurednessMetricExtractor(basicMetricsExtractor, conversion);
@@ -260,9 +260,9 @@ public class BpmnAdvancedMetricsExtractor {
 				ComplexityIndex ci = new ComplexityIndex(gm.getAdjacencyMatrix(), gal.getAdj());
 				this.json.addAdvancedMetric("CI",ci.getCI(), this.numberProcess);
 				}
+			json.addAdvancedMetric("MCC", this.getMCC(gm.getEdge(), gm.getVertix()), this.numberProcess);
 		}
 		json.addAdvancedMetric("S", this.getNumberOfBPMNElements(), this.numberProcess);
-		json.addAdvancedMetric("MCC", this.getMCC(), this.numberProcess);
 		json.addAdvancedMetric("Inter-process Complexity", this.getInterProcessComplexity(), this.numberProcess);
 		json.addAdvancedMetric("DE", this.getDuplicatedElements(), this.numberProcess);
 		this.F = new StructurednessMetricExtractor(basicMetricsExtractor, conversion);
@@ -1270,10 +1270,8 @@ public class BpmnAdvancedMetricsExtractor {
 	 * McCabe’s Cyclomatic Number counts the number of linearly independent paths through a process 
 	 * @return
 	 */
-	public int getMCC() {
-		if(this.basicMetricsExtractor.getExtractionType().equals("Model"))
-			return this.basicMetricsExtractor.getSequenceFlows() - this.basicMetricsExtractor.getFlowNodes() + 2*this.basicMetricsExtractor.getNumberOfTypeElement(Process.class);
-		return this.basicMetricsExtractor.getSequenceFlows() - this.basicMetricsExtractor.getFlowNodes() + 2;
+	public int getMCC(int edges, int nodes) {
+		return edges - nodes + 2;
 	}
 	
 	/**

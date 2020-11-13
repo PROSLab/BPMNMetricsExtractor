@@ -205,20 +205,20 @@ public class ModelConverter {
 		Collection<FlowNode> flowNodes = new ArrayList<FlowNode>();
 		Collection<SequenceFlow> sequenceFlows = new ArrayList<SequenceFlow>();
 		for(Process p : this.modelInstance.getModelElementsByType(Process.class)) {
-			/*if(p.getChildElementsByType(StartEvent.class).isEmpty() || p.getChildElementsByType(EndEvent.class).isEmpty() || p.getChildElementsByType(SequenceFlow.class).isEmpty()) {
+			if(p.getChildElementsByType(StartEvent.class).isEmpty() || p.getChildElementsByType(EndEvent.class).isEmpty() || p.getChildElementsByType(SequenceFlow.class).isEmpty()) {
 				this.notification.add("Incomplete process: "+p.getId());
 				return null;
-			}*/
+			}
 			Collection<FlowNode> flowNodesProcess = p.getChildElementsByType(FlowNode.class);
 			//elimina tutti i flow node disconnessi
-			/*Iterator<FlowNode> i = flowNodesProcess.iterator();
+			Iterator<FlowNode> i = flowNodesProcess.iterator();
 			while(i.hasNext()) {
 				FlowNode fn = i.next();
 				if(fn.getIncoming().isEmpty() && fn.getOutgoing().isEmpty()) {
 					i.remove();
 					this.notification.add("Disconnected node in "+p.getId()+": "+fn.getId());
 				}	
-			}*/
+			}
 			flowNodes.addAll(flowNodesProcess);
 			Collection<SequenceFlow> sequenceFlowsProcess = p.getChildElementsByType(SequenceFlow.class);
 			sequenceFlows.addAll(sequenceFlowsProcess);
@@ -239,7 +239,8 @@ public class ModelConverter {
         	edges.add(new Edge(sf.getSource().getId(), sf.getTarget().getId()));
         //TODO message flow for participant?
         for(MessageFlow mf : this.modelInstance.getModelElementsByType(MessageFlow.class))
-    		edges.add(new Edge(mf.getSource().getId(), mf.getTarget().getId()));
+        	if(mf.getTarget() instanceof FlowNode && mf.getSource() instanceof FlowNode)
+        		edges.add(new Edge(mf.getSource().getId(), mf.getTarget().getId()));
         //crea la matrice di adiacenza convertita dal modello
         GraphMatrixes gm = new GraphMatrixes(edges,nodes);
         return gm;
