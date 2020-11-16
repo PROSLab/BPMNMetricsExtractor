@@ -25,7 +25,7 @@ public class CycleDetector {
     } 
 	
 	private boolean isCyclicUtil(int i, boolean[] visited, boolean[] recStack) { 
-		// Segna il nodo corrente come visitato e parte dello stack della ricorsione
+		//segna il nodo corrente come visitato e parte dello stack della ricorsione
 		if (recStack[i]) 
 			return true; 
 		if (visited[i]) 

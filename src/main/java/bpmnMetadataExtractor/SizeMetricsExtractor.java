@@ -72,7 +72,7 @@ public class SizeMetricsExtractor {
 		for (int i = 0; i < adj.get(node).size(); i++) { 
 			if (!visited[adj.get(node).get(i)]) 
 				dfs(adj.get(node).get(i), adj, dp, visited); 
-			// Store the max of the paths 
+			//store the max of the paths 
 			dp[node] = Math.max(dp[node], 1 + dp[adj.get(node).get(i)]); 
 			} 
 		}
@@ -80,13 +80,13 @@ public class SizeMetricsExtractor {
 	private double setDiam() { 
 		int[] dp = new int[n+1]; 
 		boolean[] visited = new boolean[n + 1]; 
-		// Call DFS for every unvisited vertex 
+		//call DFS for every unvisited vertex 
 		for (int i = 0; i < n; i++) { 
 			if (!visited[i]) 
 				dfs(i, adj, dp, visited);
 			} 
 		int ans = 0; 
-		// Traverse and find the maximum of all dp[i] 
+		//traverse and find the maximum of all dp[i] 
 		for (int i = 0; i <= n; i++) { 
 			ans = Math.max(ans, dp[i]);
 			} 

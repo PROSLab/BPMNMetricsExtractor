@@ -53,7 +53,7 @@ public class StructureDiversity {
     private int countPathsUtil(int u, int d, boolean visited[], int pathCount) { 
     	//segna il nodo in esame come visitato 
     	visited[u] = true; 
-    	//se il vertice in esame è quello finale, allora il numero aumenta 
+    	//se il vertice in esame uguale quello finale, allora il numero aumenta 
     	if (u == d) 
     		pathCount++;  
     	//itera per tutti i nodi adiacenti a quello in esame 

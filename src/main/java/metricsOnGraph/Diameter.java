@@ -31,11 +31,11 @@ public class Diameter {
         return minIndex; 
     }  
   
-    //metodo che implementa l'algoritmo di Dijkstra per i cammini più corti di un singolo nodo
+    //metodo che implementa algoritmo di Dijkstra per i cammini piu corti di un singolo nodo
     //basato sulla matrice di adiacenza del grafo
 	
     private void dijkstra(int graph[][], int src) {
-    	//array che conterrà le distanze più corte dal nodo source ad ogni altro nodo
+    	//array che contiene le distanze piu corte dal nodo source ad ogni altro nodo
         int dist[] = new int[nodesNumber]; 
         //tiene traccia dei vertici inclusi 
         Boolean visited[] = new Boolean[nodesNumber]; 
@@ -46,7 +46,7 @@ public class Diameter {
         } 
         //distanza del source node da se stesso 
         dist[src] = 0; 
-        //trova il cammino più corto per ogni vertice 
+        //trova il cammino piu corto per ogni vertice 
         for (int count = 0; count < nodesNumber - 1; count++) { 
             //sceglie il vertice con minor distanza dal set di vertici non ancora analizzato
             int u = minDistance(dist, visited); 
@@ -54,13 +54,13 @@ public class Diameter {
             visited[u] = true; 
             //aggiorna il valore dist dei vertici adiacenti dei vertici selezionati 
             for (int v = 0; v < nodesNumber; v++) 
-            	//aggiorna dist[v] solo se non è già analizzato, c'è un arco da u a v 
-                //e il peso totale del cammino dalla source a v attraverso u è più piccolo del corrente dist[v] 
+            	//aggiorna dist[v] solo se non analizzato precedentemente, esiste un arco da u a v 
+                //e il peso totale del cammino dalla source a v attraverso u piu piccolo del corrente dist[v] 
                 if (!visited[v] && graph[u][v] != 0 &&  
                    dist[u] != Integer.MAX_VALUE && dist[u] + graph[u][v] < dist[v]) 
                     dist[v] = dist[u] + graph[u][v]; 
         } 
-        //salva il cammino più lungo tra tutti i cammini più corti del nodo source
+        //salva il cammino piu lungo tra tutti i cammini piu corti del nodo source
         int shortestPath = 0;
         for(int x : dist)
         	if(x != Integer.MAX_VALUE)

@@ -26,11 +26,11 @@ public class GraphMatrixes {
     	int target = 0;
     	for(Edge e : this.edges) {
     		for(Node n : this.nodes) {
-    			//se l'id del nodo source dell'arco in esame e l'id del nodo in esame sono uguali
+    			//se id del nodo source dell'arco in esame e id del nodo in esame sono uguali
     			//salva il numero del nodo in esame in source
     			if(e.getSource().equals(n.getId()))
     				source = n.getVertexNumber();
-    			//se l'id del nodo target dell'arco in esame e l'id del nodo in esame sono uguali
+    			//se id del nodo target dell'arco in esame e id del nodo in esame sono uguali
     			//salva il numero del nodo in esame in target
     			if(e.getTarget().equals(n.getId())) 
     				target = n.getVertexNumber();
@@ -47,10 +47,10 @@ public class GraphMatrixes {
                this.reachMatrix[i][j] = this.adjMatrix[i][j]; 
 		//aggiunge tutti i vertici uno alla volta al set dei vertici intermedi
 		/*
-		 * All'inizio di una iterazione, abbiamo i valori di raggiungibilità per ogni 
-		 * coppia di vertici così che i valori di raggiungibilità considerano solo i vertici 
+		 * Ad ogni iterazione, abbiamo i valori di raggiungibilita per ogni 
+		 * coppia di vertici in modo che i valori di raggiungibilita considerano solo i vertici 
 		 * nel set {0, 1, 2, .. k-1} come vertici intermedi
-		 * Al termine di una iterazione, il vertice no. k è aggiunto al set dei
+		 * Al termine di una iterazione, il vertice no. k viene aggiunto al set dei
 		 * vertici intermedi e il set diventa {0, 1, 2, .. k}
 		 */
 		for (k = 0; k < this.vertex; k++) {
@@ -58,13 +58,13 @@ public class GraphMatrixes {
            for (i = 0; i < this.vertex; i++) {
         	   //seleziona tutti i vertici come destinazione per la sorgente selezionata
                for (j = 0; j < this.vertex; j++) { 
-            	   //se il vertice k è nel path da i a j, allora il valore di reach[i][j] è 1
+            	   //se il vertice k si trova nel path da i a j, allora il valore di reach[i][j] = 1
                    this.reachMatrix[i][j] = (this.reachMatrix[i][j]!=0) || 
                             ((this.reachMatrix[i][k]!=0) && (this.reachMatrix[k][j]!=0))?1:0; 
                } 
            } 
        } 
-		//rende la la matrice di raggiungibilità riflessiva
+		//rende la la matrice riflessiva
 		for (i = 0; i < this.vertex; i++) 
 			this.reachMatrix[i][i] = 1;
     }

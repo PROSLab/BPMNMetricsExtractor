@@ -13,7 +13,7 @@ public class GraphAdjacencyList {
 		}
 	
 	private void convertMatrixToLIst(){
-		//crea una nuova lista per ogni vertice così che i nodi adiacenti possono essere salvati
+		//crea una nuova lista per ogni vertice dove i nodi adiacenti possono essere salvati
 		for (int i = 0; i < this.adjMatrix[0].length; i++) {
         	this.adjList.add(new ArrayList<Integer>()); 
         } 

@@ -1264,7 +1264,7 @@ public class BpmnAdvancedMetricsExtractor {
 	
 	/**
 	 * Metric: MCC
-	 * McCabe’s Cyclomatic Number counts the number of linearly independent paths through a process 
+	 * McCabes Cyclomatic Number counts the number of linearly independent paths through a process 
 	 * @return
 	 */
 	public int getMCC(int edges, int nodes) {

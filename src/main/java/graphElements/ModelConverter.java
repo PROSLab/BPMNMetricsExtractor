@@ -43,7 +43,7 @@ public class ModelConverter {
 			//check per verificare che il sotto-processo sia connesso
 			if(subprocess.getIncoming().isEmpty() || subprocess.getOutgoing().isEmpty())
 				this.notification.add("Incomplete subprocess in "+process.getId()+": "+subprocess.getId());
-			//check per verificare che il sotto-processo non contenga più di uno start event
+			//check per verificare che il sotto-processo contenga al massimo uno start event
 			else if(subprocess.getChildElementsByType(StartEvent.class).size()>1)
 				this.notification.add("Invalid number of start events in "+subprocess.getId());
 			else {
@@ -55,14 +55,14 @@ public class ModelConverter {
        				else if(fe instanceof SequenceFlow)
        					sf.add((SequenceFlow) fe);
        			}
-        		//cancella ogni boundary event e il source dei suoi outgoing diventa l'id dell'attività al quale è attaccato
+        		//cancella ogni boundary event e il source dei suoi outgoing diventa id dell'attivita al quale attaccato
         		this.resolveBoundaryEvent(subprocess, fn);
         		//chiamata ricorsiva del metodo per ogni sotto-processo all'interno sotto-processo in esame
         		this.whiteboxSubprocessConversion(edges, subprocess, fn, sf);
-        		//check per verificare l'assenza di start event ed end event, allora sotto-processo contiene solo attività
+        		//check per verificare l'assenza di start event ed end event, allora sotto-processo contiene solo attivita
         		if(subprocess.getChildElementsByType(StartEvent.class).isEmpty() &&
         				subprocess.getChildElementsByType(EndEvent.class).isEmpty()) {
-        			//check per verificare che il sotto-processo contiene almeno un'attività
+        			//check per verificare che il sotto-processo contiene almeno un'attivita
         			if(!subprocess.getChildElementsByType(Activity.class).isEmpty()) {
         				for(SequenceFlow in: subprocess.getIncoming()) {
         					for(FlowElement fe : flowElements)
@@ -129,12 +129,12 @@ public class ModelConverter {
     }
 	
 	/*
-	 * Il metodo resolveBoundaryEvent elimina il boundary event dopo aver connesso l'attività al quale è attaccato
+	 * Il metodo resolveBoundaryEvent elimina il boundary event dopo aver connesso l'attivita al quale attaccato
 	 * con i sequence flow che da esso si diramano
 	 */
 	
 	private void resolveBoundaryEvent(BaseElement process, Collection<FlowNode> flowNodes) {
-		//rende ogni boundary event parte dello stesso sequence flow al quale è attaccato 
+		//rende ogni boundary event parte dello stesso sequence flow al quale attaccato 
 		for(BoundaryEvent be : process.getChildElementsByType(BoundaryEvent.class)) {
         	for(SequenceFlow sfbe: be.getOutgoing()) {
         		sfbe.setSource(be.getAttachedTo());
@@ -179,9 +179,9 @@ public class ModelConverter {
 				this.notification.add("Disconnected node in "+process.getId()+": "+fn.getId());
 			}	
 		}
-        //cancella ogni boundary event e il source dei suoi outgoing diventa l'id dell'attività al quale è attaccato
+        //cancella ogni boundary event e il source dei suoi outgoing diventa l'id dell'attivita al quale attaccato
         this.resolveBoundaryEvent(process,flowNodes);
-        //controlla l'opzione per la conversione scelta
+        //controlla opzione per la conversione scelta
         if(opzione.equals("WhiteBox"))
         	this.whiteboxSubprocessConversion(edges, process, flowNodes, sequenceFlows);
         //crea un nuovo nodo per il grafo per ogni flownode del processo
@@ -222,7 +222,7 @@ public class ModelConverter {
 			flowNodes.addAll(flowNodesProcess);
 			Collection<SequenceFlow> sequenceFlowsProcess = p.getChildElementsByType(SequenceFlow.class);
 			sequenceFlows.addAll(sequenceFlowsProcess);
-			//cancella ogni boundary event e il source dei suoi outgoing diventa l'id dell'attività al quale è attaccato
+			//cancella ogni boundary event e il source dei suoi outgoing diventa id dell'attivita al quale attaccato
 	        this.resolveBoundaryEvent(p, flowNodes);
 	        //controlla l'opzione per la conversione scelta 
 	        if(opzione.equals("WhiteBox"))
@@ -237,10 +237,12 @@ public class ModelConverter {
         //crea un nuovo arco per il grafo per ogni sequenceflow del processo
         for(SequenceFlow sf : sequenceFlows)
         	edges.add(new Edge(sf.getSource().getId(), sf.getTarget().getId()));
-        //TODO message flow for participant?
         for(MessageFlow mf : this.modelInstance.getModelElementsByType(MessageFlow.class))
+        	//se il messaggio collega due nodi di flusso viene creato un nuovo arco,
+        	//altrimenti il modello non viene convertito in grafo
         	if(mf.getTarget() instanceof FlowNode && mf.getSource() instanceof FlowNode)
         		edges.add(new Edge(mf.getSource().getId(), mf.getTarget().getId()));
+        	else return null;
         //crea la matrice di adiacenza convertita dal modello
         GraphMatrixes gm = new GraphMatrixes(edges,nodes);
         return gm;

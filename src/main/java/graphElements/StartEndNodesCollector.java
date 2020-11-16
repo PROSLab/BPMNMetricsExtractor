@@ -34,7 +34,7 @@ public class StartEndNodesCollector {
     		for(int j = 0; j <matrix[i].length; j++)
     			//somma tutti i valori della colonna
     			sum+= matrix[j][i];
-    		//controlla se la somma della colonna è uguale a 1 
+    		//controlla se la somma della colonna uguale 1 
     		//in questo caso esiste un solo arco entrante
     		if(sum == 0)
     			this.initialNodes.add(i);

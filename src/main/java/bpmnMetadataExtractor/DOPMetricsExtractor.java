@@ -30,7 +30,7 @@ public class DOPMetricsExtractor {
 	}
 	
 	/*
-	 * Il metodo checkNonInterrupt controlla se l'attività "a" sia eseguita per mezzo di un boundary event non-interrupt
+	 * Il metodo checkNonInterrupt controlla se l'attivita "a" sia eseguita per mezzo di un boundary event non-interrupt
 	 */
 	
 	private int checkNonInterrupt(Activity a, Vector<String> activityId) {
@@ -61,7 +61,7 @@ public class DOPMetricsExtractor {
 			if(!be.cancelActivity()) 
 				this.activityId.add(be.getAttachedTo().getId());
 		int tempDop = 0;
-		//check per verificare se il sottoprocesso contiene solo attività
+		//check per verificare se il sottoprocesso contiene solo attivita
 		if(subprocess.getChildElementsByType(SequenceFlow.class).isEmpty()) {
 				tempDop = ((SubProcess) subprocess).getChildElementsByType(Activity.class).size();
 			return tempDop;
@@ -85,27 +85,28 @@ public class DOPMetricsExtractor {
 		if(!(node instanceof ExclusiveGateway) && !(node instanceof EventBasedGateway)) {
 			//controlla il tipo di ogni nodo collegato al nodo in esame
 			for(SequenceFlow se : node.getOutgoing()) {
-				//se è un attività, ma non un sottoprocesso, il degree of parallelism aumenta
+				//se corrisponde ad attivita, ma non ad un sottoprocesso, il degree of parallelism aumenta
 				if(se.getTarget() instanceof Activity) {
-					//se è un sottoprocesso
+					//se un sottoprocesso
 					if(se.getTarget() instanceof SubProcess && this.conversion.equals("WhiteBox")) 
 						dop+= this.checkSubProcess(se.getTarget(), activityId, visit);
 					 else { 
 						 dop++;
 						 //esegue check per eventuali boundary event non interrupting
 						 dop+=this.checkNonInterrupt((Activity) se.getTarget(), activityId);}
-					//se il flow node è un evento o un gateway parallelo/inclusive
+					//se il flow node corrisponde ad un evento o un gateway parallelo/inclusive
 				} else {
 					visit.add(se.getTarget().getId());
 					dop+=checkNode(se.getTarget(), activityId, 0, visit);}
 			}
 		} else {
-			//se non è parallelo/inclusive, il degree of parallelism aumenta in base al flusso con maggior numero di attività simultanee
+			//se non corrisponde a parallelo/inclusive, 
+			//il degree of parallelism aumenta in base al flusso con maggior numero di attivita simultanee
 			int partialDop = 0;
 			for(SequenceFlow seg: node.getOutgoing()) {
 				int tempDop = 0;
 				if(seg.getTarget() instanceof Activity) { 
-					//se è un sottoprocesso
+					//se un sottoprocesso
 					if(seg.getTarget() instanceof SubProcess && this.conversion.equals("WhiteBox"))
 						tempDop+=this.checkSubProcess(seg.getTarget(), activityId, visit);
 					else {
@@ -129,19 +130,18 @@ public class DOPMetricsExtractor {
 		for(BoundaryEvent be : process.getChildElementsByType(BoundaryEvent.class)) {
 			if(!be.cancelActivity()) {
 				if(!(be.getAttachedTo() instanceof SubProcess) || this.conversion.equals("BlackBox"))
-					//salva id dell'attività che ha attaccato un boundary event non interrupting
+					//salva id dell'attivita che ha attaccato un boundary event non interrupting
 					this.activityId.add(be.getAttachedTo().getId());
 				else {
-					//se un attachedto è un sottoprocesso, aggiunge tutte gli id delle attività al suo interno nel vettore di stringhe
+					//se attachedto un sottoprocesso, aggiunge tutti gli id delle attivita al suo interno nel vettore di stringhe
 					for(FlowElement fe:((SubProcess) be.getAttachedTo()).getFlowElements())
 						if(fe instanceof Activity)
 							this.activityId.add(fe.getId());
 				}
 			}
 		}
-		//mettere un check per verificare se il nodo è stato già ispezionato
 		Vector<String> visit = new Vector<String>();
-		//controlla il numero di attività che possono essere eseguite simultaneamente per ogni nodo
+		//controlla il numero di attivita che possono essere eseguite simultaneamente per ogni nodo
 		for(FlowNode node : process.getChildElementsByType(FlowNode.class)) {
 			if(!visit.contains(node.getId())) {
 				visit.add(node.getId());

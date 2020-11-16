@@ -23,7 +23,7 @@ public class ProcessBreadth {
 		return this.ndop;
 	}
 	
-	// A recursive method to count all paths from 'u' to 'd'. 
+	//recursive method to count all paths from 'u' to 'd'. 
     private int countPathsUtil(int u, int d, 
                        int pathCount) { 
     	// If current vertex is same as destination, then increment count 
@@ -43,14 +43,14 @@ public class ProcessBreadth {
     
     // Returns count of paths from 's' to 'd' 
     private int countPaths(int s, int d) { 
-    	// Call the recursive method to count all paths 
+    	//call the recursive method to count all paths 
         int pathCount = 0; 
         pathCount = countPathsUtil(s, d, 
                                    pathCount); 
         return pathCount; 
     } 
   
-    // Returns count of paths from initial nodes to final ones 
+    //returns count of paths from initial nodes to final ones 
     private void setProcessBreadth( int[][]reach, Vector<Integer> initialNodes, Vector<Integer> finalNodes) { 
     	for(Integer finale : finalNodes) {
     		for(Integer initial: initialNodes) {

@@ -63,7 +63,7 @@ public class StructurednessMetricExtractor {
 	 */
 	private int search(FlowNode fn, Vector<String> blocks) {
 		int cont = 0;
-		//check per verificare che il nodo non sia già ridotto
+		//check per verificare che il nodo non sia stato ridotto precedentemente
 		if(!this.reducedNodes.contains(fn.getId())) {
 			
 			//check per verificare la presenza di uno split annidato
@@ -73,14 +73,14 @@ public class StructurednessMetricExtractor {
 				}
 			
 			if(fn instanceof Gateway && !this.gateways.contains(fn.getId()) && !this.reducedNodes.contains(fn.getId())) {
-				//se non è un join salva una stringa di avviso
+				//se non corrisponde ad un join salva una stringa di avviso
 				if(fn.getOutgoing().size() != 1)
 					blocks.add("NoJoin");
 				else blocks.add(fn.getId());
 				return cont;
 				}
 			
-			//se arriva all'end event il metodo termina
+			//se arriva al end event il metodo termina
 			if (fn instanceof EndEvent) {
 				blocks.add(fn.getId());
 				return cont;
@@ -133,7 +133,7 @@ public class StructurednessMetricExtractor {
 			if(this.extractionType.equals("Model")) {
 				
 				if(blocks.get(0) !="NoJoin" && check && type.equals(model.getModelElementById(blocks.get(0)).getElementType().getTypeName())) {
-					//salva l'id del join se compone una struttura
+					//salva id del join se compone una struttura
 					this.gateways.addAll(blocks);
 					//riduce il nodo corrispondente al join
 					reduce++;
@@ -145,7 +145,7 @@ public class StructurednessMetricExtractor {
 			else {
 				
 				if(blocks.get(0) !="NoJoin" && check && type.equals(process.getModelInstance().getModelElementById(blocks.get(0)).getElementType().getTypeName())) {
-					//salva l'id del join se compone una struttura
+					//salva id del join se compone una struttura
 					this.gateways.addAll(blocks);
 					//riduce il nodo corrispondente al join
 					reduce++;

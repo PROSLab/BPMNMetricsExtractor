@@ -54,7 +54,7 @@ public class ComplexityIndex {
     		if(x.size()==1) {
     			int sum = 0;
     			int row = -1;
-    			//salva l'indice dell'arco entrante 
+    			//salva indice dell'arco entrante 
     			for(int i = 0; i <this.adjMatrix.length; i++) {
     				if(this.adjMatrix[i][u]==1)
     					row = i;
@@ -66,7 +66,7 @@ public class ComplexityIndex {
 					this.adjMatrix[row][u]--;
 					//aggiunge un arco entrante dal nodo precedente a quello successivo al nodo da ridurre
 					this.adjMatrix[row][x.get(0)]++;
-					//prima del remove per eventualità cappio
+					//prima del remove per cappio
 					//aggiunge nodo successivo al nodo ridotto alla lista del precedente
 					this.adjList.get(row).add(x.get(0));
 					//rimuovo nodo ridotto dalla lista del precedente
@@ -98,7 +98,7 @@ public class ComplexityIndex {
     					this.adjMatrix[riga][u]--;
     					//aggiunge un arco entrante dal nodo precedente a quello successivo al nodo da ridurre
     					this.adjMatrix[riga][x.get(0)]++;
-    					//prima del remove per eventualità cappio
+    					//prima del remove per cappio
     					//aggiunge nodo successivo al nodo ridotto alla lista del precedente
     					this.adjList.get(riga).add(x.get(0));
     					//rimuovo nodo ridotto dalla lista del precedente
@@ -134,7 +134,7 @@ public class ComplexityIndex {
     			//somma tutti i valori della colonna
     			sum+= this.adjMatrix[j][i];
     		}
-    		//controlla se la somma della colonna è uguale a 1 
+    		//controlla se la somma della colonna uguale 1 
     		//in questo caso esiste un solo arco entrante
     		if(sum == 1) {
     			//aggiorna i nodi che hanno un arco entrante dal nodo da ridurre
