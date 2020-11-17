@@ -166,6 +166,8 @@ public class BpmnAdvancedMetricsExtractor {
 		}
 		json.addAdvancedMetric("Inter-process Complexity", this.getInterProcessComplexity());
 		json.addAdvancedMetric("DE", this.getDuplicatedElements());
+		json.addAdvancedMetric("PPT", getProportionOfPoolsAndTasks());
+		json.addAdvancedMetric("PLA", getProportionOfLanesAndActivities());
 	}
 	
 	public void runMetricsProcess(String conversion) {
@@ -264,6 +266,8 @@ public class BpmnAdvancedMetricsExtractor {
 		}
 		json.addAdvancedMetric("Inter-process Complexity", this.getInterProcessComplexity(), this.numberProcess);
 		json.addAdvancedMetric("DE", this.getDuplicatedElements(), this.numberProcess);
+		json.addAdvancedMetric("PPT", getProportionOfPoolsAndTasks(), this.numberProcess);
+		json.addAdvancedMetric("PLA", getProportionOfLanesAndActivities(), this.numberProcess);
 	}
 
 	/**
@@ -377,16 +381,25 @@ public class BpmnAdvancedMetricsExtractor {
 	/**
 	 * Metric: PPT
 	 * Proportion of pools and tasks
-	 * Number of Pools / Total number of Tasks (PLT = NP/TNT)
+	 * Number of Pools / Total number of Tasks (PPT = NP/TNT)
 	 * @return
 	 */
 	public float getProportionOfPoolsAndTasks() {
 		try {
-			float toReturn = (float)basicMetricsExtractor.getPools() / basicMetricsExtractor.getTasks();
-			if (Float.isFinite(toReturn)) {
-				return toReturn;
+			if(basicMetricsExtractor.getPools() > 0) {
+				float toReturn = (float)basicMetricsExtractor.getPools() / basicMetricsExtractor.getTasks();
+				if (Float.isFinite(toReturn)) {
+					return toReturn;
+				}
+				return 0.0f;
+			} else {
+				float toReturn = (float) 1 / basicMetricsExtractor.getTasks();
+				if (Float.isFinite(toReturn)) {
+					return toReturn;
+				}
+				return 0.0f;
 			}
-			return 0.0f;
+			
 		} catch (ArithmeticException e) {
 			return 0.0f;
 		}
@@ -1046,11 +1059,11 @@ public class BpmnAdvancedMetricsExtractor {
 			else
 				return (double)basicMetricsExtractor.getPools()/basicMetricsExtractor.getActivities();
 			} else {
-				double result = (double)basicMetricsExtractor.getProcesses()/basicMetricsExtractor.getActivities();
+				double result = (double) 1 / basicMetricsExtractor.getActivities();
 				if (!Double.isFinite(result)) 
 					return 0;
 				else
-					return (double)basicMetricsExtractor.getProcesses()/basicMetricsExtractor.getActivities();
+					return (double) 1 / basicMetricsExtractor.getActivities();
 			}
 		} 
 		catch (ArithmeticException e) {
