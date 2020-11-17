@@ -51,6 +51,10 @@ public class StructurednessMetricExtractor {
 			WBSubProcessElementsCollector ec = new WBSubProcessElementsCollector(this.conversionType);
 			ec.getGatewaysSubProcess(gateways, process);
 		}
+		if(gateways.size() == 0) {
+			this.S = 1;
+			return;
+		}
 		for(Gateway split : gateways) {
 			this.reduceGraph(split);
 		}
@@ -131,27 +135,33 @@ public class StructurednessMetricExtractor {
 				}
 			
 			if(this.extractionType.equals("Model")) {
-				
-				if(blocks.get(0) !="NoJoin" && check && type.equals(model.getModelElementById(blocks.get(0)).getElementType().getTypeName())) {
-					//salva id del join se compone una struttura
-					this.gateways.addAll(blocks);
-					//riduce il nodo corrispondente al join
-					reduce++;
-					this.reducedGraph = this.reducedGraph - reduce;
-					//System.out.println(reduce);
+				try {
+					
+					if(blocks.get(0) !="NoJoin" && check && type.equals(model.getModelElementById(blocks.get(0)).getElementType().getTypeName())) {
+						//salva id del join se compone una struttura
+						this.gateways.addAll(blocks);
+						//riduce il nodo corrispondente al join
+						reduce++;
+						this.reducedGraph = this.reducedGraph - reduce;
+						//System.out.println(reduce);
 					}
+					
+				} catch (Exception e) {System.out.println("Missing end event!");}
 			}
 			
 			else {
-				
-				if(blocks.get(0) !="NoJoin" && check && type.equals(process.getModelInstance().getModelElementById(blocks.get(0)).getElementType().getTypeName())) {
-					//salva id del join se compone una struttura
-					this.gateways.addAll(blocks);
-					//riduce il nodo corrispondente al join
-					reduce++;
-					this.reducedGraph = this.reducedGraph - reduce;
-					//System.out.println(reduce);
-					}
+				try {
+					
+					if(blocks.get(0) !="NoJoin" && check && type.equals(process.getModelInstance().getModelElementById(blocks.get(0)).getElementType().getTypeName())) {
+						//salva id del join se compone una struttura
+						this.gateways.addAll(blocks);
+						//riduce il nodo corrispondente al join
+						reduce++;
+						this.reducedGraph = this.reducedGraph - reduce;
+						//System.out.println(reduce);
+						}
+					
+				} catch (Exception e) {System.out.println("Missing end event!");}
 			}	
 		} 
 	}

@@ -161,11 +161,11 @@ public class BpmnAdvancedMetricsExtractor {
 				this.json.addAdvancedMetric("CI",ci.getCI());
 				}
 			json.addAdvancedMetric("MCC", this.getMCC(gm.getEdge(), gm.getVertix()));
+			this.F = new StructurednessMetricExtractor(basicMetricsExtractor, conversion);
+			json.addAdvancedMetric("F", this.F.getS());
 		}
 		json.addAdvancedMetric("Inter-process Complexity", this.getInterProcessComplexity());
 		json.addAdvancedMetric("DE", this.getDuplicatedElements());
-		this.F = new StructurednessMetricExtractor(basicMetricsExtractor, conversion);
-		json.addAdvancedMetric("F", this.F.getS());
 	}
 	
 	public void runMetricsProcess(String conversion) {
@@ -259,11 +259,11 @@ public class BpmnAdvancedMetricsExtractor {
 				this.json.addAdvancedMetric("CI",ci.getCI(), this.numberProcess);
 				}
 			json.addAdvancedMetric("MCC", this.getMCC(gm.getEdge(), gm.getVertix()), this.numberProcess);
+			this.F = new StructurednessMetricExtractor(basicMetricsExtractor, conversion);
+			json.addAdvancedMetric("F", this.F.getS(), this.numberProcess);
 		}
 		json.addAdvancedMetric("Inter-process Complexity", this.getInterProcessComplexity(), this.numberProcess);
 		json.addAdvancedMetric("DE", this.getDuplicatedElements(), this.numberProcess);
-		this.F = new StructurednessMetricExtractor(basicMetricsExtractor, conversion);
-		json.addAdvancedMetric("F", this.F.getS(), this.numberProcess);
 	}
 
 	/**

@@ -264,10 +264,10 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NID", this.getInclusiveDecisions(), this.numberProcess);
 		this.json.addBasicMetric("NEDDB", this.getExclusiveDataBasedDecisions(), this.numberProcess);
 		this.json.addBasicMetric("NEDEB", this.getExclusiveEventBasedDecisions(), this.numberProcess);
-		//this.json.addBasicMetric("NL", this.getLanes(), this.numberProcess);
+		this.json.addBasicMetric("NL", this.getLanes(), this.numberProcess);
 		this.json.addBasicMetric("NMF", this.getMessageFlows(), this.numberProcess);
 		this.json.addBasicMetric("NP", this.getPools(), this.numberProcess);
-		//this.json.addBasicMetric("NEP", this.getEmptyPools(), this.numberProcess);
+		this.json.addBasicMetric("NEP", this.getEmptyPools(), this.numberProcess);
 		this.json.addBasicMetric("NSFE", this.getSequenceFlowsFromEvents(), this.numberProcess);
 		this.json.addBasicMetric("NSFG", this.getSequenceFlowsFromGateways(), this.numberProcess);
 		this.json.addBasicMetric("NSFA", this.getSequenceFlowsBetweenActivities(), this.numberProcess);
@@ -529,12 +529,10 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of lanes
 	 */
 	public int getLanes() {
-		Collection<Participant> participants = this.modelInstance.getModelElementsByType(Participant.class);
 		int numberOfLanes = 0;
-		for (Participant p : participants) {
-
-			//Try to check whether it is a collapsed pool or not
-			try{
+		if(this.extraction.equals("Model")) {
+			Collection<Participant> participants = this.modelInstance.getModelElementsByType(Participant.class);
+			for (Participant p : participants) {
 				Collection<LaneSet> laneSets = p.getProcess().getLaneSets();
 				for (LaneSet l : laneSets) {
 					Collection<Lane> lanes = l.getLanes();
@@ -542,9 +540,15 @@ public class BpmnBasicMetricsExtractor {
 						numberOfLanes += lanes.size();
 					}
 				}
-			}catch(Exception e){
-//				System.out.println("Collapsed Pool so no lane");
 			}
+		} else {
+			Collection<LaneSet> laneSets = this.process.getLaneSets();
+			for (LaneSet l : laneSets) {
+				Collection<Lane> lanes = l.getLanes();
+				if (lanes.size() > 1) {
+					numberOfLanes += lanes.size();
+				}
+			}	
 		}
 		return numberOfLanes;
 	}
@@ -2890,25 +2894,20 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of empty pools
 	 */
 	private int getEmptyPools() {
-
 		int numberOfEmptyPools = 0;
-		try{
+		if(this.extraction.equals("Model")) {
 			Collection<Participant> participants = this.modelInstance.getModelElementsByType(Participant.class);
-			
 			for (Participant p : participants) {
-
-				//Try to check whether it is a collapsed pool or not
-				
-					Collection<FlowElement> flowElementSet = p.getProcess().getFlowElements();
-					if(flowElementSet.size()==0)numberOfEmptyPools++;
-				
+				Collection<FlowElement> flowElementSet = p.getProcess().getFlowElements();
+				if(flowElementSet.size()==0)
+					numberOfEmptyPools++;
 			}
-		}catch(Exception e){
-			//System.out.println("NO ELEMENT");
+		} else {
+			Collection<FlowElement> flowElementSet = this.process.getFlowElements();
+			if(flowElementSet.size()==0)
+				numberOfEmptyPools++;
 		}
-		//System.out.println("numberOfEmptyPools: "+numberOfEmptyPools);
 	return numberOfEmptyPools;
-
 	}
 	
 }
