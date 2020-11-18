@@ -257,6 +257,9 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NITMREV", getIntermediateTimerEvents());
 		this.json.addBasicMetric("NESUB", getEventSubprocesses());
 		this.json.addBasicMetric("NCP", getCollapsedPools());
+		this.json.addBasicMetric("NSTESEV", getStartEscalationEvents());
+		this.json.addBasicMetric("NSTEREV", getStartErrorEvents());
+		this.json.addBasicMetric("NSTCOMEV", getStartCompensationEvents());
 	}
 	
 	public void runMetricsProcess() {
@@ -463,7 +466,9 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NITMREV", getIntermediateTimerEvents(), this.numberProcess);
 		this.json.addBasicMetric("NESUB", getEventSubprocesses(), this.numberProcess);
 		this.json.addBasicMetric("NCP", getCollapsedPools(), this.numberProcess);
-
+		this.json.addBasicMetric("NSTESEV", getStartEscalationEvents(), this.numberProcess);
+		this.json.addBasicMetric("NSTEREV", getStartErrorEvents(), this.numberProcess);
+		this.json.addBasicMetric("NSTCOMEV", getStartCompensationEvents(), this.numberProcess);
 	}
 	
 	/**
@@ -2374,7 +2379,7 @@ public class BpmnBasicMetricsExtractor {
 	/**
 	 * Metric: NESUB
 	 * 
-	 * @return number of collapsed Sub-Processes
+	 * @return number of Event Sub-Processes
 	 */
 	public int getEventSubprocesses() {
 		int nesub = 0;
@@ -2966,6 +2971,54 @@ public class BpmnBasicMetricsExtractor {
 			ec.getCatchEventsSubProcess(events, process);
 		}
 		return this.getNumberOfEventDefinitionsOfCatchEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateCatchEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.TimerEventDefinitionImpl");		
+	}
+	
+	/**
+	 * Metric: NSTESEV
+	 * 
+	 * @return number of Start Escalation Events
+	 */
+	public int getStartEscalationEvents() {
+		Collection<CatchEvent> events;
+		if(this.extraction.equals("Model"))
+			events = this.modelInstance.getModelElementsByType(CatchEvent.class);
+		else {
+			events = this.process.getChildElementsByType(CatchEvent.class);
+			ec.getCatchEventsSubProcess(events, process);
+		}
+		return this.getNumberOfEventDefinitionsOfCatchEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.StartEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.EscalationEventDefinitionImpl");
+	}
+	
+	/**
+	 * Metric: NSTEREV
+	 * 
+	 * @return number of Start Error Events
+	 */
+	public int getStartErrorEvents() {
+		Collection<CatchEvent> events;
+		if(this.extraction.equals("Model"))
+			events = this.modelInstance.getModelElementsByType(CatchEvent.class);
+		else {
+			events = this.process.getChildElementsByType(CatchEvent.class);
+			ec.getCatchEventsSubProcess(events, process);
+		}
+		return this.getNumberOfEventDefinitionsOfCatchEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.StartEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.ErrorEventDefinitionImpl");
+	}
+	
+	/**
+	 * Metric: NSTCOMEV
+	 * 
+	 * @return number of Start Compensation Events
+	 */
+	public int getStartCompensationEvents() {
+		Collection<CatchEvent> events;
+		if(this.extraction.equals("Model"))
+			events = this.modelInstance.getModelElementsByType(CatchEvent.class);
+		else {
+			events = this.process.getChildElementsByType(CatchEvent.class);
+			ec.getCatchEventsSubProcess(events, process);
+		}
+		return this.getNumberOfEventDefinitionsOfCatchEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.StartEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.CompensateEventDefinitionImpl");
 	}
 	
 }

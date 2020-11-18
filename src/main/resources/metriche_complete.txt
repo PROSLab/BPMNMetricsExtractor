@@ -274,3 +274,6 @@ PLA %Proportion of lanes and activities	{absent}
 NITMREV %Number of Intermediate Timer Events {Camunda API Instance Package}
 NESUB %Number of Event Subprocesses {Camunda API Instance Package}
 NCP	%Number of collapsed pools {Camunda API Instance Package}
+NSTESEV	%Number of Start Escalation Events {Camunda API Instance Package}
+NSTEREV	%Number of Start Error Events {Camunda API Instance Package}
+NSTCOMEV	%Number of Start Compensation Events {Camunda API Instance Package}
