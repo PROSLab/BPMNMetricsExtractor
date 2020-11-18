@@ -804,7 +804,7 @@ public class BpmnAdvancedMetricsExtractor {
 					}catch(Exception e) {continue;}
 				}
 			}
-			toReturn = toReturn/(activities.size() * activities.size() - 1);
+			toReturn = toReturn/(activities.size() * (activities.size() - 1));
 		}
 		return toReturn;
 	}
@@ -897,7 +897,7 @@ public class BpmnAdvancedMetricsExtractor {
 				}
 			}
 		}
-		toReturn = toReturn/(activities.size() * activities.size() - 1);
+		toReturn = toReturn/(activities.size() * (activities.size() - 1));
 		return toReturn;
 	}
 	

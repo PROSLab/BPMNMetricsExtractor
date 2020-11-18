@@ -70,12 +70,14 @@ public class BpmnModelReader {
 		if(this.extractionType.equals("Process")){
 			Collection<Participant> participant = modelInstance.getModelElementsByType(Participant.class);
 			for(Participant p: participant) {
-				jsonEncoder.buildJSON(numberProcess, p.getId(), p.getName(), p.getProcess().getId());
-				BpmnBasicMetricsExtractor basicExtractor = new BpmnBasicMetricsExtractor(modelInstance, p.getProcess(), jsonEncoder, numberProcess, this.extractionType, this.conversionType);
-				BpmnAdvancedMetricsExtractor advExtractor = new BpmnAdvancedMetricsExtractor(new ModelConverter(modelInstance), basicExtractor, jsonEncoder, numberProcess);
-				numberProcess++;
-				basicExtractor.runMetricsProcess();
-				advExtractor.runMetricsProcess(this.conversionType);
+				if(p.getProcess() != null) {
+					jsonEncoder.buildJSON(numberProcess, p.getId(), p.getName(), p.getProcess().getId());
+					BpmnBasicMetricsExtractor basicExtractor = new BpmnBasicMetricsExtractor(modelInstance, p.getProcess(), jsonEncoder, numberProcess, this.extractionType, this.conversionType);
+					BpmnAdvancedMetricsExtractor advExtractor = new BpmnAdvancedMetricsExtractor(new ModelConverter(modelInstance), basicExtractor, jsonEncoder, numberProcess);
+					numberProcess++;
+					basicExtractor.runMetricsProcess();
+					advExtractor.runMetricsProcess(this.conversionType);
+				}
 			}
 			jsonEncoder.populateHeader(LocalDateTime.now(), participant.size());
 		} else {

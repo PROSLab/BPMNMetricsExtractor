@@ -254,6 +254,9 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("TNIE", getTotalNumberOfIntermediateEvents());
 		//this.json.addBasicMetric("NG", getGroups());
 		this.json.addBasicMetric("NSL", getSwimlanes());
+		this.json.addBasicMetric("NITMREV", getIntermediateTimerEvents());
+		this.json.addBasicMetric("NESUB", getEventSubprocesses());
+		this.json.addBasicMetric("NCP", getCollapsedPools());
 	}
 	
 	public void runMetricsProcess() {
@@ -457,6 +460,9 @@ public class BpmnBasicMetricsExtractor {
 		json.addBasicMetric("TNIE", getTotalNumberOfIntermediateEvents(), this.numberProcess);
 		//this.json.addBasicMetric("NG", getGroups(), this.numberProcess);
 		this.json.addBasicMetric("NSL", getSwimlanes(), this.numberProcess);
+		this.json.addBasicMetric("NITMREV", getIntermediateTimerEvents(), this.numberProcess);
+		this.json.addBasicMetric("NESUB", getEventSubprocesses(), this.numberProcess);
+		this.json.addBasicMetric("NCP", getCollapsedPools(), this.numberProcess);
 
 	}
 	
@@ -530,26 +536,28 @@ public class BpmnBasicMetricsExtractor {
 	 */
 	public int getLanes() {
 		int numberOfLanes = 0;
-		if(this.extraction.equals("Model")) {
-			Collection<Participant> participants = this.modelInstance.getModelElementsByType(Participant.class);
-			for (Participant p : participants) {
-				Collection<LaneSet> laneSets = p.getProcess().getLaneSets();
+		try {
+			if(this.extraction.equals("Model")) {
+				Collection<Participant> participants = this.modelInstance.getModelElementsByType(Participant.class);
+				for (Participant p : participants) {
+					Collection<LaneSet> laneSets = p.getProcess().getLaneSets();
+					for (LaneSet l : laneSets) {
+						Collection<Lane> lanes = l.getLanes();
+						if (lanes.size() > 1) {
+							numberOfLanes += lanes.size();
+						}
+					}
+				}
+			} else {
+				Collection<LaneSet> laneSets = this.process.getLaneSets();
 				for (LaneSet l : laneSets) {
 					Collection<Lane> lanes = l.getLanes();
 					if (lanes.size() > 1) {
 						numberOfLanes += lanes.size();
 					}
-				}
+				}	
 			}
-		} else {
-			Collection<LaneSet> laneSets = this.process.getLaneSets();
-			for (LaneSet l : laneSets) {
-				Collection<Lane> lanes = l.getLanes();
-				if (lanes.size() > 1) {
-					numberOfLanes += lanes.size();
-				}
-			}	
-		}
+		} catch (Exception e) {}
 		return numberOfLanes;
 	}
 	
@@ -2355,13 +2363,25 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number of collapsed Sub-Processes
 	 */
-	//
 	public int getCollapsedSubprocesses() {
 		int ncsub = 0;
 		for(ModelElementInstance sub : getCollectionOfElementType(SubProcess.class))
 			if(((SubProcess) sub).getFlowElements().size()==0)
 				ncsub++;
 		return ncsub;
+	}
+	
+	/**
+	 * Metric: NESUB
+	 * 
+	 * @return number of collapsed Sub-Processes
+	 */
+	public int getEventSubprocesses() {
+		int nesub = 0;
+		for(ModelElementInstance sub : getCollectionOfElementType(SubProcess.class))
+			if(((SubProcess) sub).triggeredByEvent())
+				nesub++;
+		return nesub;
 	}
 	
 	/**
@@ -2895,19 +2915,57 @@ public class BpmnBasicMetricsExtractor {
 	 */
 	private int getEmptyPools() {
 		int numberOfEmptyPools = 0;
-		if(this.extraction.equals("Model")) {
-			Collection<Participant> participants = this.modelInstance.getModelElementsByType(Participant.class);
-			for (Participant p : participants) {
-				Collection<FlowElement> flowElementSet = p.getProcess().getFlowElements();
+		try {
+			if(this.extraction.equals("Model")) {
+				Collection<Participant> participants = this.modelInstance.getModelElementsByType(Participant.class);
+				for (Participant p : participants) {
+					Collection<FlowElement> flowElementSet = p.getProcess().getFlowElements();
+					if(flowElementSet.size()==0)
+						numberOfEmptyPools++;
+				}
+			} else {
+				Collection<FlowElement> flowElementSet = this.process.getFlowElements();
 				if(flowElementSet.size()==0)
 					numberOfEmptyPools++;
 			}
-		} else {
-			Collection<FlowElement> flowElementSet = this.process.getFlowElements();
-			if(flowElementSet.size()==0)
-				numberOfEmptyPools++;
-		}
+		} catch (Exception e) {}
 	return numberOfEmptyPools;
+	}
+	
+	/**
+	 * Metrica:NCP 
+	 * 
+	 * @return Number of collapsed pools
+	 */
+	public int getCollapsedPools() {
+		int ncp = 0;
+		if(this.extraction.equals("Model")) {
+			Collection<Participant> participants = this.modelInstance.getModelElementsByType(Participant.class);
+			for (Participant p : participants) {
+				if(p.getProcess() == null)
+					ncp++;
+			}
+		} else {
+			if(this.process == null)
+				ncp++;
+		}
+	return ncp;
+	}
+	
+	/**
+	 * Metric: NITEV
+	 * 
+	 * @return number of Intermediate Timer Events
+	 */
+	public int getIntermediateTimerEvents() {
+		Collection<CatchEvent> events;
+		if(this.extraction.equals("Model"))
+			events = this.modelInstance.getModelElementsByType(CatchEvent.class);
+		else {
+			events = this.process.getChildElementsByType(CatchEvent.class);
+			ec.getCatchEventsSubProcess(events, process);
+		}
+		return this.getNumberOfEventDefinitionsOfCatchEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateCatchEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.TimerEventDefinitionImpl");		
 	}
 	
 }

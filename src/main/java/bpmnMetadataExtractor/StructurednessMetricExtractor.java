@@ -51,10 +51,6 @@ public class StructurednessMetricExtractor {
 			WBSubProcessElementsCollector ec = new WBSubProcessElementsCollector(this.conversionType);
 			ec.getGatewaysSubProcess(gateways, process);
 		}
-		if(gateways.size() == 0) {
-			this.S = 1;
-			return;
-		}
 		for(Gateway split : gateways) {
 			this.reduceGraph(split);
 		}
