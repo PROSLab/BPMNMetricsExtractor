@@ -40,7 +40,7 @@ public class CognitiveWeightMetricExtractor {
 		totalWeight += (basicMetricsExtractor.getFlowDividingInclusiveGateways()* 7);
 		totalWeight += (basicMetricsExtractor.getNumberOfTypeElement(SubProcess.class) * 2);
 		totalWeight += (basicMetricsExtractor.getNumberOfTypeElement(MultiInstanceLoopCharacteristics.class) * 6);
-		totalWeight += basicMetricsExtractor.getCancelEvents();
+		totalWeight += basicMetricsExtractor.getInterruptingBoundaryCancelEvents() + basicMetricsExtractor.getEndCancelEvents();
 		return (double) totalWeight;
 	}
 

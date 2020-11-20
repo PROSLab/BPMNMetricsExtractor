@@ -72,11 +72,11 @@ public class BpmnAdvancedMetricsExtractor {
 	public void runMetrics(String conversion) {
 		json.addAdvancedMetric("CLA", getConnectivityLevelBetweenActivities());
 		json.addAdvancedMetric("CLP", getConnectivityLevelBetweenPartecipants());
-		json.addAdvancedMetric("PDOPin", getProportionOfIncomingDataObjectsAndTotalDataObjects(0, 0));
-		json.addAdvancedMetric("PDOPout", getProportionOfOutgoingDataObjectsAndTotalDataObjects(0,0));
+		json.addAdvancedMetric("PDOPin", getProportionOfIncomingDataObjectsAndTotalDataObjects());
+		json.addAdvancedMetric("PDOPout", getProportionOfOutgoingDataObjectsAndTotalDataObjects());
 		json.addAdvancedMetric("VOL", getVolume());
 		json.addAdvancedMetric("RPRA", getRatioRolesActivities());
-		json.addAdvancedMetric("PDOTout", getProportionOfDataObjectsAsOutgoingProducts(0));
+		json.addAdvancedMetric("PDOTout", getProportionOfDataObjectsAsOutgoingProducts());
 		json.addAdvancedMetric("PLT", getProportionOfLanesAndTasks());
 		json.addAdvancedMetric("S(df)", getDataFlowSize());
 		json.addAdvancedMetric("C(df)", getDataFlowComplexity());
@@ -86,17 +86,17 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("JC", getJoinComplexity());
 		json.addAdvancedMetric("JSR", getJoinSplitRatio());
 		json.addAdvancedMetric("PC", getProcessComplexity());
-		json.addAdvancedMetric("PFC", getProcessFlowComplexity(0, 0));
-		json.addAdvancedMetric("CADAC", getArcCognitiveComplexity(0, 0));
+		json.addAdvancedMetric("PFC", getProcessFlowComplexity());
+		json.addAdvancedMetric("CADAC", getArcCognitiveComplexity());
 		json.addAdvancedMetric("NOAC", getNumberOfActivitiesAndControlFlowElements());
 		json.addAdvancedMetric("NOAJS", this.getNumberOfActivitiesJoinsAndSplits());
 		json.addAdvancedMetric("HPC_D", getHalsteadBasedProcessComplexityDifficulty());
 		json.addAdvancedMetric("HPC_N", getHalsteadBasedProcessComplexityLength());
 		json.addAdvancedMetric("HPC_V", getHalsteadBasedProcessComplexityVolume());
-		json.addAdvancedMetric("AAI", getAverageActivityInput(0));
-		json.addAdvancedMetric("AAO", getAverageActivityOutput(0));
-		json.addAdvancedMetric("IC", getInterfaceComplexityOfActivityMetric(0, 0));
-		json.addAdvancedMetric("FIO", getStructuralComplexity(0, 0));	
+		json.addAdvancedMetric("AAI", getAverageActivityInput());
+		json.addAdvancedMetric("AAO", getAverageActivityOutput());
+		json.addAdvancedMetric("IC", getInterfaceComplexityOfActivityMetric());
+		json.addAdvancedMetric("FIO", getStructuralComplexity());	
 		json.addAdvancedMetric("CC", ccExtractor.calculateCrossConnectivity());
 		json.addAdvancedMetric("ICP",getImportedCouplingOfProcess());
 		json.addAdvancedMetric("ECP",getExportedCouplingOfProcess());
@@ -164,26 +164,20 @@ public class BpmnAdvancedMetricsExtractor {
 			this.F = new StructurednessMetricExtractor(basicMetricsExtractor, conversion);
 			json.addAdvancedMetric("F", this.F.getS());
 		}
-		json.addAdvancedMetric("Inter-process Complexity", this.getInterProcessComplexity(0, 0));
+		json.addAdvancedMetric("Inter-process Complexity", this.getInterProcessComplexity());
 		json.addAdvancedMetric("DE", this.getDuplicatedElements());
 		json.addAdvancedMetric("PPT", getProportionOfPoolsAndTasks());
 		json.addAdvancedMetric("PLA", getProportionOfLanesAndActivities());
 	}
 	
 	public void runMetricsProcess(String conversion) {
-		int DataObjectsInput = 0;
-		int DataObjectsOutput = 0;
-		for(ModelElementInstance a: this.basicMetricsExtractor.getCollectionOfElementType(Activity.class)) {
-			DataObjectsInput += ((Activity) a).getDataInputAssociations().size();
-			DataObjectsOutput += ((Activity) a).getDataOutputAssociations().size();
-		}
 		json.addAdvancedMetric("CLA", getConnectivityLevelBetweenActivities(), this.numberProcess);
 		json.addAdvancedMetric("CLP", getConnectivityLevelBetweenPartecipants(),  this.numberProcess);
-		json.addAdvancedMetric("PDOPin", getProportionOfIncomingDataObjectsAndTotalDataObjects(DataObjectsInput, DataObjectsOutput), this.numberProcess);
-		json.addAdvancedMetric("PDOPout", getProportionOfOutgoingDataObjectsAndTotalDataObjects(DataObjectsInput, DataObjectsOutput), this.numberProcess);
+		json.addAdvancedMetric("PDOPin", getProportionOfIncomingDataObjectsAndTotalDataObjects(), this.numberProcess);
+		json.addAdvancedMetric("PDOPout", getProportionOfOutgoingDataObjectsAndTotalDataObjects(), this.numberProcess);
 		json.addAdvancedMetric("VOL", getVolume(), this.numberProcess);
 		json.addAdvancedMetric("RPRA", getRatioRolesActivities(), this.numberProcess);
-		json.addAdvancedMetric("PDOTout", getProportionOfDataObjectsAsOutgoingProducts(DataObjectsOutput), this.numberProcess);
+		json.addAdvancedMetric("PDOTout", getProportionOfDataObjectsAsOutgoingProducts(), this.numberProcess);
 		json.addAdvancedMetric("PLT", getProportionOfLanesAndTasks(), this.numberProcess);
 		json.addAdvancedMetric("S(df)", getDataFlowSize(), this.numberProcess);
 		json.addAdvancedMetric("C(df)", getDataFlowComplexity(), this.numberProcess);
@@ -193,17 +187,17 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("JC", getJoinComplexity(), this.numberProcess);
 		json.addAdvancedMetric("JSR", getJoinSplitRatio(), this.numberProcess);
 		json.addAdvancedMetric("PC", getProcessComplexity(), this.numberProcess);
-		json.addAdvancedMetric("PFC", getProcessFlowComplexity(DataObjectsInput, DataObjectsOutput), this.numberProcess);
-		json.addAdvancedMetric("CADAC", getArcCognitiveComplexity(DataObjectsInput, DataObjectsOutput), this.numberProcess);
+		json.addAdvancedMetric("PFC", getProcessFlowComplexity(), this.numberProcess);
+		json.addAdvancedMetric("CADAC", getArcCognitiveComplexity(), this.numberProcess);
 		json.addAdvancedMetric("NOAC", getNumberOfActivitiesAndControlFlowElements(), this.numberProcess);
 		json.addAdvancedMetric("NOAJS", this.getNumberOfActivitiesJoinsAndSplits(), this.numberProcess);
 		json.addAdvancedMetric("HPC_D", getHalsteadBasedProcessComplexityDifficulty(), this.numberProcess);
 		json.addAdvancedMetric("HPC_N", getHalsteadBasedProcessComplexityLength(), this.numberProcess);
 		json.addAdvancedMetric("HPC_V", getHalsteadBasedProcessComplexityVolume(), this.numberProcess);
-		json.addAdvancedMetric("AAI", getAverageActivityInput(DataObjectsInput), this.numberProcess);
-		json.addAdvancedMetric("AAO", getAverageActivityOutput(DataObjectsOutput), this.numberProcess);
-		json.addAdvancedMetric("IC", getInterfaceComplexityOfActivityMetric(DataObjectsInput, DataObjectsOutput), this.numberProcess);
-		json.addAdvancedMetric("FIO", getStructuralComplexity(DataObjectsInput, DataObjectsOutput), this.numberProcess);
+		json.addAdvancedMetric("AAI", getAverageActivityInput(), this.numberProcess);
+		json.addAdvancedMetric("AAO", getAverageActivityOutput(), this.numberProcess);
+		json.addAdvancedMetric("IC", getInterfaceComplexityOfActivityMetric(), this.numberProcess);
+		json.addAdvancedMetric("FIO", getStructuralComplexity(), this.numberProcess);
 		json.addAdvancedMetric("CC", ccExtractor.calculateCrossConnectivity(), this.numberProcess);
 		json.addAdvancedMetric("ICP",getImportedCouplingOfProcess(), this.numberProcess);
 		json.addAdvancedMetric("ECP",getExportedCouplingOfProcess(), this.numberProcess);
@@ -270,7 +264,7 @@ public class BpmnAdvancedMetricsExtractor {
 			this.F = new StructurednessMetricExtractor(basicMetricsExtractor, conversion);
 			json.addAdvancedMetric("F", this.F.getS(), this.numberProcess);
 		}
-		json.addAdvancedMetric("Inter-process Complexity", this.getInterProcessComplexity(DataObjectsInput, DataObjectsOutput), this.numberProcess);
+		json.addAdvancedMetric("Inter-process Complexity", this.getInterProcessComplexity(), this.numberProcess);
 		json.addAdvancedMetric("DE", this.getDuplicatedElements(), this.numberProcess);
 		json.addAdvancedMetric("PPT", getProportionOfPoolsAndTasks(), this.numberProcess);
 		json.addAdvancedMetric("PLA", getProportionOfLanesAndActivities(), this.numberProcess);
@@ -318,15 +312,8 @@ public class BpmnAdvancedMetricsExtractor {
 	 * Number of Data Objects which are input of activities / Total number of Data Objects in the model (PDOPIn = NDOIn/TNDO)
 	 * @return 
 	 */
-	public float getProportionOfIncomingDataObjectsAndTotalDataObjects(int DataObjectsInput, int DataObjectsOutput) {
+	public float getProportionOfIncomingDataObjectsAndTotalDataObjects() {
 		try {
-			if(this.basicMetricsExtractor.getExtractionType().equals("Process")) {
-				float toReturn = (float) DataObjectsInput / (DataObjectsInput + DataObjectsOutput);
-				if (Float.isFinite(toReturn)) {
-					return toReturn;
-				}
-				return 0.0f;
-			}
 			float toReturn = (float) this.basicMetricsExtractor.getDataInputAssociations() / (this.basicMetricsExtractor.getDataInputAssociations() + this.basicMetricsExtractor.getDataOutputAssociations());
 			if (Float.isFinite(toReturn)) {
 				return toReturn;
@@ -343,15 +330,8 @@ public class BpmnAdvancedMetricsExtractor {
 	 * Number of Data Objects which are output of activities / Total number of Data Objects in the model (PDOPOut = NDOOut/TNDO)
 	 * @return 
 	 */
-	public float getProportionOfOutgoingDataObjectsAndTotalDataObjects(int DataObjectsInput, int DataObjectsOutput) {
+	public float getProportionOfOutgoingDataObjectsAndTotalDataObjects() {
 		try {
-			if(this.basicMetricsExtractor.getExtractionType().equals("Process")) {
-				float toReturn = (float) DataObjectsOutput / (DataObjectsInput + DataObjectsOutput);
-				if (Float.isFinite(toReturn)) {
-					return toReturn;
-				}
-				return 0.0f;
-			}
 			float toReturn = (float) this.basicMetricsExtractor.getDataOutputAssociations() / (this.basicMetricsExtractor.getDataInputAssociations() + this.basicMetricsExtractor.getDataOutputAssociations());
 			if (Float.isFinite(toReturn)) {
 				return toReturn;
@@ -368,15 +348,8 @@ public class BpmnAdvancedMetricsExtractor {
 	 * Number of data objects which are outputs of activities / Total number of Tasks (PDOTOut = NDOOut/TNT)
 	 * @return
 	 */
-	public float getProportionOfDataObjectsAsOutgoingProducts(int DataObjectsOutput) {
+	public float getProportionOfDataObjectsAsOutgoingProducts() {
 		try {
-			if(this.basicMetricsExtractor.getExtractionType().equals("Process")) {
-				float toReturn = (float) DataObjectsOutput / this.basicMetricsExtractor.getTasks();
-				if (Float.isFinite(toReturn)) {
-					return toReturn;
-				}
-				return 0.0f;
-			}
 			float toReturn = (float) this.basicMetricsExtractor.getDataOutputAssociations() / this.basicMetricsExtractor.getTasks();
 			if (Float.isFinite(toReturn)) {
 				return toReturn;
@@ -645,15 +618,8 @@ public class BpmnAdvancedMetricsExtractor {
 	 *  Average activity inputs, Total Number of Activity input / Total Number of Activity
 	 * @return 
 	 */
-	public double getAverageActivityInput(int input) {
+	public double getAverageActivityInput() {
 		try {
-			if(this.basicMetricsExtractor.getExtractionType().equals("Process")) {
-				double result = (double) input / this.basicMetricsExtractor.getActivities();
-				if (!Double.isFinite(result)) 
-					return 0;
-				else
-					return (double) input / this.basicMetricsExtractor.getActivities();
-			}
 			double result = (double)this.basicMetricsExtractor.getDataInputAssociations()/this.basicMetricsExtractor.getActivities();
 			if (!Double.isFinite(result)) 
 				return 0;
@@ -670,16 +636,8 @@ public class BpmnAdvancedMetricsExtractor {
 	 *  Average activity inputs, Total Number of Activity output / Total Number of Activity
 	 * @return 
 	 */
-	public double getAverageActivityOutput(int output) {
+	public double getAverageActivityOutput() {
 		try {
-			if(this.basicMetricsExtractor.getExtractionType().equals("Process")) {
-				double result = (double) output / this.basicMetricsExtractor.getActivities();
-				if (!Double.isFinite(result)) 
-					return 0;
-				else 
-					return (double) output / this.basicMetricsExtractor.getActivities();
-
-			}
 			double result = (double) this.basicMetricsExtractor.getDataOutputAssociations() / this.basicMetricsExtractor.getActivities();
 			if (!Double.isFinite(result)) 
 				return 0;
@@ -698,7 +656,6 @@ public class BpmnAdvancedMetricsExtractor {
 	 */
 	public double getProcessComplexity() {
 		try {
-		
 			return (double)(this.getControlFlowComplexity() + this.partExtractor.getDepth());
 		} 
 		catch (ArithmeticException e) {
@@ -712,9 +669,9 @@ public class BpmnAdvancedMetricsExtractor {
 	 * Give the Cognitive Activity Depth Arc Control Flow
 	 * @return 
 	 */
-	public double getArcCognitiveComplexity(int DataObjectsInput, int DataObjectsOutput) {
+	public double getArcCognitiveComplexity() {
 		try {
-			return (double)(this.basicMetricsExtractor.getActivities() + (this.ndExtractor.getMaxNestingDepth()) * 14) + (basicMetricsExtractor.getCollectionOfElementType(InclusiveGateway.class).size()*7) + (basicMetricsExtractor.getCollectionOfElementType(ExclusiveGateway.class).size()*2) + (basicMetricsExtractor.getCollectionOfElementType(ParallelGateway.class).size()*4) + (this.getStructuralComplexity(DataObjectsInput, DataObjectsOutput)*4) + (this.basicMetricsExtractor.getSequenceFlows());
+			return (double)(this.basicMetricsExtractor.getActivities() + (this.ndExtractor.getMaxNestingDepth()) * 14) + (basicMetricsExtractor.getCollectionOfElementType(InclusiveGateway.class).size()*7) + (basicMetricsExtractor.getCollectionOfElementType(ExclusiveGateway.class).size()*2) + (basicMetricsExtractor.getCollectionOfElementType(ParallelGateway.class).size()*4) + (this.getStructuralComplexity()*4) + (this.basicMetricsExtractor.getSequenceFlows());
 		} 
 		catch (ArithmeticException e) {
 			return 0;	
@@ -727,10 +684,9 @@ public class BpmnAdvancedMetricsExtractor {
 	 *  Process Complexity is obtained by multiply the CFC to the another version of the FIO metrics (fan-in + fan-out)
 	 * @return 
 	 */
-	public double getProcessFlowComplexity(int DataObjectsInput, int DataObjectsOutput) {
+	public double getProcessFlowComplexity() {
 		try {
-		
-			return (double) (this.getControlFlowComplexity()*(Math.pow(this.getInterProcessComplexity(DataObjectsInput, DataObjectsOutput),2)));
+			return (double) (this.getControlFlowComplexity()*(Math.pow(this.getInterProcessComplexity(),2)));
 		} 
 		catch (ArithmeticException e) {
 			return 0;	
@@ -745,8 +701,8 @@ public class BpmnAdvancedMetricsExtractor {
 	 *  the number of inputs and outputs.
 	 * @return
 	 */
-	public double getInterfaceComplexityOfActivityMetric(int DataObjectsInput, int DataObjectsOutput) {
-		return this.basicMetricsExtractor.getActivities() * (this.getStructuralComplexity(DataObjectsInput, DataObjectsOutput));
+	public double getInterfaceComplexityOfActivityMetric() {
+		return this.basicMetricsExtractor.getActivities() * (this.getStructuralComplexity());
 	}
 	
 	/**
@@ -755,9 +711,7 @@ public class BpmnAdvancedMetricsExtractor {
 	 *  the number of inputs and outputs.
 	 * @return
 	 */
-	public double getStructuralComplexity(int DataObjectsInput, int DataObjectsOutput) {
-		if(this.basicMetricsExtractor.getExtractionType().equals("Process"))
-			return Math.pow((DataObjectsInput * DataObjectsOutput), 2);
+	public double getStructuralComplexity() {
 		return Math.pow((this.basicMetricsExtractor.getDataInputAssociations() * this.basicMetricsExtractor.getDataOutputAssociations()), 2);
 	}
 	
@@ -1243,7 +1197,8 @@ public class BpmnAdvancedMetricsExtractor {
 			toReturn +=1;
 		if (basicMetricsExtractor.getLoopCharacteristics() > 0)
 			toReturn +=1;
-		if (basicMetricsExtractor.getCompensateEvents() > 0)
+		if (basicMetricsExtractor.getStartCompensationEvents() + basicMetricsExtractor.getInterruptingBoundaryCompensationEvents() +
+				basicMetricsExtractor.getIntermediateCompensationThrowEvents() + basicMetricsExtractor.getEndCompensationEvents() > 0)
 			toReturn +=1;
 		if (basicMetricsExtractor.getSubprocesses() > 0)
 			toReturn +=1;
@@ -1277,7 +1232,8 @@ public class BpmnAdvancedMetricsExtractor {
 			basicMetricsExtractor.getCallActivities()  + 
 			basicMetricsExtractor.getMultiInstanceLoopCharacteristics()  + 
 			basicMetricsExtractor.getLoopCharacteristics()  + 
-			basicMetricsExtractor.getCompensateEvents()  + 
+			basicMetricsExtractor.getStartCompensationEvents() + basicMetricsExtractor.getInterruptingBoundaryCompensationEvents() +
+			basicMetricsExtractor.getIntermediateCompensationThrowEvents() + basicMetricsExtractor.getEndCompensationEvents()  + 
 			basicMetricsExtractor.getSubprocesses()  + 
 			basicMetricsExtractor.getParallelGateways()  + 
 			basicMetricsExtractor.getComplexDecisions()  + 
@@ -1332,10 +1288,7 @@ public class BpmnAdvancedMetricsExtractor {
 	 * Total number of DataInputAssociations + Total number of DataOutputAssociations (Inter-process Complexity = Fan-In + Fan-Out)
 	 * @return
 	 */
-	public int getInterProcessComplexity(int DataObjectsInput, int DataObjectsOutput) {
-		if(this.basicMetricsExtractor.getExtractionType().equals("Process")) {
-			return DataObjectsInput + DataObjectsOutput;
-		}
+	public int getInterProcessComplexity() {
 		return this.basicMetricsExtractor.getDataInputAssociations() + this.basicMetricsExtractor.getDataOutputAssociations();
 	}
 	

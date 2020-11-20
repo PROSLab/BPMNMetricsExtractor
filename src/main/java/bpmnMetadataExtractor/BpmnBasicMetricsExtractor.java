@@ -236,7 +236,7 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NIMTEV", this.getIntermediateMessageThrowEvents());
 		this.json.addBasicMetric("NISIGTEV", this.getIntermediateSignalThrowEvents());
 		this.json.addBasicMetric("NIMUTEV",this.getIntermediateMultipleThrowEvents());
-		this.json.addBasicMetric("NICOMCEV", this.getIntermediateCompensationCatchEvents());
+		//this.json.addBasicMetric("NICOMCEV", this.getIntermediateCompensationCatchEvents());
 		this.json.addBasicMetric("NICONCEV", this.getIntermediateConditionalCatchEvents());
 		this.json.addBasicMetric("NILCEV", this.getIntermediateLinkCatchEvents());
 		this.json.addBasicMetric("NIMCEV", this.getIntermediateMessageCatchEvents());
@@ -445,7 +445,7 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NIMTEV", this.getIntermediateMessageThrowEvents(), this.numberProcess);
 		this.json.addBasicMetric("NISIGTEV", this.getIntermediateSignalThrowEvents(), this.numberProcess);
 		this.json.addBasicMetric("NIMUTEV",this.getIntermediateMultipleThrowEvents(), this.numberProcess);
-		this.json.addBasicMetric("NICOMCEV", this.getIntermediateCompensationCatchEvents(), this.numberProcess);
+		//this.json.addBasicMetric("NICOMCEV", this.getIntermediateCompensationCatchEvents(), this.numberProcess);
 		this.json.addBasicMetric("NICONCEV", this.getIntermediateConditionalCatchEvents(), this.numberProcess);
 		this.json.addBasicMetric("NILCEV", this.getIntermediateLinkCatchEvents(), this.numberProcess);
 		this.json.addBasicMetric("NIMCEV", this.getIntermediateMessageCatchEvents(), this.numberProcess);
@@ -1246,6 +1246,13 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Data Input Associations
 	 */
 	public int getDataInputAssociations() {
+		if(this.extraction.equals("Process")) {
+			int DataObjectsInput = 0;
+			for(ModelElementInstance a: this.getCollectionOfElementType(Activity.class)) 
+				DataObjectsInput += ((Activity) a).getDataInputAssociations().size();
+			return DataObjectsInput;
+			
+		}
 		return getNumberOfTypeElement(DataInputAssociation.class);
 	}
 	
@@ -1273,6 +1280,12 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Data Output Associations
 	 */
 	public int getDataOutputAssociations() {
+		if(this.extraction.equals("Process")) {
+			int DataObjectsOutput = 0;
+			for(ModelElementInstance a: this.getCollectionOfElementType(Activity.class)) 
+				DataObjectsOutput += ((Activity) a).getDataOutputAssociations().size();
+			return DataObjectsOutput;	
+		}
 		return getNumberOfTypeElement(DataOutputAssociation.class);
 	}
 	
@@ -1733,12 +1746,12 @@ public class BpmnBasicMetricsExtractor {
 
 	}
 	
-	/**
+	/**TODO delete metric
 	 * Metric: NICOMCEV
 	 * 
 	 * @return number degli Intermediate Compensation Catch Events
 	 */	
-	public int getIntermediateCompensationCatchEvents() {
+	/*public int getIntermediateCompensationCatchEvents() {
 		Collection<CatchEvent> events;
 		if(this.extraction.equals("Model"))
 			events = this.modelInstance.getModelElementsByType(CatchEvent.class);
@@ -1747,7 +1760,7 @@ public class BpmnBasicMetricsExtractor {
 			ec.getCatchEventsSubProcess(events, process);
 		}
 		return this.getNumberOfEventDefinitionsOfCatchEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateCatchEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.CompensateEventDefinitionImpl");
-	}
+	}*/
 	
 	/**
 	 * Metric: NIMUCEV
@@ -1951,6 +1964,14 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Task with Loop Characteristics
 	 */
 	public int getLoopCharacteristics() {
+		if(this.extraction.equals("Process")) {
+			int standard = 0;
+			for(ModelElementInstance a: this.getCollectionOfElementType(Activity.class)) {
+				if(((Activity)a).getLoopCharacteristics() instanceof LoopCharacteristics)
+					standard++;
+				return standard;
+			}
+		}
 		return getNumberOfTypeElement(LoopCharacteristics.class);
 	}
 	
@@ -2005,6 +2026,14 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of tasks whit Multi Instance Loop Characteristics
 	 */
 	public int getMultiInstanceLoopCharacteristics() {
+		if(this.extraction.equals("Process")) {
+			int multi = 0;
+			for(ModelElementInstance a: this.getCollectionOfElementType(Activity.class)) {
+				if(((Activity)a).getLoopCharacteristics() instanceof MultiInstanceLoopCharacteristics)
+					multi++;
+				return multi;
+			}
+		}
 		return getNumberOfTypeElement(MultiInstanceLoopCharacteristics.class);
 	}
 	
