@@ -1,6 +1,7 @@
 package bpmnMetadataExtractor;
 
 import java.util.Collection;
+import java.util.Vector;
 
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.camunda.bpm.model.bpmn.instance.*;
@@ -495,6 +496,15 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of data objects that are input of activities
 	 */
 	public int getDataObjectsInput() {
+		if(this.extraction.equals("Process")) {
+			Vector<String> dataInput = new Vector<String>();
+			for(ModelElementInstance a: this.getCollectionOfElementType(Activity.class)) 
+				for(DataInputAssociation da : ((Activity) a).getDataInputAssociations())
+					for(ItemAwareElement iae : da.getSources() )
+						if(!dataInput.contains(iae.getId()))
+							dataInput.add(iae.getId());
+			return dataInput.size();
+		}
 		return getNumberOfTypeElement(DataInput.class);
 	}
 
@@ -504,6 +514,14 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of data objects that are output of activities
 	 */
 	public int getDataObjectsOutput() {
+		if(this.extraction.equals("Process")) {
+			Vector<String> dataOutput = new Vector<String>();
+			for(ModelElementInstance a: this.getCollectionOfElementType(Activity.class)) 
+				for(DataOutputAssociation da : ((Activity) a).getDataOutputAssociations())
+					if(!dataOutput.contains(da.getTarget().getId()))
+						dataOutput.add(da.getTarget().getId());
+			return dataOutput.size();
+		}
 		return getNumberOfTypeElement(DataOutput.class);
 	}
 

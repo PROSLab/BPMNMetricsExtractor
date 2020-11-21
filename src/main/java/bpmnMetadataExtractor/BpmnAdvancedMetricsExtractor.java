@@ -148,7 +148,7 @@ public class BpmnAdvancedMetricsExtractor {
 			this.dopExtractor = new DOPMetricsExtractor("WhiteBox");
 			if(!cyclical) {
 				ProcessBreadth pb = new ProcessBreadth(gm.getReachabilityMatrix(), gal.getAdj(), senc.getInitialNodes(), senc.getFinalNodes());
-				this.json.addAdvancedMetric("Process Breadth", pb.getProcessBreadth());
+				this.json.addAdvancedMetric("PB", pb.getProcessBreadth());
 				this.json.addAdvancedMetric("NDOP", pb.getNDOP());
 				//sizeExtractor moved here, it uses adjacency list
 				SizeMetricsExtractor sizeExtractor = new SizeMetricsExtractor(gm.getVertix(), gal.getAdj());
@@ -249,7 +249,7 @@ public class BpmnAdvancedMetricsExtractor {
 			this.dopExtractor = new DOPMetricsExtractor(conversion);
 			if(!cyclical) {
 				ProcessBreadth pb = new ProcessBreadth(gm.getReachabilityMatrix(), gal.getAdj(), senc.getInitialNodes(), senc.getFinalNodes());
-				this.json.addAdvancedMetric("Process Breadth", pb.getProcessBreadth(), this.numberProcess);
+				this.json.addAdvancedMetric("PB", pb.getProcessBreadth(), this.numberProcess);
 				this.json.addAdvancedMetric("NDOP", pb.getNDOP(), this.numberProcess);
 				//sizeExtractor moved here, it uses adjacency list
 				SizeMetricsExtractor sizeExtractor = new SizeMetricsExtractor(gm.getVertix(), gal.getAdj());
@@ -350,7 +350,7 @@ public class BpmnAdvancedMetricsExtractor {
 	 */
 	public float getProportionOfDataObjectsAsOutgoingProducts() {
 		try {
-			float toReturn = (float)basicMetricsExtractor.getDataObjectsOutput() / (basicMetricsExtractor.getDataObjectsInput() + basicMetricsExtractor.getDataObjectsOutput());
+			float toReturn = (float)basicMetricsExtractor.getDataObjectsOutput() / (basicMetricsExtractor.getTasks());
 			if (Float.isFinite(toReturn)) {
 				return toReturn;
 			}

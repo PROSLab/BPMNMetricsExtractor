@@ -263,7 +263,7 @@ CI %Complexity index	{absent}
 NG	%Number of Groups {absent}
 NSL	%Number of Swimlanes {absent}
 S	%Number of BPMN elements	{absent}
-Process Breadth %Number of distinct paths	{absent}
+PB %Number of distinct paths	{absent}
 MCC %McCabe’s Cyclomatic Number	{absent}
 Inter-process Complexity %Inter-process Complexity	{absent}
 DE %Duplicated Elements	{absent}
