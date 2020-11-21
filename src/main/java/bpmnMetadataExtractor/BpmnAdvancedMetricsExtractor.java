@@ -314,7 +314,7 @@ public class BpmnAdvancedMetricsExtractor {
 	 */
 	public float getProportionOfIncomingDataObjectsAndTotalDataObjects() {
 		try {
-			float toReturn = (float) this.basicMetricsExtractor.getDataInputAssociations() / (this.basicMetricsExtractor.getDataInputAssociations() + this.basicMetricsExtractor.getDataOutputAssociations());
+			float toReturn = (float)basicMetricsExtractor.getDataObjectsInput() / (basicMetricsExtractor.getDataObjectsInput() + basicMetricsExtractor.getDataObjectsOutput());
 			if (Float.isFinite(toReturn)) {
 				return toReturn;
 			}
@@ -332,7 +332,7 @@ public class BpmnAdvancedMetricsExtractor {
 	 */
 	public float getProportionOfOutgoingDataObjectsAndTotalDataObjects() {
 		try {
-			float toReturn = (float) this.basicMetricsExtractor.getDataOutputAssociations() / (this.basicMetricsExtractor.getDataInputAssociations() + this.basicMetricsExtractor.getDataOutputAssociations());
+			float toReturn = (float)basicMetricsExtractor.getDataObjectsOutput() / (basicMetricsExtractor.getDataObjectsInput() + basicMetricsExtractor.getDataObjectsOutput());
 			if (Float.isFinite(toReturn)) {
 				return toReturn;
 			}
@@ -350,7 +350,7 @@ public class BpmnAdvancedMetricsExtractor {
 	 */
 	public float getProportionOfDataObjectsAsOutgoingProducts() {
 		try {
-			float toReturn = (float) this.basicMetricsExtractor.getDataOutputAssociations() / this.basicMetricsExtractor.getTasks();
+			float toReturn = (float)basicMetricsExtractor.getDataObjectsOutput() / (basicMetricsExtractor.getDataObjectsInput() + basicMetricsExtractor.getDataObjectsOutput());
 			if (Float.isFinite(toReturn)) {
 				return toReturn;
 			}
