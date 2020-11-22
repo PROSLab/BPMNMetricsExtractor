@@ -100,7 +100,6 @@ NInS	%Number of Input Sets {Camunda API Instance Package}
 NINTNO	%Number of Interaction Nodes {Camunda API Instance Package}
 NINTE	%Number of Interfaces {Camunda API Instance Package}
 NICEV	%Number of Intermediate Catch Events {Camunda API Instance Package}
-NICOMCEV	%Number of Intermediate Compensation Catch Events {Camunda API Instance Package}
 NICONCEV	%Number of Intermediate Conditional Catch Events {Camunda API Instance Package}
 NILCEV	%Number of Intermediate Link Catch Events {Camunda API Instance Package}
 NIMCEV	%Number of Intermediate Message Catch Events {Camunda API Instance Package}
@@ -265,7 +264,6 @@ NSL	%Number of Swimlanes {absent}
 S	%Number of BPMN elements	{absent}
 PB %Number of distinct paths	{absent}
 MCC %McCabe’s Cyclomatic Number	{absent}
-Inter-process Complexity %Inter-process Complexity	{absent}
 DE %Duplicated Elements	{absent}
 Sep %Separability	{absent}
 NDOP %Number of different objects in all possible paths	{absent}

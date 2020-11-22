@@ -1255,6 +1255,8 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Data Associations
 	 */
 	public int getDataAssociations() {
+		if(this.extraction.equals("Process"))
+			return this.getDataInputAssociations() + this.getDataOutputAssociations();
 		return getNumberOfTypeElement(DataAssociation.class);
 	}
 	
@@ -1268,6 +1270,8 @@ public class BpmnBasicMetricsExtractor {
 			int DataObjectsInput = 0;
 			for(ModelElementInstance a: this.getCollectionOfElementType(Activity.class)) 
 				DataObjectsInput += ((Activity) a).getDataInputAssociations().size();
+			for(ModelElementInstance e: this.getCollectionOfElementType(ThrowEvent.class)) 
+				DataObjectsInput += ((ThrowEvent) e).getDataInputAssociations().size();
 			return DataObjectsInput;
 			
 		}
@@ -1302,6 +1306,8 @@ public class BpmnBasicMetricsExtractor {
 			int DataObjectsOutput = 0;
 			for(ModelElementInstance a: this.getCollectionOfElementType(Activity.class)) 
 				DataObjectsOutput += ((Activity) a).getDataOutputAssociations().size();
+			for(ModelElementInstance e: this.getCollectionOfElementType(CatchEvent.class)) 
+				DataObjectsOutput += ((CatchEvent) e).getDataOutputAssociations().size();
 			return DataObjectsOutput;	
 		}
 		return getNumberOfTypeElement(DataOutputAssociation.class);
@@ -1763,22 +1769,6 @@ public class BpmnBasicMetricsExtractor {
 		return this.getNumberOfEventDefinitionsOfCatchEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateCatchEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.ConditionalEventDefinitionImpl");
 
 	}
-	
-	/**TODO delete metric
-	 * Metric: NICOMCEV
-	 * 
-	 * @return number degli Intermediate Compensation Catch Events
-	 */	
-	/*public int getIntermediateCompensationCatchEvents() {
-		Collection<CatchEvent> events;
-		if(this.extraction.equals("Model"))
-			events = this.modelInstance.getModelElementsByType(CatchEvent.class);
-		else {
-			events = this.process.getChildElementsByType(CatchEvent.class);
-			ec.getCatchEventsSubProcess(events, process);
-		}
-		return this.getNumberOfEventDefinitionsOfCatchEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.IntermediateCatchEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.CompensateEventDefinitionImpl");
-	}*/
 	
 	/**
 	 * Metric: NIMUCEV

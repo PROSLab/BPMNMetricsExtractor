@@ -164,7 +164,6 @@ public class BpmnAdvancedMetricsExtractor {
 			this.F = new StructurednessMetricExtractor(basicMetricsExtractor, conversion);
 			json.addAdvancedMetric("F", this.F.getS());
 		}
-		json.addAdvancedMetric("Inter-process Complexity", this.getInterProcessComplexity());
 		json.addAdvancedMetric("DE", this.getDuplicatedElements());
 		json.addAdvancedMetric("PPT", getProportionOfPoolsAndTasks());
 		json.addAdvancedMetric("PLA", getProportionOfLanesAndActivities());
@@ -264,7 +263,6 @@ public class BpmnAdvancedMetricsExtractor {
 			this.F = new StructurednessMetricExtractor(basicMetricsExtractor, conversion);
 			json.addAdvancedMetric("F", this.F.getS(), this.numberProcess);
 		}
-		json.addAdvancedMetric("Inter-process Complexity", this.getInterProcessComplexity(), this.numberProcess);
 		json.addAdvancedMetric("DE", this.getDuplicatedElements(), this.numberProcess);
 		json.addAdvancedMetric("PPT", getProportionOfPoolsAndTasks(), this.numberProcess);
 		json.addAdvancedMetric("PLA", getProportionOfLanesAndActivities(), this.numberProcess);
@@ -686,7 +684,7 @@ public class BpmnAdvancedMetricsExtractor {
 	 */
 	public double getProcessFlowComplexity() {
 		try {
-			return (double) (this.getControlFlowComplexity()*(Math.pow(this.getInterProcessComplexity(),2)));
+			return (double) (this.getControlFlowComplexity()*(Math.pow(this.basicMetricsExtractor.getDataAssociations(),2)));
 		} 
 		catch (ArithmeticException e) {
 			return 0;	
@@ -1281,15 +1279,6 @@ public class BpmnAdvancedMetricsExtractor {
 	 */
 	public int getMCC(int edges, int nodes) {
 		return edges - nodes + 2;
-	}
-	
-	/**
-	 * Metric: Inter-process Complexity 
-	 * Total number of DataInputAssociations + Total number of DataOutputAssociations (Inter-process Complexity = Fan-In + Fan-Out)
-	 * @return
-	 */
-	public int getInterProcessComplexity() {
-		return this.basicMetricsExtractor.getDataInputAssociations() + this.basicMetricsExtractor.getDataOutputAssociations();
 	}
 	
 	/**
