@@ -106,7 +106,6 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("WCP", getWeightedProcessCoupling());
 		json.addAdvancedMetric("CNC^2", this.getCoefficientOfNetworkComplexity());
 		json.addAdvancedMetric("CNC", this.getCoefficientComplexity());
-		json.addAdvancedMetric("NCA", this.getActivityCoupling());
 		json.addAdvancedMetric("MeanND", ndExtractor.getMeanNestingDepth());
 		json.addAdvancedMetric("Sequentiality", getSequentiality());
 		json.addAdvancedMetric("Depth", partExtractor.getDepth());
@@ -206,7 +205,6 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("WCP", getWeightedProcessCoupling(), this.numberProcess);
 		json.addAdvancedMetric("CNC^2", this.getCoefficientOfNetworkComplexity(), this.numberProcess);
 		json.addAdvancedMetric("CNC", this.getCoefficientComplexity(), this.numberProcess);
-		json.addAdvancedMetric("NCA", this.getActivityCoupling(), this.numberProcess);
 		json.addAdvancedMetric("MeanND", ndExtractor.getMeanNestingDepth(), this.numberProcess);
 		json.addAdvancedMetric("Sequentiality", getSequentiality(), this.numberProcess);
 		json.addAdvancedMetric("Depth", partExtractor.getDepth(), this.numberProcess);
@@ -998,24 +996,6 @@ public class BpmnAdvancedMetricsExtractor {
 				return 0;
 			else
 				return  (double) this.basicMetricsExtractor.getFlowNodes()/diam;
-		} 
-		catch (ArithmeticException e) {
-			return 0;	
-		}
-	}
-	
-	/**
-	 * Metric: NCA
-	 * Activity Coupling (total number of sequence flows NOAJS/NSEQF)
-	 * @return NOAJS/NSEQF
-	 */
-	public double getActivityCoupling() {
-		try {
-			double result = (double)this.getNumberOfActivitiesJoinsAndSplits()/this.basicMetricsExtractor.getSequenceFlows();
-			if (!Double.isFinite(result)) 
-				return 0;
-			else
-				return (double)this.getNumberOfActivitiesJoinsAndSplits()/this.basicMetricsExtractor.getSequenceFlows();
 		} 
 		catch (ArithmeticException e) {
 			return 0;	

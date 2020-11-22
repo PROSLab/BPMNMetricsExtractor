@@ -221,7 +221,6 @@ IC	%Interface complexity of an activity metric	{10.1007/11837862\_13}
 FIO	%Structural Complexity	{10.1007/1-4020-5634-6_2}
 CNC %Connectivity Coefficient {10.1007/11837862\_13}
 CNC^2 %Coefficient of Network Complexity	{10.1007/11837862\_13}
-NCA %Activity Coupling {10.1007/978-3-540-45189-1_8}
 CC	%Cross-connectivity metric	{10.1007/978-3-540-69534-9\_36}
 ICP	%Imported Coupling of a Process metric	{10.1016/j.procs.2016.09.274}
 ECP	%Exported Coupling of a Process metric	{10.1016/j.procs.2016.09.274}
