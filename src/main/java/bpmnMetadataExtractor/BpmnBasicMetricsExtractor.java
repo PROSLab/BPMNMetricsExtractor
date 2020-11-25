@@ -1977,8 +1977,8 @@ public class BpmnBasicMetricsExtractor {
 			for(ModelElementInstance a: this.getCollectionOfElementType(Activity.class)) {
 				if(((Activity)a).getLoopCharacteristics() instanceof LoopCharacteristics)
 					standard++;
-				return standard;
 			}
+			return standard;
 		}
 		return getNumberOfTypeElement(LoopCharacteristics.class);
 	}
@@ -2039,8 +2039,8 @@ public class BpmnBasicMetricsExtractor {
 			for(ModelElementInstance a: this.getCollectionOfElementType(Activity.class)) {
 				if(((Activity)a).getLoopCharacteristics() instanceof MultiInstanceLoopCharacteristics)
 					multi++;
-				return multi;
 			}
+			return multi;
 		}
 		return getNumberOfTypeElement(MultiInstanceLoopCharacteristics.class);
 	}

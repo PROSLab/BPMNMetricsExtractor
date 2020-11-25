@@ -6,7 +6,6 @@ import java.util.List;
 import org.camunda.bpm.model.bpmn.instance.Event;
 import org.camunda.bpm.model.bpmn.instance.ExclusiveGateway;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;
-import org.camunda.bpm.model.bpmn.instance.MultiInstanceLoopCharacteristics;
 import org.camunda.bpm.model.bpmn.instance.SequenceFlow;
 import org.camunda.bpm.model.bpmn.instance.StartEvent;
 import org.camunda.bpm.model.bpmn.instance.SubProcess;
@@ -39,7 +38,7 @@ public class CognitiveWeightMetricExtractor {
 		totalWeight += (basicMetricsExtractor.getFlowDividingParallelGateways() * 4);
 		totalWeight += (basicMetricsExtractor.getFlowDividingInclusiveGateways()* 7);
 		totalWeight += (basicMetricsExtractor.getNumberOfTypeElement(SubProcess.class) * 2);
-		totalWeight += (basicMetricsExtractor.getNumberOfTypeElement(MultiInstanceLoopCharacteristics.class) * 6);
+		totalWeight += (basicMetricsExtractor.getMultiInstanceLoopCharacteristics() * 6);
 		totalWeight += basicMetricsExtractor.getInterruptingBoundaryCancelEvents() + basicMetricsExtractor.getEndCancelEvents();
 		return (double) totalWeight;
 	}
