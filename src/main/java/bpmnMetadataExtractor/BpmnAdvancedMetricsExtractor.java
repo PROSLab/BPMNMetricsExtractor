@@ -78,8 +78,6 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("RPRA", getRatioRolesActivities());
 		json.addAdvancedMetric("PDOTout", getProportionOfDataObjectsAsOutgoingProducts());
 		json.addAdvancedMetric("PLT", getProportionOfLanesAndTasks());
-		json.addAdvancedMetric("S(df)", getDataFlowSize());
-		json.addAdvancedMetric("C(df)", getDataFlowComplexity());
 		json.addAdvancedMetric("CFC", getControlFlowComplexity());
 		json.addAdvancedMetric("CFC(rel)", getRelativeControlFlowComplexity());
 		json.addAdvancedMetric("PCFC", getParallelControlFlowComplexity());
@@ -177,8 +175,6 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("RPRA", getRatioRolesActivities(), this.numberProcess);
 		json.addAdvancedMetric("PDOTout", getProportionOfDataObjectsAsOutgoingProducts(), this.numberProcess);
 		json.addAdvancedMetric("PLT", getProportionOfLanesAndTasks(), this.numberProcess);
-		json.addAdvancedMetric("S(df)", getDataFlowSize(), this.numberProcess);
-		json.addAdvancedMetric("C(df)", getDataFlowComplexity(), this.numberProcess);
 		json.addAdvancedMetric("CFC", getControlFlowComplexity(), this.numberProcess);
 		json.addAdvancedMetric("CFC(rel)", getRelativeControlFlowComplexity(), this.numberProcess);
 		json.addAdvancedMetric("PCFC", getParallelControlFlowComplexity(), this.numberProcess);
@@ -501,38 +497,6 @@ public class BpmnAdvancedMetricsExtractor {
 		return toReturn;
 	}
 	
-	/**
-	 * Metric: S(df)
-	 * The sum of input data received by an activity plus the number of output data produced by the same activity minus the outgoing arcs
-	 * towards the end event
-	 * @return
-	 */
-	public int getDataFlowSize() {
-		Collection<ModelElementInstance> activities = basicMetricsExtractor.getCollectionOfElementType(Activity.class);
-		int toReturn = 0;
-		for (ModelElementInstance activity : activities) {
-			toReturn+=((FlowNode) activity).getIncoming().size()+((FlowNode) activity).getOutgoing().size();
-		}
-		toReturn = toReturn - basicMetricsExtractor.getEndEvents();
-		return toReturn;
-	}
-	
-	/**
-	 * Metric: C(df)
-	 * The sum of input data received by an activity plus the number of output data produced by the same activity minus the outgoing arcs
-	 * towards the end event plus the number of gateways
-	 * @return
-	 */
-	public int getDataFlowComplexity() {
-		Collection<ModelElementInstance> activities = basicMetricsExtractor.getCollectionOfElementType(Activity.class);
-		int toReturn = 0;
-		for (ModelElementInstance activity : activities) {
-			toReturn+=((FlowNode) activity).getIncoming().size()+((FlowNode) activity).getOutgoing().size();
-		}
-		toReturn = toReturn - basicMetricsExtractor.getEndEvents() + this.basicMetricsExtractor.getGateways();
-		return toReturn;
-	}
-
 	/**
 	 * Metric: NOAC
 	 * Number of activities and control-flow elements in a process. 

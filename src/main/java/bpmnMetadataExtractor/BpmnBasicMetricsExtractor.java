@@ -174,7 +174,6 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NSIEV", this.getSignalEvent());
 		this.json.addBasicMetric("NSTEV", this.getStartEvents());
 		this.json.addBasicMetric("NSCONV", this.getSubConversations());
-		this.json.addBasicMetric("NTEEV", this.getTerminateEvents());
 		this.json.addBasicMetric("NTEX", this.getTexts());
 		this.json.addBasicMetric("NTEXA", this.getTextAnnotations());
 		this.json.addBasicMetric("NTHEV", this.getThrowEvents());
@@ -220,7 +219,7 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NENDESCEV", this.getEndEscalationEvents());
 		this.json.addBasicMetric("NENDMEV", this.getEndMessageEvents());
 		this.json.addBasicMetric("NENDSIGEV", this.getEndSignalEvents());
-		this.json.addBasicMetric("NENDTEREV", this.getEndTerminateEvents());
+		this.json.addBasicMetric("NTEEV", this.getEndTerminateEvents());
 		this.json.addBasicMetric("NENDMUEV", this.getEndMultipleEvents());
 		this.json.addBasicMetric("NIBEV", this.getInterruptingBoundaryEvents());
 		this.json.addBasicMetric("NIBCANCEV", this.getInterruptingBoundaryCancelEvents());
@@ -237,7 +236,6 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NIMTEV", this.getIntermediateMessageThrowEvents());
 		this.json.addBasicMetric("NISIGTEV", this.getIntermediateSignalThrowEvents());
 		this.json.addBasicMetric("NIMUTEV",this.getIntermediateMultipleThrowEvents());
-		//this.json.addBasicMetric("NICOMCEV", this.getIntermediateCompensationCatchEvents());
 		this.json.addBasicMetric("NICONCEV", this.getIntermediateConditionalCatchEvents());
 		this.json.addBasicMetric("NILCEV", this.getIntermediateLinkCatchEvents());
 		this.json.addBasicMetric("NIMCEV", this.getIntermediateMessageCatchEvents());
@@ -253,7 +251,7 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NBNIESCEV", this.getNonInterruptingBoundaryEscalationEvents());
 		this.json.addBasicMetric("NBNIPMUEV", this.getNonInterruptingBoundaryParallelMultipleEvents());
 		this.json.addBasicMetric("TNIE", getTotalNumberOfIntermediateEvents());
-		//this.json.addBasicMetric("NG", getGroups());
+		this.json.addBasicMetric("NG", getGroups());
 		this.json.addBasicMetric("NSL", getSwimlanes());
 		this.json.addBasicMetric("NITMREV", getIntermediateTimerEvents());
 		this.json.addBasicMetric("NESUB", getEventSubprocesses());
@@ -383,7 +381,6 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NSIEV", this.getSignalEvent(), this.numberProcess);
 		this.json.addBasicMetric("NSTEV", this.getStartEvents(), this.numberProcess);
 		this.json.addBasicMetric("NSCONV", this.getSubConversations(), this.numberProcess);
-		this.json.addBasicMetric("NTEEV", this.getTerminateEvents(), this.numberProcess);
 		this.json.addBasicMetric("NTEX", this.getTexts(), this.numberProcess);
 		this.json.addBasicMetric("NTEXA", this.getTextAnnotations(), this.numberProcess);
 		this.json.addBasicMetric("NTHEV", this.getThrowEvents(), this.numberProcess);
@@ -429,7 +426,7 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NENDESCEV", this.getEndEscalationEvents(), this.numberProcess);
 		this.json.addBasicMetric("NENDMEV", this.getEndMessageEvents(), this.numberProcess);
 		this.json.addBasicMetric("NENDSIGEV", this.getEndSignalEvents(), this.numberProcess);
-		this.json.addBasicMetric("NENDTEREV", this.getEndTerminateEvents(), this.numberProcess);
+		this.json.addBasicMetric("NTEEV", this.getEndTerminateEvents(), this.numberProcess);
 		this.json.addBasicMetric("NENDMUEV", this.getEndMultipleEvents(), this.numberProcess);
 		this.json.addBasicMetric("NIBEV", this.getInterruptingBoundaryEvents(), this.numberProcess);
 		this.json.addBasicMetric("NIBCANCEV", this.getInterruptingBoundaryCancelEvents(), this.numberProcess);
@@ -446,7 +443,6 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NIMTEV", this.getIntermediateMessageThrowEvents(), this.numberProcess);
 		this.json.addBasicMetric("NISIGTEV", this.getIntermediateSignalThrowEvents(), this.numberProcess);
 		this.json.addBasicMetric("NIMUTEV",this.getIntermediateMultipleThrowEvents(), this.numberProcess);
-		//this.json.addBasicMetric("NICOMCEV", this.getIntermediateCompensationCatchEvents(), this.numberProcess);
 		this.json.addBasicMetric("NICONCEV", this.getIntermediateConditionalCatchEvents(), this.numberProcess);
 		this.json.addBasicMetric("NILCEV", this.getIntermediateLinkCatchEvents(), this.numberProcess);
 		this.json.addBasicMetric("NIMCEV", this.getIntermediateMessageCatchEvents(), this.numberProcess);
@@ -462,7 +458,7 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NBNIESCEV", this.getNonInterruptingBoundaryEscalationEvents(), this.numberProcess);
 		this.json.addBasicMetric("NBNIPMUEV", this.getNonInterruptingBoundaryParallelMultipleEvents(), this.numberProcess);
 		json.addBasicMetric("TNIE", getTotalNumberOfIntermediateEvents(), this.numberProcess);
-		//this.json.addBasicMetric("NG", getGroups(), this.numberProcess);
+		this.json.addBasicMetric("NG", getGroups(), this.numberProcess);
 		this.json.addBasicMetric("NSL", getSwimlanes(), this.numberProcess);
 		this.json.addBasicMetric("NITMREV", getIntermediateTimerEvents(), this.numberProcess);
 		this.json.addBasicMetric("NESUB", getEventSubprocesses(), this.numberProcess);
@@ -1474,9 +1470,9 @@ public class BpmnBasicMetricsExtractor {
 	}
 	
 	/**
-	 * Metric: NENDTEREV
+	 * Metric: NTEEV
 	 * 
-	 * @return number of End Terminate Events
+	 * @return number of Terminate Events
 	 */
 	public int getEndTerminateEvents(){
 		Collection<ThrowEvent> events;
@@ -2436,15 +2432,6 @@ public class BpmnBasicMetricsExtractor {
 	}
 	
 	/**
-	 * Metric: NTEEV
-	 * 
-	 * @return number of Terminate Events
-	 */
-	public int getTerminateEvents() {
-		return getNumberOfTypeElement(TerminateEventDefinition.class);
-	}
-	
-	/**
 	 * Metric: NTEX
 	 * 
 	 * @return number of Texts 
@@ -2462,14 +2449,14 @@ public class BpmnBasicMetricsExtractor {
 		return getNumberOfTypeElement(TextAnnotation.class);
 	}
 	
-	/**TODO
+	/**
 	 * Metric: NG
 	 * 
 	 * @return number of Groups
 	 */
-	/*public int getGroups() {
+	public int getGroups() {
 		return getNumberOfTypeElement(Group.class);
-	}*/
+	}
 	
 	/**
 	 * Metric: NTHEV

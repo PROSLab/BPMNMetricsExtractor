@@ -76,7 +76,6 @@ NENDERREV	%Number of End Error Events {Camunda API Instance Package}
 NENDESCEV	%Number of End Escalation Events {Camunda API Instance Package}
 NENDMEV	%Number of End Message Events {Camunda API Instance Package}
 NENDSIGEV	%Number of End Signal Events {Camunda API Instance Package}
-NENDTEREV	%Number of End Terminate Events {Camunda API Instance Package}
 NENDMUEV	%Number of End Multiple Events {Camunda API Instance Package}
 NENDP	%Number of End Points {Camunda API Instance Package}
 NERR	%Number of Errors {Camunda API Instance Package}
@@ -212,8 +211,6 @@ HPC_N	%Hasted-based Process Complexity (process length)	{10.1007/11837862\_13}
 HPC_V	%Hasted-based Process Complexity (process volume)	{10.1007/11837862\_13}
 CFC(rel)	%Relative Control Flow Complexity{10.4018/jwsr.2008040103}
 PCFC	%Parallel Control Flow Complexity{10.1109/tsc.2013.10}
-S(df) %Size of the Data-Flow	{10.1007/978-3-540-75183-0\_4}
-C(df) %Complexity of the Data-Flow	{10.1007/978-3-540-75183-0\_4}
 VOL %Structural Size {10.1016/0026-2714(92)90643-y}
 AAO %Average Activity Output {10.1016/0026-2714(92)90643-y}
 AAI %Average Activity Input {Proposed Metrics}
