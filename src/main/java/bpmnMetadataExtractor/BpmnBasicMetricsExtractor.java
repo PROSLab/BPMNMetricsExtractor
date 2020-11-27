@@ -248,17 +248,30 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NBNICONEV", this.getNonInterruptingBoundaryConditionalEvents());
 		this.json.addBasicMetric("NBNISIGEV", this.getNonInterruptingBoundarySignalEvents());
 		this.json.addBasicMetric("NBNIMUEV", this.getNonInterruptingBoundaryMultipleEvents());
+		this.json.addBasicMetric("NBIMUEV", this.getInterruptingBoundaryMultipleEvents());
 		this.json.addBasicMetric("NBNIESCEV", this.getNonInterruptingBoundaryEscalationEvents());
 		this.json.addBasicMetric("NBNIPMUEV", this.getNonInterruptingBoundaryParallelMultipleEvents());
+		this.json.addBasicMetric("NBIPMUEV", this.getInterruptingBoundaryParallelMultipleEvents());
 		this.json.addBasicMetric("TNIE", getTotalNumberOfIntermediateEvents());
 		this.json.addBasicMetric("NG", getGroups());
 		this.json.addBasicMetric("NSL", getSwimlanes());
 		this.json.addBasicMetric("NITMREV", getIntermediateTimerEvents());
 		this.json.addBasicMetric("NESUB", getEventSubprocesses());
+		this.json.addBasicMetric("NCESUB", getCollapsedEventSubprocesses());
 		this.json.addBasicMetric("NCP", getCollapsedPools());
 		this.json.addBasicMetric("NSTESEV", getStartEscalationEvents());
 		this.json.addBasicMetric("NSTEREV", getStartErrorEvents());
 		this.json.addBasicMetric("NSTCOMEV", getStartCompensationEvents());
+		this.json.addBasicMetric("NSTNNEV", getStartNoneEvents());
+		this.json.addBasicMetric("NINNEV", getIntermediateNoneEvents());
+		this.json.addBasicMetric("NENNNEV", getEndNoneEvents());
+		this.json.addBasicMetric("NISCE", this.getNonInterruptingStartConditionalEvents());
+		this.json.addBasicMetric("NISEE", this.getNonInterruptingStartEscalationEvents());
+		this.json.addBasicMetric("NISME", this.getNonInterruptingStartMessageEvents());
+		this.json.addBasicMetric("NISSE", this.getNonInterruptingStartSignalEvents());
+		this.json.addBasicMetric("NISMUE", this.getNonInterruptingStartMultipleEvents());
+		this.json.addBasicMetric("NISMUPE", this.getNonInterruptingStartMultipleParallelEvents());
+		this.json.addBasicMetric("NISTE", this.getNonInterruptingStartTimerEvents());
 	}
 	
 	public void runMetricsProcess() {
@@ -455,17 +468,30 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NBNICONEV", this.getNonInterruptingBoundaryConditionalEvents(), this.numberProcess);
 		this.json.addBasicMetric("NBNISIGEV", this.getNonInterruptingBoundarySignalEvents(), this.numberProcess);
 		this.json.addBasicMetric("NBNIMUEV", this.getNonInterruptingBoundaryMultipleEvents(), this.numberProcess);
+		this.json.addBasicMetric("NBIMUEV", this.getInterruptingBoundaryMultipleEvents(), this.numberProcess);
 		this.json.addBasicMetric("NBNIESCEV", this.getNonInterruptingBoundaryEscalationEvents(), this.numberProcess);
 		this.json.addBasicMetric("NBNIPMUEV", this.getNonInterruptingBoundaryParallelMultipleEvents(), this.numberProcess);
+		this.json.addBasicMetric("NBIPMUEV", this.getInterruptingBoundaryParallelMultipleEvents(), this.numberProcess);
 		json.addBasicMetric("TNIE", getTotalNumberOfIntermediateEvents(), this.numberProcess);
 		this.json.addBasicMetric("NG", getGroups(), this.numberProcess);
 		this.json.addBasicMetric("NSL", getSwimlanes(), this.numberProcess);
 		this.json.addBasicMetric("NITMREV", getIntermediateTimerEvents(), this.numberProcess);
 		this.json.addBasicMetric("NESUB", getEventSubprocesses(), this.numberProcess);
+		this.json.addBasicMetric("NCESUB", getCollapsedEventSubprocesses(), this.numberProcess);
 		this.json.addBasicMetric("NCP", getCollapsedPools(), this.numberProcess);
 		this.json.addBasicMetric("NSTESEV", getStartEscalationEvents(), this.numberProcess);
 		this.json.addBasicMetric("NSTEREV", getStartErrorEvents(), this.numberProcess);
 		this.json.addBasicMetric("NSTCOMEV", getStartCompensationEvents(), this.numberProcess);
+		this.json.addBasicMetric("NSTNNEV", getStartNoneEvents(), this.numberProcess);
+		this.json.addBasicMetric("NINNEV", getIntermediateNoneEvents(), this.numberProcess);
+		this.json.addBasicMetric("NENNNEV", getEndNoneEvents(), this.numberProcess);
+		this.json.addBasicMetric("NISCE", this.getNonInterruptingStartConditionalEvents(), this.numberProcess);
+		this.json.addBasicMetric("NISEE", this.getNonInterruptingStartEscalationEvents(), this.numberProcess);
+		this.json.addBasicMetric("NISME", this.getNonInterruptingStartMessageEvents(), this.numberProcess);
+		this.json.addBasicMetric("NISSE", this.getNonInterruptingStartSignalEvents(), this.numberProcess);
+		this.json.addBasicMetric("NISMUE", this.getNonInterruptingStartMultipleEvents(), this.numberProcess);
+		this.json.addBasicMetric("NISMUPE", this.getNonInterruptingStartMultipleParallelEvents(), this.numberProcess);
+		this.json.addBasicMetric("NISTE", this.getNonInterruptingStartTimerEvents(), this.numberProcess);
 	}
 	
 	/**
@@ -2423,6 +2449,20 @@ public class BpmnBasicMetricsExtractor {
 	}
 	
 	/**
+	 * Metric: NCESUB
+	 * 
+	 * @return number of Collapsed Event Sub-Processes
+	 */
+	public int getCollapsedEventSubprocesses() {
+		int nesub = 0;
+		for(ModelElementInstance sub : getCollectionOfElementType(SubProcess.class))
+			if(((SubProcess) sub).triggeredByEvent())
+				if(((SubProcess) sub).getFlowElements().size()==0)
+					nesub++;
+		return nesub;
+	}
+	
+	/**
 	 * Metric: NSC
 	 * 
 	 * @return number of Sub Conversations
@@ -3043,6 +3083,203 @@ public class BpmnBasicMetricsExtractor {
 			ec.getCatchEventsSubProcess(events, process);
 		}
 		return this.getNumberOfEventDefinitionsOfCatchEvents(events, "org.camunda.bpm.model.bpmn.impl.instance.StartEventImpl", "org.camunda.bpm.model.bpmn.impl.instance.CompensateEventDefinitionImpl");
+	}
+	
+	/**
+	 * Metric: NENNNEV
+	 * 
+	 * @return number of End None Events
+	 */
+	public int getEndNoneEvents() {
+		return this.getEndEvents() - this.getEndMessageEvents()- this.getEndSignalEvents() - this.getEndErrorEvents()
+				- this.getEndEscalationEvents() - this.getEndTerminateEvents() - this.getEndCompensationEvents() 
+				- this.getEndCancelEvents() - this.getEndMultipleEvents();
+
+	}
+	
+	/**
+	 * Metric: NSTNNEV
+	 * 
+	 * @return number of Start None Events
+	 */
+	public int getStartNoneEvents() {
+		return this.getStartEvents() - this.getStartMessageEvents() - this.getStartTimerEvents() - this.getStartConditionalEvents()
+				- this.getStartSignalEvents() - this.getStartMultipleEvents() - this.getStartParallelMultipleEvents()
+				- this.getStartCompensationEvents() - this.getStartErrorEvents() - this.getEscalationEvents();
+	}
+	
+	/**
+	 * Metric: NINNEV
+	 * 
+	 * @return number of Intermediate None Events
+	 */
+	public int getIntermediateNoneEvents() {
+		return this.getIntermediateCatchEvents() + this.getIntermediateThrowEvents() - this.getIntermediateCompensationThrowEvents() 
+				- this.getIntermediateConditionalCatchEvents() - this.getIntermediateEscalationThrowEvents() 
+				- this.getIntermediateLinkCatchEvents() - this.getIntermediateLinkThrowEvents() - this.getIntermediateMessageCatchEvents() 
+				- this.getIntermediateMessageThrowEvents() - this.getIntermediateMultipleCatchEvents() - this.getIntermediateMultipleThrowEvents() 
+				- this.getIntermediateParallelMultipleCatchEvents() - this.getIntermediateSignalCatchEvents() - this.getIntermediateSignalThrowEvents() 
+				- this.getIntermediateTimerEvents();
+		}
+	
+	/**
+	 * Metric: NBIMUEV
+	 * @return the number of interrupting boundary multiple events
+	 */
+	public int getInterruptingBoundaryMultipleEvents() {
+		int toReturn = 0;
+		Collection<BoundaryEvent> boundaryEvents;
+		if(this.extraction.equals("Model"))
+			boundaryEvents = this.modelInstance.getModelElementsByType(BoundaryEvent.class);
+		else {
+			boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
+			ec.getBoundaryEventsSubProcess(boundaryEvents, process);
+		}
+		for (BoundaryEvent event: boundaryEvents) {
+			if (event.getEventDefinitions().size() > 1) {
+				toReturn += 1;
+			}
+		}
+		
+		return toReturn;
+	}
+	
+	
+	/**
+	 * Metric: NBIPMUEV
+	 * @return the number of interrupting boundary parallel multiple events
+	 */
+	public int getInterruptingBoundaryParallelMultipleEvents() {
+		int toReturn = 0;
+		Collection<BoundaryEvent> boundaryEvents;
+		if(this.extraction.equals("Model"))
+			boundaryEvents = this.modelInstance.getModelElementsByType(BoundaryEvent.class);
+		else {
+			boundaryEvents = this.process.getChildElementsByType(BoundaryEvent.class);
+			ec.getBoundaryEventsSubProcess(boundaryEvents, process);
+		}
+		for (BoundaryEvent event: boundaryEvents) {
+			if (event.isParallelMultiple()) {
+				toReturn++;
+			}
+		}
+		
+		return toReturn;
+	}
+	
+	public int getNonInterruptingStartMessageEvents() {
+		int ni = 0;
+		Collection<StartEvent> events;
+		if(this.extraction.equals("Model"))
+			events = this.modelInstance.getModelElementsByType(StartEvent.class);
+		else {
+			events = this.process.getChildElementsByType(StartEvent.class);
+			ec.getStartEventsSubProcess(events, process);
+		}
+		for(StartEvent e : events)
+			if(!e.isInterrupting())
+				for(EventDefinition ed : e.getEventDefinitions())
+					if(ed instanceof MessageEventDefinition)
+						ni++;
+		return ni;
+	}
+	
+	public int getNonInterruptingStartTimerEvents() {
+		int ni = 0;
+		Collection<StartEvent> events;
+		if(this.extraction.equals("Model"))
+			events = this.modelInstance.getModelElementsByType(StartEvent.class);
+		else {
+			events = this.process.getChildElementsByType(StartEvent.class);
+			ec.getStartEventsSubProcess(events, process);
+		}
+		for(StartEvent e : events)
+			if(!e.isInterrupting())
+				for(EventDefinition ed : e.getEventDefinitions())
+					if(ed instanceof TimerEventDefinition)
+						ni++;
+		return ni;
+	}
+	
+	public int getNonInterruptingStartConditionalEvents() {
+		int ni = 0;
+		Collection<StartEvent> events;
+		if(this.extraction.equals("Model"))
+			events = this.modelInstance.getModelElementsByType(StartEvent.class);
+		else {
+			events = this.process.getChildElementsByType(StartEvent.class);
+			ec.getStartEventsSubProcess(events, process);
+		}
+		for(StartEvent e : events)
+			if(!e.isInterrupting())
+				for(EventDefinition ed : e.getEventDefinitions())
+   				    if(ed instanceof ConditionalEventDefinition)
+						ni++;
+		return ni;
+	}
+	
+	public int getNonInterruptingStartSignalEvents() {
+		int ni = 0;
+		Collection<StartEvent> events;
+		if(this.extraction.equals("Model"))
+			events = this.modelInstance.getModelElementsByType(StartEvent.class);
+		else {
+			events = this.process.getChildElementsByType(StartEvent.class);
+			ec.getStartEventsSubProcess(events, process);
+		}
+		for(StartEvent e : events)
+			if(!e.isInterrupting())
+				for(EventDefinition ed : e.getEventDefinitions())
+					if(ed instanceof SignalEventDefinition)
+						ni++;
+		return ni;
+	}
+	
+	public int getNonInterruptingStartEscalationEvents() {
+		int ni = 0;
+		Collection<StartEvent> events;
+		if(this.extraction.equals("Model"))
+			events = this.modelInstance.getModelElementsByType(StartEvent.class);
+		else {
+			events = this.process.getChildElementsByType(StartEvent.class);
+			ec.getStartEventsSubProcess(events, process);
+		}
+		for(StartEvent e : events)
+			if(!e.isInterrupting())
+				for(EventDefinition ed : e.getEventDefinitions())
+					if(ed instanceof EscalationEventDefinition)
+						ni++;
+		return ni;
+	}
+	
+	public int getNonInterruptingStartMultipleEvents() {
+		int ni = 0;
+		Collection<StartEvent> events;
+		if(this.extraction.equals("Model"))
+			events = this.modelInstance.getModelElementsByType(StartEvent.class);
+		else {
+			events = this.process.getChildElementsByType(StartEvent.class);
+			ec.getStartEventsSubProcess(events, process);
+		}
+		for(StartEvent e : events)
+			if((!e.isInterrupting()) && e.getEventDefinitions().size() > 1)
+				ni++;
+		return ni;
+	}
+	
+	public int getNonInterruptingStartMultipleParallelEvents() {
+		int ni = 0;
+		Collection<StartEvent> events;
+		if(this.extraction.equals("Model"))
+			events = this.modelInstance.getModelElementsByType(StartEvent.class);
+		else {
+			events = this.process.getChildElementsByType(StartEvent.class);
+			ec.getStartEventsSubProcess(events, process);
+		}
+		for(StartEvent e : events)
+			if(!e.isInterrupting() && e.isParallelMultiple())
+				ni++;
+		return ni;
 	}
 	
 }

@@ -267,7 +267,20 @@ PPT %Proportion of pools and tasks	{absent}
 PLA %Proportion of lanes and activities	{absent}
 NITMREV %Number of Intermediate Timer Events {Camunda API Instance Package}
 NESUB %Number of Event Subprocesses {Camunda API Instance Package}
-NCP	%Number of collapsed pools {Camunda API Instance Package}
+NCESUB %Number of Collapsed Event Subprocesses {Camunda API Instance Package}
+NCP	%Number of Collapsed Pools {Camunda API Instance Package}
 NSTESEV	%Number of Start Escalation Events {Camunda API Instance Package}
 NSTEREV	%Number of Start Error Events {Camunda API Instance Package}
-NSTCOMEV	%Number of Start Compensation Events {Camunda API Instance Package}
+NSTCOMEV %Number of Start Compensation Events {Camunda API Instance Package}
+NENNNEV %Number of End None Events {Camunda API Instance Package}
+NSTNNEV %Number of Start None Events {Camunda API Instance Package}
+NINNEV %Number of Intermediate None Events {Camunda API Instance Package}
+NBIMUEV	%Number of Interrupting Boundary Multiple Events {Camunda API Instance Package}
+NBIPMUEV %Number of Interrupting Boundary Parallel Multiple Events {Camunda API Instance Package}
+NISCE %Number of Non-Interrupting Start Conditional Events {Camunda API Instance Package}
+NISSE %Number of Non-Interrupting Start Signal Events {Camunda API Instance Package}
+NISME %Number of Non-Interrupting Start Message Events {Camunda API Instance Package}
+NISEE %Number of Non-Interrupting Start Escalation Events {Camunda API Instance Package}
+NISMUE %Number of Non-Interrupting Start Multiple Events {Camunda API Instance Package}
+NISMUPE %Number of Non-Interrupting Start Parallel Multiple Events {Camunda API Instance Package}
+NISTE %Number of Non-Interrupting Start Timer Events {Camunda API Instance Package}
