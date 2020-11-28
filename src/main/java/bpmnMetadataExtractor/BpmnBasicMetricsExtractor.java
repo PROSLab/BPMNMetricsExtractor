@@ -1106,6 +1106,18 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Cancel Events
 	 */
 	public int getCancelEvents() {
+		if(this.extraction.equals("Process")) {
+			int ce = 0;
+			for(ModelElementInstance e: this.getCollectionOfElementType(ThrowEvent.class)) 
+				for(EventDefinition ed : ((ThrowEvent) e).getEventDefinitions())
+					if(ed instanceof CancelEventDefinition)
+						ce++;
+			for(ModelElementInstance e: this.getCollectionOfElementType(CatchEvent.class)) 
+				for(EventDefinition ed : ((CatchEvent) e).getEventDefinitions())
+					if(ed instanceof CancelEventDefinition)
+						ce++;
+			return ce;
+		}
 		return getNumberOfTypeElement(CancelEventDefinition.class);
 	}
 	
@@ -1142,6 +1154,18 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Compensate Events 
 	 */
 	public int getCompensateEvents() {
+		if(this.extraction.equals("Process")) {
+			int ce = 0;
+			for(ModelElementInstance e: this.getCollectionOfElementType(ThrowEvent.class)) 
+				for(EventDefinition ed : ((ThrowEvent) e).getEventDefinitions())
+					if(ed instanceof CompensateEventDefinition)
+						ce++;
+			for(ModelElementInstance e: this.getCollectionOfElementType(CatchEvent.class)) 
+				for(EventDefinition ed : ((CatchEvent) e).getEventDefinitions())
+					if(ed instanceof CompensateEventDefinition)
+						ce++;
+			return ce;
+		}
 		return getNumberOfTypeElement(CompensateEventDefinition.class);
 	}
 	
@@ -1178,6 +1202,18 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Conditional Event
 	 */
 	public int getConditionalEvent() {
+		if(this.extraction.equals("Process")) {
+			int ce = 0;
+			for(ModelElementInstance e: this.getCollectionOfElementType(ThrowEvent.class)) 
+				for(EventDefinition ed : ((ThrowEvent) e).getEventDefinitions())
+					if(ed instanceof ConditionalEventDefinition)
+						ce++;
+			for(ModelElementInstance e: this.getCollectionOfElementType(CatchEvent.class)) 
+				for(EventDefinition ed : ((CatchEvent) e).getEventDefinitions())
+					if(ed instanceof ConditionalEventDefinition)
+						ce++;
+			return ce;
+		}
 		return getNumberOfTypeElement(ConditionalEventDefinition.class);
 	}
 	
@@ -1550,6 +1586,18 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Error Events
 	 */
 	public int getErrorEvents() {
+		if(this.extraction.equals("Process")) {
+			int ee = 0;
+			for(ModelElementInstance e: this.getCollectionOfElementType(ThrowEvent.class)) 
+				for(EventDefinition ed : ((ThrowEvent) e).getEventDefinitions())
+					if(ed instanceof ErrorEventDefinition)
+						ee++;
+			for(ModelElementInstance e: this.getCollectionOfElementType(CatchEvent.class)) 
+				for(EventDefinition ed : ((CatchEvent) e).getEventDefinitions())
+					if(ed instanceof ErrorEventDefinition)
+						ee++;
+			return ee;
+		}
 		return getNumberOfTypeElement(ErrorEventDefinition.class);
 	}
 	
@@ -1568,6 +1616,18 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Escalation Events
 	 */
 	public int getEscalationEvents() {
+		if(this.extraction.equals("Process")) {
+			int ee = 0;
+			for(ModelElementInstance e: this.getCollectionOfElementType(ThrowEvent.class)) 
+				for(EventDefinition ed : ((ThrowEvent) e).getEventDefinitions())
+					if(ed instanceof EscalationEventDefinition)
+						ee++;
+			for(ModelElementInstance e: this.getCollectionOfElementType(CatchEvent.class)) 
+				for(EventDefinition ed : ((CatchEvent) e).getEventDefinitions())
+					if(ed instanceof EscalationEventDefinition)
+						ee++;
+			return ee;
+		}
 		return getNumberOfTypeElement(EscalationEventDefinition.class);
 	}
 	
@@ -1586,6 +1646,14 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Event Definitions
 	 */
 	public int getEventDefinitions() {
+		if(this.extraction.equals("Process")) {
+			int ed = 0;
+			for(ModelElementInstance e: this.getCollectionOfElementType(ThrowEvent.class)) 
+				ed += ((ThrowEvent) e).getEventDefinitions().size();
+			for(ModelElementInstance e: this.getCollectionOfElementType(CatchEvent.class)) 
+				ed += ((CatchEvent) e).getEventDefinitions().size();
+			return ed;
+		}
 		return getNumberOfTypeElement(EventDefinition.class);
 	}
 	
@@ -1976,6 +2044,18 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Link Event Definitions
 	 */
 	public int getLinkEvents() {
+		if(this.extraction.equals("Process")) {
+			int le = 0;
+			for(ModelElementInstance e: this.getCollectionOfElementType(ThrowEvent.class)) 
+				for(EventDefinition ed : ((ThrowEvent) e).getEventDefinitions())
+					if(ed instanceof LinkEventDefinition)
+						le++;
+			for(ModelElementInstance e: this.getCollectionOfElementType(CatchEvent.class)) 
+				for(EventDefinition ed : ((CatchEvent) e).getEventDefinitions())
+					if(ed instanceof LinkEventDefinition)
+						le++;
+			return le;
+		}
 		return getNumberOfTypeElement(LinkEventDefinition.class);
 	}
 	
@@ -2029,6 +2109,18 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Message Event Definition
 	 */
 	public int getMessageEvents() {
+		if(this.extraction.equals("Process")) {
+			int me = 0;
+			for(ModelElementInstance e: this.getCollectionOfElementType(ThrowEvent.class)) 
+				for(EventDefinition ed : ((ThrowEvent) e).getEventDefinitions())
+					if(ed instanceof MessageEventDefinition)
+						me++;
+			for(ModelElementInstance e: this.getCollectionOfElementType(CatchEvent.class)) 
+				for(EventDefinition ed : ((CatchEvent) e).getEventDefinitions())
+					if(ed instanceof MessageEventDefinition)
+						me++;
+			return me;
+		}
 		return getNumberOfTypeElement(MessageEventDefinition.class);
 	}
 	
@@ -2298,6 +2390,18 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Signal Events
 	 */
 	public int getSignalEvent() {
+		if(this.extraction.equals("Process")) {
+			int se = 0;
+			for(ModelElementInstance e: this.getCollectionOfElementType(ThrowEvent.class)) 
+				for(EventDefinition ed : ((ThrowEvent) e).getEventDefinitions())
+					if(ed instanceof SignalEventDefinition)
+						se++;
+			for(ModelElementInstance e: this.getCollectionOfElementType(CatchEvent.class)) 
+				for(EventDefinition ed : ((CatchEvent) e).getEventDefinitions())
+					if(ed instanceof SignalEventDefinition)
+						se++;
+			return se;
+		}
 		return getNumberOfTypeElement(SignalEventDefinition.class);
 	}
 	
@@ -2540,6 +2644,18 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Timer Event Definitions
 	 */
 	public int getTimerEventDefinitions() {
+		if(this.extraction.equals("Process")) {
+			int te = 0;
+			for(ModelElementInstance e: this.getCollectionOfElementType(ThrowEvent.class)) 
+				for(EventDefinition ed : ((ThrowEvent) e).getEventDefinitions())
+					if(ed instanceof TimerEventDefinition)
+						te++;
+			for(ModelElementInstance e: this.getCollectionOfElementType(CatchEvent.class)) 
+				for(EventDefinition ed : ((CatchEvent) e).getEventDefinitions())
+					if(ed instanceof TimerEventDefinition)
+						te++;
+			return te;
+		}
 		return getNumberOfTypeElement(TimerEventDefinition.class);
 	}
 
