@@ -14,10 +14,10 @@ import org.camunda.bpm.model.bpmn.instance.SubProcess;
 import org.camunda.bpm.model.bpmn.instance.ThrowEvent;
 import org.camunda.bpm.model.xml.instance.ModelElementInstance;
 
-public class WBSubProcessElementsCollector {
+public class PEUtility {
 	private String conversion;
 	
-	WBSubProcessElementsCollector(String c){
+	PEUtility(String c){
 		this.conversion = c;
 	}
 	

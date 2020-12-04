@@ -48,7 +48,7 @@ public class StructurednessMetricExtractor {
 			gateways = this.model.getModelElementsByType(Gateway.class);
 		else {
 			gateways = this.process.getChildElementsByType(Gateway.class);
-			WBSubProcessElementsCollector ec = new WBSubProcessElementsCollector(this.conversionType);
+			PEUtility ec = new PEUtility(this.conversionType);
 			ec.getGatewaysSubProcess(gateways, process);
 		}
 		for(Gateway split : gateways) {

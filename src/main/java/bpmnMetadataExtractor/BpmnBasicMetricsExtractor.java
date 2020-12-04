@@ -28,7 +28,7 @@ public class BpmnBasicMetricsExtractor {
 	private int numberProcess;
 	private String extraction;
 	private String conversion;
-	private WBSubProcessElementsCollector ec;
+	private PEUtility ec;
 
 	public BpmnBasicMetricsExtractor(BpmnModelInstance modelInstance, Process process, JsonEncoder jsonEncoder, int i, String e, String c) {
 		this.modelInstance = modelInstance;
@@ -37,7 +37,7 @@ public class BpmnBasicMetricsExtractor {
 		this.numberProcess = i;
 		this.extraction = e;
 		this.conversion = c;
-		this.ec = new WBSubProcessElementsCollector(c);
+		this.ec = new PEUtility(c);
 	}
 	
 	public BpmnBasicMetricsExtractor(BpmnModelInstance modelInstance, JsonEncoder jsonEncoder, int i, String e) {
@@ -709,6 +709,13 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Activation Conditions 
 	 */
 	public int getActivationConditions() {
+		if(this.extraction.equals("Process")) {
+			int a = 0;
+			for(ModelElementInstance fe : this.getCollectionOfElementType(ComplexGateway.class))
+				if(((ComplexGateway) fe).getActivationCondition() != null)
+				  a++;
+			return a;
+		}
 		return getNumberOfTypeElement(ActivationCondition.class);
 	}
 	
@@ -736,6 +743,22 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Assignments
 	 */
 	public int getAssignments() {
+		if(this.extraction.equals("Process")) {
+			int as = 0;
+			for(ModelElementInstance a: this.getCollectionOfElementType(Activity.class)) {
+				for(DataInputAssociation da : ((Activity) a).getDataInputAssociations())
+					as += da.getAssignments().size();
+				for(DataOutputAssociation da : ((Activity) a).getDataOutputAssociations())
+					as += da.getAssignments().size();
+			}
+			for(ModelElementInstance e: this.getCollectionOfElementType(ThrowEvent.class)) 
+				for(DataInputAssociation da : ((ThrowEvent) e).getDataInputAssociations())
+					as += da.getAssignments().size();
+			for(ModelElementInstance e: this.getCollectionOfElementType(CatchEvent.class)) 
+					for(DataOutputAssociation da : ((CatchEvent) e).getDataOutputAssociations())
+						as += da.getAssignments().size();
+			return as;
+		}
 		return getNumberOfTypeElement(Assignment.class);
 	}
 	
@@ -754,6 +777,15 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Auditings
 	 */
 	public int getAuditing() {
+		if(this.extraction.equals("Process")) {
+			int a = 0;
+			if(this.process.getAuditing() != null)
+				  a++;
+			for(ModelElementInstance fe : this.getCollectionOfElementType(FlowElement.class))
+				if(((FlowElement) fe).getAuditing() != null)
+				  a++;
+			return a;
+		}
 		return getNumberOfTypeElement(Auditing.class);
 	}
 	
@@ -1175,6 +1207,15 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Completion Conditions
 	 */
 	public int getCompletionConditions() {
+		if(this.extraction.equals("Process")) {
+			int cc = 0;
+			for(ModelElementInstance a: this.getCollectionOfElementType(Activity.class)) {
+				if(((Activity)a).getLoopCharacteristics() instanceof MultiInstanceLoopCharacteristics)
+					if(((MultiInstanceLoopCharacteristics) ((Activity)a).getLoopCharacteristics()).getCompletionCondition() != null)
+					  cc++;
+			}
+			return cc;
+		}
 		return getNumberOfTypeElement(CompletionCondition.class);
 	}
 	
@@ -1223,6 +1264,14 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Condition Expressions
 	 */
 	public int getConditionExpressions() {
+		if(this.extraction.equals("Process")) {
+			int ce = 0;
+			for(ModelElementInstance fe : this.getCollectionOfElementType(SequenceFlow.class))
+				if(((SequenceFlow) fe).getConditionExpression() != null)
+				  ce++;
+			return ce;
+		}
+
 		return getNumberOfTypeElement(ConditionExpression.class);
 	}
 	
@@ -1331,7 +1380,6 @@ public class BpmnBasicMetricsExtractor {
 			for(ModelElementInstance e: this.getCollectionOfElementType(ThrowEvent.class)) 
 				DataObjectsInput += ((ThrowEvent) e).getDataInputAssociations().size();
 			return DataObjectsInput;
-			
 		}
 		return getNumberOfTypeElement(DataInputAssociation.class);
 	}
@@ -1386,6 +1434,13 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Data Stores
 	 */
 	public int getDataStores() {
+		if(this.extraction.equals("Process")) {
+			int DataStore = 0;
+			for(ModelElementInstance ds: this.getCollectionOfElementType(DataStoreReference.class)) 
+				if(((DataStoreReference) ds).getDataStore() != null)
+					DataStore++;
+			return DataStore;	
+		}
 		return getNumberOfTypeElement(DataStore.class);
 	}
 	
@@ -1404,6 +1459,12 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Documentations
 	 */
 	public int getDocumentations() {
+		if(this.extraction.equals("Process")) {
+			int d = 0;
+			for(ModelElementInstance be : this.getCollectionOfElementType(BaseElement.class))
+				d+= ((BaseElement) be).getDocumentations().size();
+			return d;
+		}
 		return getNumberOfTypeElement(Documentation.class);
 	}
 	
@@ -1681,6 +1742,13 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Extension Elements 
 	 */
 	public int getExtensionElements() {
+		if(this.extraction.equals("Process")) {
+			int e = 0;
+			for(ModelElementInstance be : this.getCollectionOfElementType(BaseElement.class))
+				if(((BaseElement) be).getExtensionElements() != null)
+				e++;
+			return e;
+		}
 		return getNumberOfTypeElement(ExtensionElements.class);
 	}
 	
@@ -1753,6 +1821,15 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Input Data Items
 	 */
 	public int getInputDataItems() {
+		if(this.extraction.equals("Process")) {
+			int idi = 0;
+			for(ModelElementInstance a: this.getCollectionOfElementType(Activity.class)) {
+				if(((Activity)a).getLoopCharacteristics() instanceof MultiInstanceLoopCharacteristics)
+					if(((MultiInstanceLoopCharacteristics) ((Activity)a).getLoopCharacteristics()).getInputDataItem() != null)
+						idi++;
+				}
+			return idi;
+		}
 		return getNumberOfTypeElement(InputDataItem.class);
 	}
 	
@@ -1762,6 +1839,16 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Input Sets
 	 */
 	public int getInputSets() {
+		if(this.extraction.equals("Process")) {
+			int is = 0;
+			for(ModelElementInstance a: this.getCollectionOfElementType(ThrowEvent.class))
+				if(((ThrowEvent) a).getInputSet() != null)
+				is++;
+			for(ModelElementInstance a: this.getCollectionOfElementType(Activity.class))
+				if(((Activity) a).getIoSpecification() != null)
+					is+=((Activity) a).getIoSpecification().getInputSets().size();
+			return is;
+		}
 		return getNumberOfTypeElement(InputSet.class);
 	}
 	
@@ -2017,6 +2104,13 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Io Specifications
 	 */
 	public int getIoSpecifications() {
+		if(this.extraction.equals("Process")) {
+			int io = 0;
+			for(ModelElementInstance a: this.getCollectionOfElementType(Activity.class))
+				if(((Activity) a).getIoSpecification() != null)
+					io++;
+			return io;
+		}
 		return getNumberOfTypeElement(IoSpecification.class);
 	}
 	
@@ -2065,6 +2159,15 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Loop Cardinalities
 	 */
 	public int getLoopCardinalities() {
+		if(this.extraction.equals("Process")) {
+			int multi = 0;
+			for(ModelElementInstance a: this.getCollectionOfElementType(Activity.class)) {
+				if(((Activity)a).getLoopCharacteristics() instanceof MultiInstanceLoopCharacteristics)
+					if(((MultiInstanceLoopCharacteristics) ((Activity)a).getLoopCharacteristics()).getLoopCardinality() != null)
+						multi++;
+				}
+			return multi;
+		}
 		return getNumberOfTypeElement(LoopCardinality.class);
 	}
 	
@@ -2139,6 +2242,15 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Monitorings 
 	 */
 	public int getMonitorings() {
+		if(this.extraction.equals("Process")) {
+			int a = 0;
+			if(this.process.getMonitoring() != null)
+				  a++;
+			for(ModelElementInstance fe : this.getCollectionOfElementType(FlowElement.class))
+				if(((FlowElement) fe).getMonitoring() != null)
+				  a++;
+			return a;
+		}
 		return getNumberOfTypeElement(Monitoring.class);
 	}
 	
@@ -2174,6 +2286,15 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Output Data Items
 	 */
 	public int getOutputDataItems() {
+		if(this.extraction.equals("Process")) {
+			int odi = 0;
+			for(ModelElementInstance a: this.getCollectionOfElementType(Activity.class)) {
+				if(((Activity)a).getLoopCharacteristics() instanceof MultiInstanceLoopCharacteristics)
+					if(((MultiInstanceLoopCharacteristics) ((Activity)a).getLoopCharacteristics()).getOutputDataItem() != null)
+						odi++;
+				}
+			return odi;
+		}
 		return getNumberOfTypeElement(OutputDataItem.class);
 	}
 	
@@ -2183,6 +2304,16 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Output Sets
 	 */
 	public int getOutputSets() {
+		if(this.extraction.equals("Process")) {
+			int os = 0;
+			for(ModelElementInstance a: this.getCollectionOfElementType(CatchEvent.class))
+				if(((CatchEvent) a).getOutputSet() != null)
+				os++;
+			for(ModelElementInstance a: this.getCollectionOfElementType(Activity.class))
+				if(((Activity) a).getIoSpecification() != null)
+					os+=((Activity) a).getIoSpecification().getOutputSets().size();
+			return os;
+		}
 		return getNumberOfTypeElement(OutputSet.class);
 	}
 	
@@ -2246,6 +2377,14 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Proprerties
 	 */
 	public int getProperties() {
+		if(this.extraction.equals("Process")) {
+			int p = this.process.getProperties().size();
+			for(ModelElementInstance a: this.getCollectionOfElementType(Activity.class)) 
+				p+= ((Activity) a).getProperties().size();
+			for(ModelElementInstance a: this.getCollectionOfElementType(Event.class)) 
+				p+= ((Event) a).getProperties().size();
+			return p;
+			}
 		return getNumberOfTypeElement(Property.class);
 	}
 	
@@ -2273,6 +2412,12 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Renderings
 	 */
 	public int getRenderings() {
+		if(this.extraction.equals("Process")) {
+			int r = 0;
+			for(ModelElementInstance a: this.getCollectionOfElementType(UserTask.class)) 
+				r+= ((UserTask) a).getRenderings().size();
+			return r;
+		}
 		return getNumberOfTypeElement(Rendering.class);
 	}
 	
@@ -2291,6 +2436,15 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Resource Assignment Expressions
 	 */
 	public int getResourceAssignmentExpressions() {
+		if(this.extraction.equals("Process")) {
+			int rr = 0;
+			if(((ResourceRole) this.process.getResourceRoles()).getResourceAssignmentExpression() != null)
+				rr++;
+			for(ModelElementInstance a: this.getCollectionOfElementType(Activity.class)) 
+				if(((ResourceRole) ((Activity) a).getResourceRoles()).getResourceAssignmentExpression() != null)
+				rr++;
+			return rr;
+			}
 		return getNumberOfTypeElement(ResourceAssignmentExpression.class);
 	}
 	
@@ -2309,6 +2463,12 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Resource Parameter Bindings
 	 */
 	public int getResourceParameterBindings() {
+		if(this.extraction.equals("Process")) {
+			int rr = ((ResourceRole) this.process.getResourceRoles()).getResourceParameterBinding().size() ;
+			for(ModelElementInstance a: this.getCollectionOfElementType(Activity.class)) 
+				rr+= ((ResourceRole) ((Activity) a).getResourceRoles()).getResourceParameterBinding().size();
+			return rr;
+			}
 		return getNumberOfTypeElement(ResourceParameterBinding.class);
 	}
 	
@@ -2318,6 +2478,12 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Resource Roles
 	 */
 	public int getResourceRoles() {
+		if(this.extraction.equals("Process")) {
+			int rr = this.process.getResourceRoles().size();
+			for(ModelElementInstance a: this.getCollectionOfElementType(Activity.class)) 
+				rr+= ((Activity) a).getResourceRoles().size();
+			return rr;
+			}
 		return getNumberOfTypeElement(ResourceRole.class);
 	}
 	
@@ -2581,6 +2747,13 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Texts 
 	 */
 	public int getTexts() {
+		if(this.extraction.equals("Process")) {
+			int t = 0;
+			for(ModelElementInstance te : this.getCollectionOfElementType(TextAnnotation.class))
+				if(((TextAnnotation) te).getText() != null)
+					t++;
+			return t;
+		}
 		return getNumberOfTypeElement(Text.class);
 	}
 	
@@ -2617,6 +2790,20 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Time Cycles
 	 */
 	public int getTimeCycles() {
+		if(this.extraction.equals("Process")) {
+			int te = 0;
+			for(ModelElementInstance e: this.getCollectionOfElementType(ThrowEvent.class)) 
+				for(EventDefinition ed : ((ThrowEvent) e).getEventDefinitions())
+					if(ed instanceof TimerEventDefinition)
+						if(((TimerEventDefinition) ed).getTimeCycle() != null)
+						te++;
+			for(ModelElementInstance e: this.getCollectionOfElementType(CatchEvent.class)) 
+				for(EventDefinition ed : ((CatchEvent) e).getEventDefinitions())
+					if(ed instanceof TimerEventDefinition)
+						if(((TimerEventDefinition) ed).getTimeCycle() != null)
+							te++;
+			return te;
+		}
 		return getNumberOfTypeElement(TimeCycle.class);
 	}
 	
@@ -2626,6 +2813,20 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Time Dates
 	 */
 	public int getTimeDates() {
+		if(this.extraction.equals("Process")) {
+			int te = 0;
+			for(ModelElementInstance e: this.getCollectionOfElementType(ThrowEvent.class)) 
+				for(EventDefinition ed : ((ThrowEvent) e).getEventDefinitions())
+					if(ed instanceof TimerEventDefinition)
+						if(((TimerEventDefinition) ed).getTimeDate() != null)
+						te++;
+			for(ModelElementInstance e: this.getCollectionOfElementType(CatchEvent.class)) 
+				for(EventDefinition ed : ((CatchEvent) e).getEventDefinitions())
+					if(ed instanceof TimerEventDefinition)
+						if(((TimerEventDefinition) ed).getTimeDate() != null)
+							te++;
+			return te;
+		}
 		return getNumberOfTypeElement(TimeDate.class);
 	}
 	
@@ -2635,6 +2836,20 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Time Durations
 	 */
 	public int getTimeDurations() {
+		if(this.extraction.equals("Process")) {
+			int te = 0;
+			for(ModelElementInstance e: this.getCollectionOfElementType(ThrowEvent.class)) 
+				for(EventDefinition ed : ((ThrowEvent) e).getEventDefinitions())
+					if(ed instanceof TimerEventDefinition)
+						if(((TimerEventDefinition) ed).getTimeDuration() != null)
+						te++;
+			for(ModelElementInstance e: this.getCollectionOfElementType(CatchEvent.class)) 
+				for(EventDefinition ed : ((CatchEvent) e).getEventDefinitions())
+					if(ed instanceof TimerEventDefinition)
+						if(((TimerEventDefinition) ed).getTimeDuration() != null)
+							te++;
+			return te;
+		}
 		return getNumberOfTypeElement(TimeDuration.class);
 	}
 	
