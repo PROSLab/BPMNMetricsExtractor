@@ -1244,10 +1244,10 @@ public class BpmnBasicMetricsExtractor {
 	public int getConditionalEvent() {
 		if(this.extraction.equals("Process")) {
 			int ce = 0;
-			for(ModelElementInstance e: this.getCollectionOfElementType(ThrowEvent.class)) 
+			/*for(ModelElementInstance e: this.getCollectionOfElementType(ThrowEvent.class)) 
 				for(EventDefinition ed : ((ThrowEvent) e).getEventDefinitions())
 					if(ed instanceof ConditionalEventDefinition)
-						ce++;
+						ce++;*/
 			for(ModelElementInstance e: this.getCollectionOfElementType(CatchEvent.class)) 
 				for(EventDefinition ed : ((CatchEvent) e).getEventDefinitions())
 					if(ed instanceof ConditionalEventDefinition)
@@ -2120,7 +2120,7 @@ public class BpmnBasicMetricsExtractor {
 		return getNumberOfTypeElement(IoSpecification.class);
 	}
 	
-	/**
+	/**TODO process extraction?
 	 * Metric: NIAEL
 	 * 
 	 * @return number of Item Aware Elements
@@ -2883,10 +2883,10 @@ public class BpmnBasicMetricsExtractor {
 	public int getTimerEventDefinitions() {
 		if(this.extraction.equals("Process")) {
 			int te = 0;
-			for(ModelElementInstance e: this.getCollectionOfElementType(ThrowEvent.class)) 
+			/*for(ModelElementInstance e: this.getCollectionOfElementType(ThrowEvent.class)) 
 				for(EventDefinition ed : ((ThrowEvent) e).getEventDefinitions())
 					if(ed instanceof TimerEventDefinition)
-						te++;
+						te++;*/
 			for(ModelElementInstance e: this.getCollectionOfElementType(CatchEvent.class)) 
 				for(EventDefinition ed : ((CatchEvent) e).getEventDefinitions())
 					if(ed instanceof TimerEventDefinition)

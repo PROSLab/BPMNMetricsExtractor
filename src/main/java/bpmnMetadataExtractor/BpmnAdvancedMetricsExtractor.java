@@ -616,7 +616,7 @@ public class BpmnAdvancedMetricsExtractor {
 	 */
 	public double getProcessComplexity() {
 		try {
-			return (double)(this.getControlFlowComplexity() + this.partExtractor.getDepth());
+			return (double)(this.getControlFlowComplexity() + this.ndExtractor.getMaxNestingDepth());
 		} 
 		catch (ArithmeticException e) {
 			return 0;	
