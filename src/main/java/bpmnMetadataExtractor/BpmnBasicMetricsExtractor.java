@@ -124,7 +124,7 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NFOREXP", this.getFormalExpressions());
 		this.json.addBasicMetric("NGA", this.getGateways());
 		//this.json.addBasicMetric("NGC", this.getGlobalConversations());
-		this.json.addBasicMetric("NHP", this.getHumanPerformers());
+		//this.json.addBasicMetric("NHP", this.getHumanPerformers());
 		this.json.addBasicMetric("NIMP", this.getImports());
 		this.json.addBasicMetric("NInDI", this.getInputDataItems());
 		this.json.addBasicMetric("NInS", this.getInputSets());
@@ -151,8 +151,8 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NPG", this.getParallelGateways());
 		this.json.addBasicMetric("NPAS", this.getParticipantAssociations());
 		this.json.addBasicMetric("NPM", this.getParticipantMultiplicities());
-		this.json.addBasicMetric("NPER", this.getPerformers());
-		this.json.addBasicMetric("NPO", this.getPotentialOwners());
+		//this.json.addBasicMetric("NPER", this.getPerformers());
+		//this.json.addBasicMetric("NPO", this.getPotentialOwners());
 		this.json.addBasicMetric("NPROC", this.getProcesses());
 		this.json.addBasicMetric("NPROP", this.getProperties());
 		this.json.addBasicMetric("NRT", this.getReceiveTasks());
@@ -344,7 +344,7 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NFOREXP", this.getFormalExpressions(), this.numberProcess);
 		this.json.addBasicMetric("NGA", this.getGateways(), this.numberProcess);
 		//this.json.addBasicMetric("NGC", this.getGlobalConversations(), this.numberProcess);
-		this.json.addBasicMetric("NHP", this.getHumanPerformers(), this.numberProcess);
+		//this.json.addBasicMetric("NHP", this.getHumanPerformers(), this.numberProcess);
 		this.json.addBasicMetric("NIMP", this.getImports(), this.numberProcess);
 		this.json.addBasicMetric("NInDI", this.getInputDataItems(), this.numberProcess);
 		this.json.addBasicMetric("NInS", this.getInputSets(), this.numberProcess);
@@ -371,8 +371,8 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NPG", this.getParallelGateways(), this.numberProcess);
 		this.json.addBasicMetric("NPAS", this.getParticipantAssociations(), this.numberProcess);
 		this.json.addBasicMetric("NPM", this.getParticipantMultiplicities(), this.numberProcess);
-		this.json.addBasicMetric("NPER", this.getPerformers(), this.numberProcess);
-		this.json.addBasicMetric("NPO", this.getPotentialOwners(), this.numberProcess);
+		//this.json.addBasicMetric("NPER", this.getPerformers(), this.numberProcess);
+		//this.json.addBasicMetric("NPO", this.getPotentialOwners(), this.numberProcess);
 		this.json.addBasicMetric("NPROC", this.getProcesses(), this.numberProcess);
 		this.json.addBasicMetric("NPROP", this.getProperties(), this.numberProcess);
 		this.json.addBasicMetric("NRT", this.getReceiveTasks(), this.numberProcess);
@@ -1801,9 +1801,9 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number of Human Performers
 	 */
-	public int getHumanPerformers() {
+	/*public int getHumanPerformers() {
 		return getNumberOfTypeElement(HumanPerformer.class);
-	}
+	}*/
 	
 	/**
 	 * Metric: NIMP
@@ -2348,18 +2348,18 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number of Performers 
 	 */
-	public int getPerformers() {
+	/*public int getPerformers() {
 		return getNumberOfTypeElement(Performer.class);
-	}
+	}*/
 	
 	/**
 	 * Metric: NPO
 	 * 
 	 * @return number of Potential Owners
 	 */
-	public int getPotentialOwners() {
+	/*public int getPotentialOwners() {
 		return getNumberOfTypeElement(PotentialOwner.class);
-	}
+	}*/
 	
 	/**
 	 * Metric: NPROC
