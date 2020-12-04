@@ -135,7 +135,7 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NIOB", this.getIoBindings());
 		this.json.addBasicMetric("NIOS", this.getIoSpecifications());
 		this.json.addBasicMetric("NIAEL", this.getItemAwareElements());
-		this.json.addBasicMetric("NIDEF", this.getItemDefinitions());
+		//this.json.addBasicMetric("NIDEF", this.getItemDefinitions());
 		this.json.addBasicMetric("NLEV", this.getLinkEvents());
 		this.json.addBasicMetric("NLOOPCA", this.getLoopCardinalities());
 		this.json.addBasicMetric("NLOOPCH", this.getLoopCharacteristics());
@@ -355,7 +355,7 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NIOB", this.getIoBindings(), this.numberProcess);
 		this.json.addBasicMetric("NIOS", this.getIoSpecifications(), this.numberProcess);
 		this.json.addBasicMetric("NIAEL", this.getItemAwareElements(), this.numberProcess);
-		this.json.addBasicMetric("NIDEF", this.getItemDefinitions(), this.numberProcess);
+		//this.json.addBasicMetric("NIDEF", this.getItemDefinitions(), this.numberProcess);
 		this.json.addBasicMetric("NLEV", this.getLinkEvents(), this.numberProcess);
 		this.json.addBasicMetric("NLOOPCA", this.getLoopCardinalities(), this.numberProcess);
 		this.json.addBasicMetric("NLOOPCH", this.getLoopCharacteristics(), this.numberProcess);
@@ -1424,6 +1424,13 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Data States
 	 */
 	public int getDataStates() {
+		if(this.extraction.equals("Process")) {
+			int ds = 0;
+			for(ModelElementInstance iae : this.getCollectionOfElementType(ItemAwareElement.class))
+				if(((ItemAwareElement) iae).getDataState() != null)
+					ds++;
+			return ds;
+		}	
 		return getNumberOfTypeElement(DataState.class);
 	}
 	
@@ -1717,7 +1724,7 @@ public class BpmnBasicMetricsExtractor {
 		return getNumberOfTypeElement(EventDefinition.class);
 	}
 	
-	/**
+	/**TODO
 	 * Metric: NEXP
 	 * 
 	 * @return number of Expressions
@@ -1769,7 +1776,7 @@ public class BpmnBasicMetricsExtractor {
 		return getNumberOfTypeElement(FlowNode.class);
 	}
 	
-	/**
+	/**TODO
 	 * Metric: NFOREXP
 	 * 
 	 * @return number of Formal Expressions
@@ -2127,9 +2134,9 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number of Item Definitions
 	 */
-	public int getItemDefinitions() {
+	/*public int getItemDefinitions() {
 		return getNumberOfTypeElement(ItemDefinition.class);
-	}
+	}*/
 	
 	/**
 	 * Metric: NLEV
@@ -2807,11 +2814,11 @@ public class BpmnBasicMetricsExtractor {
 	public int getTimeCycles() {
 		if(this.extraction.equals("Process")) {
 			int te = 0;
-			for(ModelElementInstance e: this.getCollectionOfElementType(ThrowEvent.class)) 
+			/*for(ModelElementInstance e: this.getCollectionOfElementType(ThrowEvent.class)) 
 				for(EventDefinition ed : ((ThrowEvent) e).getEventDefinitions())
 					if(ed instanceof TimerEventDefinition)
 						if(((TimerEventDefinition) ed).getTimeCycle() != null)
-						te++;
+						te++;*/
 			for(ModelElementInstance e: this.getCollectionOfElementType(CatchEvent.class)) 
 				for(EventDefinition ed : ((CatchEvent) e).getEventDefinitions())
 					if(ed instanceof TimerEventDefinition)
@@ -2830,11 +2837,11 @@ public class BpmnBasicMetricsExtractor {
 	public int getTimeDates() {
 		if(this.extraction.equals("Process")) {
 			int te = 0;
-			for(ModelElementInstance e: this.getCollectionOfElementType(ThrowEvent.class)) 
+			/*for(ModelElementInstance e: this.getCollectionOfElementType(ThrowEvent.class)) 
 				for(EventDefinition ed : ((ThrowEvent) e).getEventDefinitions())
 					if(ed instanceof TimerEventDefinition)
 						if(((TimerEventDefinition) ed).getTimeDate() != null)
-						te++;
+						te++;*/
 			for(ModelElementInstance e: this.getCollectionOfElementType(CatchEvent.class)) 
 				for(EventDefinition ed : ((CatchEvent) e).getEventDefinitions())
 					if(ed instanceof TimerEventDefinition)
@@ -2853,11 +2860,11 @@ public class BpmnBasicMetricsExtractor {
 	public int getTimeDurations() {
 		if(this.extraction.equals("Process")) {
 			int te = 0;
-			for(ModelElementInstance e: this.getCollectionOfElementType(ThrowEvent.class)) 
+			/*for(ModelElementInstance e: this.getCollectionOfElementType(ThrowEvent.class)) 
 				for(EventDefinition ed : ((ThrowEvent) e).getEventDefinitions())
 					if(ed instanceof TimerEventDefinition)
 						if(((TimerEventDefinition) ed).getTimeDuration() != null)
-						te++;
+						te++;*/
 			for(ModelElementInstance e: this.getCollectionOfElementType(CatchEvent.class)) 
 				for(EventDefinition ed : ((CatchEvent) e).getEventDefinitions())
 					if(ed instanceof TimerEventDefinition)
