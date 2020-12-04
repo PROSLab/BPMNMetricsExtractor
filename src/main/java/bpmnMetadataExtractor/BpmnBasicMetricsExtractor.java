@@ -80,7 +80,7 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NBRT", this.getBusinessRuleTasks());
 		this.json.addBasicMetric("NCEL", this.getCallableElements());
 		this.json.addBasicMetric("NCAC", this.getCallActivities());
-		this.json.addBasicMetric("NCCO", this.getCallConversations());
+		//this.json.addBasicMetric("NCCO", this.getCallConversations());
 		this.json.addBasicMetric("NCANEV", this.getCancelEvents());
 		this.json.addBasicMetric("NCATEV", this.getCatchEvents());
 		this.json.addBasicMetric("NCVAL", this.getCategoryValues());
@@ -91,15 +91,15 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NCOND", this.getConditions());
 		this.json.addBasicMetric("NCONDEV", this.getConditionalEvent());
 		this.json.addBasicMetric("NCONDEX", this.getConditionExpressions());
-		this.json.addBasicMetric("NCONV", this.getConversations());
-		this.json.addBasicMetric("NCONVAS", this.getConversationAssociations());
-		this.json.addBasicMetric("NCONVL", this.getConversationLinks());
-		this.json.addBasicMetric("NCONVN", this.getConversationNodes());
-		this.json.addBasicMetric("NCORK", this.getCorrelationKeys());
-		this.json.addBasicMetric("NCORP", this.getCorrelationProperties());
-		this.json.addBasicMetric("NCORPB", this.getCorrelationPropertyBindings());
-		this.json.addBasicMetric("NCORPRE", this.getCorrelationPropertyRetrievalExpressions());
-		this.json.addBasicMetric("NCORS", this.getCorrelationSubscriptions());
+		//this.json.addBasicMetric("NCONV", this.getConversations());
+		//this.json.addBasicMetric("NCONVAS", this.getConversationAssociations());
+		//this.json.addBasicMetric("NCONVL", this.getConversationLinks());
+		//this.json.addBasicMetric("NCONVN", this.getConversationNodes());
+		//this.json.addBasicMetric("NCORK", this.getCorrelationKeys());
+		//this.json.addBasicMetric("NCORP", this.getCorrelationProperties());
+		//this.json.addBasicMetric("NCORPB", this.getCorrelationPropertyBindings());
+		//this.json.addBasicMetric("NCORPRE", this.getCorrelationPropertyRetrievalExpressions());
+		//this.json.addBasicMetric("NCORS", this.getCorrelationSubscriptions());
 		this.json.addBasicMetric("NDA", this.getDataAssociations());
 		this.json.addBasicMetric("NDInA", this.getDataInputAssociations());
 		this.json.addBasicMetric("NDO", this.getDataObjects());
@@ -124,7 +124,7 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NFLNO", this.getFlowNodes());
 		this.json.addBasicMetric("NFOREXP", this.getFormalExpressions());
 		this.json.addBasicMetric("NGA", this.getGateways());
-		this.json.addBasicMetric("NGC", this.getGlobalConversations());
+		//this.json.addBasicMetric("NGC", this.getGlobalConversations());
 		this.json.addBasicMetric("NHP", this.getHumanPerformers());
 		this.json.addBasicMetric("NIMP", this.getImports());
 		this.json.addBasicMetric("NInDI", this.getInputDataItems());
@@ -173,7 +173,7 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NSI", this.getSignals());
 		this.json.addBasicMetric("NSIEV", this.getSignalEvent());
 		this.json.addBasicMetric("NSTEV", this.getStartEvents());
-		this.json.addBasicMetric("NSCONV", this.getSubConversations());
+		//this.json.addBasicMetric("NSCONV", this.getSubConversations());
 		this.json.addBasicMetric("NTEX", this.getTexts());
 		this.json.addBasicMetric("NTEXA", this.getTextAnnotations());
 		this.json.addBasicMetric("NTHEV", this.getThrowEvents());
@@ -300,7 +300,7 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NBRT", this.getBusinessRuleTasks(), this.numberProcess);
 		this.json.addBasicMetric("NCEL", this.getCallableElements(), this.numberProcess);
 		this.json.addBasicMetric("NCAC", this.getCallActivities(), this.numberProcess);
-		this.json.addBasicMetric("NCCO", this.getCallConversations(), this.numberProcess);
+		//this.json.addBasicMetric("NCCO", this.getCallConversations(), this.numberProcess);
 		this.json.addBasicMetric("NCANEV", this.getCancelEvents(), this.numberProcess);
 		this.json.addBasicMetric("NCATEV", this.getCatchEvents(), this.numberProcess);
 		this.json.addBasicMetric("NCVAL", this.getCategoryValues(), this.numberProcess);
@@ -311,15 +311,15 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NCOND", this.getConditions(), this.numberProcess);
 		this.json.addBasicMetric("NCONDEV", this.getConditionalEvent(), this.numberProcess);
 		this.json.addBasicMetric("NCONDEX", this.getConditionExpressions(), this.numberProcess);
-		this.json.addBasicMetric("NCONV", this.getConversations(), this.numberProcess);
-		this.json.addBasicMetric("NCONVAS", this.getConversationAssociations(), this.numberProcess);
-		this.json.addBasicMetric("NCONVL", this.getConversationLinks(), this.numberProcess);
-		this.json.addBasicMetric("NCONVN", this.getConversationNodes(), this.numberProcess);
-		this.json.addBasicMetric("NCORK", this.getCorrelationKeys(), this.numberProcess);
-		this.json.addBasicMetric("NCORP", this.getCorrelationProperties(), this.numberProcess);
-		this.json.addBasicMetric("NCORPB", this.getCorrelationPropertyBindings(), this.numberProcess);
-		this.json.addBasicMetric("NCORPRE", this.getCorrelationPropertyRetrievalExpressions(), this.numberProcess);
-		this.json.addBasicMetric("NCORS", this.getCorrelationSubscriptions(), this.numberProcess);
+		//this.json.addBasicMetric("NCONV", this.getConversations(), this.numberProcess);
+		//this.json.addBasicMetric("NCONVAS", this.getConversationAssociations(), this.numberProcess);
+		//this.json.addBasicMetric("NCONVL", this.getConversationLinks(), this.numberProcess);
+		//this.json.addBasicMetric("NCONVN", this.getConversationNodes(), this.numberProcess);
+		//this.json.addBasicMetric("NCORK", this.getCorrelationKeys(), this.numberProcess);
+		//this.json.addBasicMetric("NCORP", this.getCorrelationProperties(), this.numberProcess);
+		//this.json.addBasicMetric("NCORPB", this.getCorrelationPropertyBindings(), this.numberProcess);
+		//this.json.addBasicMetric("NCORPRE", this.getCorrelationPropertyRetrievalExpressions(), this.numberProcess);
+		//this.json.addBasicMetric("NCORS", this.getCorrelationSubscriptions(), this.numberProcess);
 		this.json.addBasicMetric("NDA", this.getDataAssociations(), this.numberProcess);
 		this.json.addBasicMetric("NDInA", this.getDataInputAssociations(), this.numberProcess);
 		this.json.addBasicMetric("NDO", this.getDataObjects(), this.numberProcess);
@@ -344,7 +344,7 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NFLNO", this.getFlowNodes(), this.numberProcess);
 		this.json.addBasicMetric("NFOREXP", this.getFormalExpressions(), this.numberProcess);
 		this.json.addBasicMetric("NGA", this.getGateways(), this.numberProcess);
-		this.json.addBasicMetric("NGC", this.getGlobalConversations(), this.numberProcess);
+		//this.json.addBasicMetric("NGC", this.getGlobalConversations(), this.numberProcess);
 		this.json.addBasicMetric("NHP", this.getHumanPerformers(), this.numberProcess);
 		this.json.addBasicMetric("NIMP", this.getImports(), this.numberProcess);
 		this.json.addBasicMetric("NInDI", this.getInputDataItems(), this.numberProcess);
@@ -393,7 +393,7 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NSI", this.getSignals(), this.numberProcess);
 		this.json.addBasicMetric("NSIEV", this.getSignalEvent(), this.numberProcess);
 		this.json.addBasicMetric("NSTEV", this.getStartEvents(), this.numberProcess);
-		this.json.addBasicMetric("NSCONV", this.getSubConversations(), this.numberProcess);
+		//this.json.addBasicMetric("NSCONV", this.getSubConversations(), this.numberProcess);
 		this.json.addBasicMetric("NTEX", this.getTexts(), this.numberProcess);
 		this.json.addBasicMetric("NTEXA", this.getTextAnnotations(), this.numberProcess);
 		this.json.addBasicMetric("NTHEV", this.getThrowEvents(), this.numberProcess);
@@ -1128,9 +1128,9 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number of Call Conversations
 	 */
-	public int getCallConversations() {
+	/*public int getCallConversations() {
 		return getNumberOfTypeElement(CallConversation.class);
-	}
+	}*/
 	
 	/**
 	 * Metric: NCANEV
@@ -1280,81 +1280,81 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number of Conversations
 	 */
-	public int getConversations() {
+	/*public int getConversations() {
 		return getNumberOfTypeElement(Conversation.class);
-	}
+	}*/
 	
 	/**
 	 * Metric: NCONVAS
 	 * 
 	 * @return number of Conversation Associations
 	 */
-	public int getConversationAssociations() {
+	/*public int getConversationAssociations() {
 		return getNumberOfTypeElement(ConversationAssociation.class);
-	}
+	}*/
 	
 	/**
 	 * Metric: NCONVL
 	 * 
 	 * @return number of Conversation Links
 	 */
-	public int getConversationLinks() {
+	/*public int getConversationLinks() {
 		return getNumberOfTypeElement(ConversationLink.class);
-	}
+	}*/
 	
 	/**
 	 * Metric: NCONVN
 	 * 
 	 * @return number of Conversation Node
 	 */
-	public int getConversationNodes() {
+	/*public int getConversationNodes() {
 		return getNumberOfTypeElement(ConversationNode.class);
-	}
+	}*/
 	
 	/**
 	 * Metric: NCORK
 	 * 
 	 * @return number of Correlation Keys
 	 */
-	public int getCorrelationKeys() {
+	/*public int getCorrelationKeys() {
 		return getNumberOfTypeElement(CorrelationKey.class);
-	}
+	}*/
 	
 	/**
 	 * Metric: NCORP
 	 * 
 	 * @return number of Correlation Properties
 	 */
-	public int getCorrelationProperties() {
+	/*public int getCorrelationProperties() {
 		return getNumberOfTypeElement(CorrelationProperty.class);
-	}
+	}*/
 	
 	/**
 	 * Metric: NCORPB
 	 * 
 	 * @return number of Correlation Property Bindings
 	 */
-	public int getCorrelationPropertyBindings() {
+	/*public int getCorrelationPropertyBindings() {
 		return getNumberOfTypeElement(CorrelationPropertyBinding.class);
-	}
+	}*/
 	
 	/**
 	 * Metric: NCORPRE
 	 * 
 	 * @return number of Correlation Property Retrieval Expressions
 	 */
-	public int getCorrelationPropertyRetrievalExpressions() {
+	/*public int getCorrelationPropertyRetrievalExpressions() {
 		return getNumberOfTypeElement(CorrelationPropertyRetrievalExpression.class);
-	}
+	}*/
 	
 	/**
 	 * Metric: NCORS
 	 * 
 	 * @return number of Correlation Subscriptions
 	 */
-	public int getCorrelationSubscriptions() {
+	/*public int getCorrelationSubscriptions() {
 		return getNumberOfTypeElement(CorrelationSubscription.class);
-	}
+	}*/
 	
 	/**
 	 * Metric: NDA
@@ -1793,9 +1793,9 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number of Global Conversations
 	 */
-	public int getGlobalConversations() {
+	/*public int getGlobalConversations() {
 		return getNumberOfTypeElement(GlobalConversation.class);
-	}
+	}*/
 	
 	/**
 	 * Metric: NHP
@@ -2737,9 +2737,9 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number of Sub Conversations
 	 */
-	public int getSubConversations() {
+	/*public int getSubConversations() {
 		return getNumberOfTypeElement(SubConversation.class);
-	}
+	}*/
 	
 	/**
 	 * Metric: NTEX
