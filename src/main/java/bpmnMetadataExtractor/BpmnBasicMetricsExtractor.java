@@ -5,7 +5,6 @@ import java.util.Vector;
 
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.camunda.bpm.model.bpmn.instance.*;
-import org.camunda.bpm.model.bpmn.instance.Error;
 import org.camunda.bpm.model.bpmn.instance.Process;
 import org.camunda.bpm.model.xml.instance.ModelElementInstance;
 import org.camunda.bpm.model.xml.type.ModelElementType;
@@ -88,7 +87,7 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NCOMEV", this.getCompensateEvents());
 		this.json.addBasicMetric("NCOCON", this.getCompletionConditions());
 		this.json.addBasicMetric("NCBDEF", this.getComplexBehaviorDefinitions());
-		this.json.addBasicMetric("NCOND", this.getConditions());
+		//this.json.addBasicMetric("NCOND", this.getConditions());
 		this.json.addBasicMetric("NCONDEV", this.getConditionalEvent());
 		this.json.addBasicMetric("NCONDEX", this.getConditionExpressions());
 		//this.json.addBasicMetric("NCONV", this.getConversations());
@@ -111,9 +110,9 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NDOC", this.getDocumentations());
 		this.json.addBasicMetric("NENDEV", this.getEndEvents());
 		this.json.addBasicMetric("NENDP", this.getEndPoints());
-		this.json.addBasicMetric("NERR", this.getErrors());
+		//this.json.addBasicMetric("NERR", this.getErrors());
 		this.json.addBasicMetric("NERREV", this.getErrorEvents());
-		this.json.addBasicMetric("NESC", this.getEscalations());
+		//this.json.addBasicMetric("NESC", this.getEscalations());
 		this.json.addBasicMetric("NESCEV", this.getEscalationEvents());
 		this.json.addBasicMetric("NEV", this.getEvents());
 		this.json.addBasicMetric("NEVDEF", this.getEventDefinitions());
@@ -141,7 +140,7 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NLOOPCA", this.getLoopCardinalities());
 		this.json.addBasicMetric("NLOOPCH", this.getLoopCharacteristics());
 		this.json.addBasicMetric("NMT", this.getManualTasks());
-		this.json.addBasicMetric("NMES", this.getMessages());
+		//this.json.addBasicMetric("NMES", this.getMessages());
 		this.json.addBasicMetric("NMESEV", this.getMessageEvents());
 		this.json.addBasicMetric("NMESFA", this.getMessageFlowAssociations());
 		this.json.addBasicMetric("NMON", this.getMonitorings());
@@ -165,12 +164,12 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NRESPB", this.getResourceParameterBindings());
 		this.json.addBasicMetric("NRESR", this.getResourceRoles());
 		this.json.addBasicMetric("NRE", this.getRootElements());
-		this.json.addBasicMetric("NSCR", this.getScripts());
+		//this.json.addBasicMetric("NSCR", this.getScripts());
 		this.json.addBasicMetric("NSCT", this.getScriptTasks());
 		this.json.addBasicMetric("NSENT", this.getSendTasks());
 		this.json.addBasicMetric("NSEQF", this.getSequenceFlows());
 		this.json.addBasicMetric("NSERT", this.getServiceTasks());
-		this.json.addBasicMetric("NSI", this.getSignals());
+		//this.json.addBasicMetric("NSI", this.getSignals());
 		this.json.addBasicMetric("NSIEV", this.getSignalEvent());
 		this.json.addBasicMetric("NSTEV", this.getStartEvents());
 		//this.json.addBasicMetric("NSCONV", this.getSubConversations());
@@ -308,7 +307,7 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NCOMEV", this.getCompensateEvents(), this.numberProcess);
 		this.json.addBasicMetric("NCOCON", this.getCompletionConditions(), this.numberProcess);
 		this.json.addBasicMetric("NCBDEF", this.getComplexBehaviorDefinitions(), this.numberProcess);
-		this.json.addBasicMetric("NCOND", this.getConditions(), this.numberProcess);
+		//this.json.addBasicMetric("NCOND", this.getConditions(), this.numberProcess);
 		this.json.addBasicMetric("NCONDEV", this.getConditionalEvent(), this.numberProcess);
 		this.json.addBasicMetric("NCONDEX", this.getConditionExpressions(), this.numberProcess);
 		//this.json.addBasicMetric("NCONV", this.getConversations(), this.numberProcess);
@@ -331,9 +330,9 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NDOC", this.getDocumentations(), this.numberProcess);
 		this.json.addBasicMetric("NENDEV", this.getEndEvents(), this.numberProcess);
 		this.json.addBasicMetric("NENDP", this.getEndPoints(), this.numberProcess);
-		this.json.addBasicMetric("NERR", this.getErrors(), this.numberProcess);
+		//this.json.addBasicMetric("NERR", this.getErrors(), this.numberProcess);
 		this.json.addBasicMetric("NERREV", this.getErrorEvents(), this.numberProcess);
-		this.json.addBasicMetric("NESC", this.getEscalations(), this.numberProcess);
+		//this.json.addBasicMetric("NESC", this.getEscalations(), this.numberProcess);
 		this.json.addBasicMetric("NESCEV", this.getEscalationEvents(), this.numberProcess);
 		this.json.addBasicMetric("NEV", this.getEvents(), this.numberProcess);
 		this.json.addBasicMetric("NEVDEF", this.getEventDefinitions(), this.numberProcess);
@@ -361,7 +360,7 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NLOOPCA", this.getLoopCardinalities(), this.numberProcess);
 		this.json.addBasicMetric("NLOOPCH", this.getLoopCharacteristics(), this.numberProcess);
 		this.json.addBasicMetric("NMT", this.getManualTasks(), this.numberProcess);
-		this.json.addBasicMetric("NMES", this.getMessages(), this.numberProcess);
+		//this.json.addBasicMetric("NMES", this.getMessages(), this.numberProcess);
 		this.json.addBasicMetric("NMESEV", this.getMessageEvents(), this.numberProcess);
 		this.json.addBasicMetric("NMESFA", this.getMessageFlowAssociations(), this.numberProcess);
 		this.json.addBasicMetric("NMON", this.getMonitorings(), this.numberProcess);
@@ -385,12 +384,12 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NRESPB", this.getResourceParameterBindings(), this.numberProcess);
 		this.json.addBasicMetric("NRESR", this.getResourceRoles(), this.numberProcess);
 		this.json.addBasicMetric("NRE", this.getRootElements(), this.numberProcess);
-		this.json.addBasicMetric("NSCR", this.getScripts(), this.numberProcess);
+		//this.json.addBasicMetric("NSCR", this.getScripts(), this.numberProcess);
 		this.json.addBasicMetric("NSCT", this.getScriptTasks(), this.numberProcess);
 		this.json.addBasicMetric("NSENT", this.getSendTasks(), this.numberProcess);
 		this.json.addBasicMetric("NSEQF", this.getSequenceFlows(), this.numberProcess);
 		this.json.addBasicMetric("NSERT", this.getServiceTasks(), this.numberProcess);
-		this.json.addBasicMetric("NSI", this.getSignals(), this.numberProcess);
+		//this.json.addBasicMetric("NSI", this.getSignals(), this.numberProcess);
 		this.json.addBasicMetric("NSIEV", this.getSignalEvent(), this.numberProcess);
 		this.json.addBasicMetric("NSTEV", this.getStartEvents(), this.numberProcess);
 		//this.json.addBasicMetric("NSCONV", this.getSubConversations(), this.numberProcess);
@@ -1233,9 +1232,9 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number of Conditions
 	 */
-	public int getConditions() {
+	/*public int getConditions() {
 		return getNumberOfTypeElement(Condition.class);
-	}
+	}*/
 	
 	/**
 	 * Metric: NCONDEV
@@ -1637,9 +1636,9 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number of Errors 
 	 */
-	public int getErrors() {
+	/*public int getErrors() {
 		return getNumberOfTypeElement(Error.class);
-	}
+	}*/
 	
 	/**
 	 * Metric: NERREV
@@ -1667,9 +1666,9 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number of Escalations 
 	 */
-	public int getEscalations() {
+	/*public int getEscalations() {
 		return getNumberOfTypeElement(Escalation.class);
-	}
+	}*/
 	
 	/**
 	 * Metric: NESCEV
@@ -2202,9 +2201,9 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number of Messages
 	 */
-	public int getMessages() {
+	/*public int getMessages() {
 		return getNumberOfTypeElement(Message.class);
-	}
+	}*/
 	
 	/**
 	 * Metric: NMESEV
@@ -2501,9 +2500,9 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number of Scripts
 	 */
-	public int getScripts() {
+	/*public int getScripts() {
 		return getNumberOfTypeElement(Script.class);
-	}
+	}*/
 	
 	/**
 	 * Metric: NSCT
@@ -2546,9 +2545,9 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number of Signals
 	 */
-	public int getSignals() {
+	/*public int getSignals() {
 		return getNumberOfTypeElement(Signal.class);
-	}
+	}*/
 	
 	/**
 	 * Metric: NSIEV
