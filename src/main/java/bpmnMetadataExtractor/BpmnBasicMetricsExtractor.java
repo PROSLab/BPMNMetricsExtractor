@@ -160,7 +160,7 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NREN", this.getRenderings());
 		this.json.addBasicMetric("NRES", this.getResources());
 		this.json.addBasicMetric("NRESAEX", this.getResourceAssignmentExpressions());
-		this.json.addBasicMetric("NRESP", this.getResourceParameters());
+		//this.json.addBasicMetric("NRESP", this.getResourceParameters());
 		this.json.addBasicMetric("NRESPB", this.getResourceParameterBindings());
 		this.json.addBasicMetric("NRESR", this.getResourceRoles());
 		this.json.addBasicMetric("NRE", this.getRootElements());
@@ -380,7 +380,7 @@ public class BpmnBasicMetricsExtractor {
 		this.json.addBasicMetric("NREN", this.getRenderings(), this.numberProcess);
 		this.json.addBasicMetric("NRES", this.getResources(), this.numberProcess);
 		this.json.addBasicMetric("NRESAEX", this.getResourceAssignmentExpressions(), this.numberProcess);
-		this.json.addBasicMetric("NRESP", this.getResourceParameters(), this.numberProcess);
+		//this.json.addBasicMetric("NRESP", this.getResourceParameters(), this.numberProcess);
 		this.json.addBasicMetric("NRESPB", this.getResourceParameterBindings(), this.numberProcess);
 		this.json.addBasicMetric("NRESR", this.getResourceRoles(), this.numberProcess);
 		this.json.addBasicMetric("NRE", this.getRootElements(), this.numberProcess);
@@ -2426,6 +2426,17 @@ public class BpmnBasicMetricsExtractor {
 	 * @return number of Resources
 	 */
 	public int getResources() {
+		if(this.extraction.equals("Process")) {
+			int r = 0;
+			for(ResourceRole rr : this.process.getResourceRoles())
+				if(rr.getResource() != null)
+					r++;
+			for(ModelElementInstance a: this.getCollectionOfElementType(Activity.class)) 
+				for(ResourceRole rr : ((Activity) a).getResourceRoles())
+					if(rr.getResource() != null)
+						r++;
+			return r;
+			}
 		return getNumberOfTypeElement(Resource.class);
 	}
 	
@@ -2436,13 +2447,15 @@ public class BpmnBasicMetricsExtractor {
 	 */
 	public int getResourceAssignmentExpressions() {
 		if(this.extraction.equals("Process")) {
-			int rr = 0;
-			if(((ResourceRole) this.process.getResourceRoles()).getResourceAssignmentExpression() != null)
-				rr++;
+			int rae = 0;
+			for(ResourceRole r : this.process.getResourceRoles())
+				if(r.getResourceAssignmentExpression() != null)
+					rae++;
 			for(ModelElementInstance a: this.getCollectionOfElementType(Activity.class)) 
-				if(((ResourceRole) ((Activity) a).getResourceRoles()).getResourceAssignmentExpression() != null)
-				rr++;
-			return rr;
+				for(ResourceRole r : ((Activity) a).getResourceRoles())
+					if(r.getResourceAssignmentExpression() != null)
+						rae++;
+			return rae;
 			}
 		return getNumberOfTypeElement(ResourceAssignmentExpression.class);
 	}
@@ -2452,9 +2465,9 @@ public class BpmnBasicMetricsExtractor {
 	 * 
 	 * @return number of Resource Parameters
 	 */
-	public int getResourceParameters() {
+	/*public int getResourceParameters() {
 		return getNumberOfTypeElement(ResourceParameter.class);
-	}
+	}*/
 	
 	/**
 	 * Metric: NRESPB
@@ -2463,10 +2476,13 @@ public class BpmnBasicMetricsExtractor {
 	 */
 	public int getResourceParameterBindings() {
 		if(this.extraction.equals("Process")) {
-			int rr = ((ResourceRole) this.process.getResourceRoles()).getResourceParameterBinding().size() ;
+			int rpb = 0;
+			for(ResourceRole r : this.process.getResourceRoles())
+				rpb+=r.getResourceParameterBinding().size();
 			for(ModelElementInstance a: this.getCollectionOfElementType(Activity.class)) 
-				rr+= ((ResourceRole) ((Activity) a).getResourceRoles()).getResourceParameterBinding().size();
-			return rr;
+				for(ResourceRole r : ((Activity) a).getResourceRoles())
+					rpb+=r.getResourceParameterBinding().size();
+			return rpb;
 			}
 		return getNumberOfTypeElement(ResourceParameterBinding.class);
 	}
