@@ -563,8 +563,8 @@ public class BpmnAdvancedMetricsExtractor {
 	public double getHalsteadBasedProcessComplexityVolume() {
 		double toReturn = 0;
 		try {
-			toReturn = (getNumberOfElements() + basicMetricsExtractor.getDataObjects() 
-			* (logBase2(getNumberOfUniqueElements() + getNumberOfUniqueDataObjects())));
+			toReturn = (getNumberOfElements() + basicMetricsExtractor.getDataObjects()) 
+			* (logBase2(getNumberOfUniqueElements() + getNumberOfUniqueDataObjects()));
 		} catch (ArithmeticException e) {
 		}
 		if (Double.isFinite(toReturn))
