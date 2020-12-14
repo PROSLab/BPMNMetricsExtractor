@@ -1724,12 +1724,22 @@ public class BpmnBasicMetricsExtractor {
 		return getNumberOfTypeElement(EventDefinition.class);
 	}
 	
-	/**TODO
+	/**
 	 * Metric: NEXP
 	 * 
 	 * @return number of Expressions
 	 */
 	public int getExpressions() {
+		if(this.extraction.equals("Process")) {
+			int c = 0;
+			for(ModelElementInstance e: this.getCollectionOfElementType(CatchEvent.class)) 
+				for(EventDefinition ed : ((CatchEvent) e).getEventDefinitions())
+					if(ed instanceof ConditionalEventDefinition)
+						if(((ConditionalEventDefinition) ed).getCondition() != null)
+							c++;
+			return this.getActivationConditions() + this.getCompletionConditions() + this.getFormalExpressions()
+			+ this.getLoopCardinalities() + this.getTimeCycles() + this.getTimeDates() + this.getTimeDurations() + c;
+		}
 		return getNumberOfTypeElement(Expression.class);
 	}
 	
@@ -1752,7 +1762,7 @@ public class BpmnBasicMetricsExtractor {
 			int e = 0;
 			for(ModelElementInstance be : this.getCollectionOfElementType(BaseElement.class))
 				if(((BaseElement) be).getExtensionElements() != null)
-				e++;
+					e++;
 			return e;
 		}
 		return getNumberOfTypeElement(ExtensionElements.class);
@@ -1776,12 +1786,15 @@ public class BpmnBasicMetricsExtractor {
 		return getNumberOfTypeElement(FlowNode.class);
 	}
 	
-	/**TODO
+	/**
 	 * Metric: NFOREXP
 	 * 
 	 * @return number of Formal Expressions
 	 */
 	public int getFormalExpressions() {
+		if(this.extraction.equals("Process")) {
+			return this.getConditionExpressions();
+		}
 		return getNumberOfTypeElement(FormalExpression.class);
 	}
 	
@@ -1849,7 +1862,7 @@ public class BpmnBasicMetricsExtractor {
 			int is = 0;
 			for(ModelElementInstance a: this.getCollectionOfElementType(ThrowEvent.class))
 				if(((ThrowEvent) a).getInputSet() != null)
-				is++;
+					is++;
 			for(ModelElementInstance a: this.getCollectionOfElementType(Activity.class))
 				if(((Activity) a).getIoSpecification() != null)
 					is+=((Activity) a).getIoSpecification().getInputSets().size();
@@ -2251,10 +2264,10 @@ public class BpmnBasicMetricsExtractor {
 		if(this.extraction.equals("Process")) {
 			int a = 0;
 			if(this.process.getMonitoring() != null)
-				  a++;
+				a++;
 			for(ModelElementInstance fe : this.getCollectionOfElementType(FlowElement.class))
 				if(((FlowElement) fe).getMonitoring() != null)
-				  a++;
+					a++;
 			return a;
 		}
 		return getNumberOfTypeElement(Monitoring.class);
@@ -2314,7 +2327,7 @@ public class BpmnBasicMetricsExtractor {
 			int os = 0;
 			for(ModelElementInstance a: this.getCollectionOfElementType(CatchEvent.class))
 				if(((CatchEvent) a).getOutputSet() != null)
-				os++;
+					os++;
 			for(ModelElementInstance a: this.getCollectionOfElementType(Activity.class))
 				if(((Activity) a).getIoSpecification() != null)
 					os+=((Activity) a).getIoSpecification().getOutputSets().size();
@@ -2814,11 +2827,6 @@ public class BpmnBasicMetricsExtractor {
 	public int getTimeCycles() {
 		if(this.extraction.equals("Process")) {
 			int te = 0;
-			/*for(ModelElementInstance e: this.getCollectionOfElementType(ThrowEvent.class)) 
-				for(EventDefinition ed : ((ThrowEvent) e).getEventDefinitions())
-					if(ed instanceof TimerEventDefinition)
-						if(((TimerEventDefinition) ed).getTimeCycle() != null)
-						te++;*/
 			for(ModelElementInstance e: this.getCollectionOfElementType(CatchEvent.class)) 
 				for(EventDefinition ed : ((CatchEvent) e).getEventDefinitions())
 					if(ed instanceof TimerEventDefinition)
@@ -2837,11 +2845,6 @@ public class BpmnBasicMetricsExtractor {
 	public int getTimeDates() {
 		if(this.extraction.equals("Process")) {
 			int te = 0;
-			/*for(ModelElementInstance e: this.getCollectionOfElementType(ThrowEvent.class)) 
-				for(EventDefinition ed : ((ThrowEvent) e).getEventDefinitions())
-					if(ed instanceof TimerEventDefinition)
-						if(((TimerEventDefinition) ed).getTimeDate() != null)
-						te++;*/
 			for(ModelElementInstance e: this.getCollectionOfElementType(CatchEvent.class)) 
 				for(EventDefinition ed : ((CatchEvent) e).getEventDefinitions())
 					if(ed instanceof TimerEventDefinition)
@@ -2860,11 +2863,6 @@ public class BpmnBasicMetricsExtractor {
 	public int getTimeDurations() {
 		if(this.extraction.equals("Process")) {
 			int te = 0;
-			/*for(ModelElementInstance e: this.getCollectionOfElementType(ThrowEvent.class)) 
-				for(EventDefinition ed : ((ThrowEvent) e).getEventDefinitions())
-					if(ed instanceof TimerEventDefinition)
-						if(((TimerEventDefinition) ed).getTimeDuration() != null)
-						te++;*/
 			for(ModelElementInstance e: this.getCollectionOfElementType(CatchEvent.class)) 
 				for(EventDefinition ed : ((CatchEvent) e).getEventDefinitions())
 					if(ed instanceof TimerEventDefinition)
