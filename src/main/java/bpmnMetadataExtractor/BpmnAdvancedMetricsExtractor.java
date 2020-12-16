@@ -1238,9 +1238,8 @@ public class BpmnAdvancedMetricsExtractor {
 		for(ModelElementInstance original : this.basicMetricsExtractor.getCollectionOfElementType(FlowElement.class)) {
 			if(((FlowElement) original).getName() != null && !((FlowElement) original).getName().trim().isEmpty() && !ispectioned.contains(((FlowElement) original).getName()))
 				for(ModelElementInstance duplicated : elements)
-					if(((FlowElement) duplicated).getName() != null && !(duplicated instanceof SequenceFlow))
-						if(original.getElementType().getTypeName().equals(duplicated.getElementType().getTypeName()) 
-								&& ((FlowElement) original).getName().equals(((FlowElement) duplicated).getName()) 
+					if(!(duplicated instanceof SequenceFlow))
+						if(((FlowElement) original).getName().equals(((FlowElement) duplicated).getName()) 
 								&& !((FlowElement) original).getId().equals(((FlowElement) duplicated).getId())) {
 							n++;
 							ispectioned.add(((FlowElement) original).getName());
@@ -1251,10 +1250,8 @@ public class BpmnAdvancedMetricsExtractor {
 		for(ModelElementInstance original : this.basicMetricsExtractor.getCollectionOfElementType(Participant.class)) {
 			if(((Participant) original).getName() != null && !((Participant) original).getName().trim().isEmpty() && !ispectioned.contains(((Participant) original).getName()))
 				for(ModelElementInstance duplicated : elements)
-					if(((Participant) duplicated).getName() != null)
-						if(original.getElementType().getTypeName().equals(duplicated.getElementType().getTypeName()) 
-								&& ((Participant) original).getName().equals(((Participant) duplicated).getName()) 
-								&& !((Participant) original).getId().equals(((Participant) duplicated).getId())) {
+					if(((Participant) original).getName().equals(((Participant) duplicated).getName()) 
+							&& !((Participant) original).getId().equals(((Participant) duplicated).getId())) {
 							n++;
 							ispectioned.add(((Participant) original).getName());
 						}
@@ -1264,10 +1261,8 @@ public class BpmnAdvancedMetricsExtractor {
 		for(ModelElementInstance original : this.basicMetricsExtractor.getCollectionOfElementType(Lane.class)) {
 			if(((Lane) original).getName() != null && !((Lane) original).getName().trim().isEmpty() && !ispectioned.contains(((Lane) original).getName()))
 				for(ModelElementInstance duplicated : elements)
-					if(((Lane) duplicated).getName() != null)
-						if(original.getElementType().getTypeName().equals(duplicated.getElementType().getTypeName()) 
-								&& ((Lane) original).getName().equals(((Lane) duplicated).getName()) 
-								&& !((Lane) original).getId().equals(((Lane) duplicated).getId())) {
+					if(((Lane) original).getName().equals(((Lane) duplicated).getName()) 
+							&& !((Lane) original).getId().equals(((Lane) duplicated).getId())) {
 							n++;
 							ispectioned.add(((Lane) original).getName());
 						}
@@ -1277,10 +1272,8 @@ public class BpmnAdvancedMetricsExtractor {
 		for(ModelElementInstance original : this.basicMetricsExtractor.getCollectionOfElementType(MessageFlow.class)) {
 			if(((MessageFlow) original).getName() != null && !((MessageFlow) original).getName().trim().isEmpty() && !ispectioned.contains(((MessageFlow) original).getName()))
 				for(ModelElementInstance duplicated : elements)
-					if(((MessageFlow) duplicated).getName() != null)
-						if(original.getElementType().getTypeName().equals(duplicated.getElementType().getTypeName()) 
-								&& ((MessageFlow) original).getName().equals(((MessageFlow) duplicated).getName()) 
-								&& !((MessageFlow) original).getId().equals(((MessageFlow) duplicated).getId())) {
+					if(((MessageFlow) original).getName().equals(((MessageFlow) duplicated).getName()) 
+							&& !((MessageFlow) original).getId().equals(((MessageFlow) duplicated).getId())) {
 							n++;
 							ispectioned.add(((MessageFlow) original).getName());
 						}
