@@ -8,19 +8,19 @@
 </head>
 <body>
 	<h1> BPMN Metadata Extractor</h1>
-	<div class = "separate"></div>
+	<div class = "separate"></div> 
 	<div class="wrapper">	
 		<form action="extractorRest/api/fileUpload" method="post" enctype="multipart/form-data">
+		
 	  			<div class="file-upload">
-	    			<input type="file" name="model"/>
+	    			<input type="file" name="model" accept=".bpmn"/>
 	   				<i class="fa fa-arrow-up"></i>
 	 			</div>
 	 			<div class="inputbutton">
 	 				<input type="submit" name="confirm" value="Compute Metrics" class="blue">
 	 			</div>
 	 			
-	 			<div style = "border-radius: 100px; position: relative; display: flex; justify-content: center; 
-	 			align-items: center; padding-top: 10px;">
+	 			<div style = "text-align: center; padding-top: 4px;">
 	 			<label for="Conversion"></label>
 	 			<select name="conversion" id="conversion">
 	 			<option value="WhiteBox">WhiteBox</option>
@@ -33,12 +33,19 @@
 	 			</select>
 	 			</div>
 	 			
-	 			<div style = "text-align: center; font-family: arial;">
-	 			<h6>Conversion (white-box/black-box) effects: <br/>1. Process extraction 2. Graph-based metrics</h6>
+	 			<div style = "text-align: center; padding-top: 2px;">
+	 			<button style = "border: none; background-color: red; color: white;" 
+	 			type="submit" formaction="extractorRest/api/results" name="test">See Results</button>
 	 			</div>
 	 			
-				<h4>  Made by <a href="https://github.com/PROSLab"> PROSLabTeam </a> </h4>
+	 			<h6 style = "text-align: center;">
+	 			Conversion (white-box/black-box) effects:<br>1. Process extraction 2. Graph-based metrics
+	 			</h6>
+
 		</form>
 	</div>
+	
+	<h4>  Made by <a href="https://github.com/PROSLab"> PROSLabTeam </a> </h4>
+	
 </body>
 </html>

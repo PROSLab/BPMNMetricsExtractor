@@ -240,8 +240,11 @@ public class ModelConverter {
         for(MessageFlow mf : this.modelInstance.getModelElementsByType(MessageFlow.class))
         	//se il messaggio collega due nodi di flusso viene creato un nuovo arco,
         	//altrimenti il modello non viene convertito in grafo
-        	if(mf.getTarget() instanceof FlowNode && mf.getSource() instanceof FlowNode)
+        	if(mf.getTarget() instanceof FlowNode && mf.getSource() instanceof FlowNode) {
         		edges.add(new Edge(mf.getSource().getId(), mf.getTarget().getId()));
+        		if(mf.getTarget() instanceof BoundaryEvent || mf.getTarget() instanceof SubProcess || mf.getSource() instanceof SubProcess)
+        			this.notification.add("Graph might be disconnected: "+mf.getId());
+        	}
         	else return null;
         //crea la matrice di adiacenza convertita dal modello
         GraphMatrixes gm = new GraphMatrixes(edges,nodes);

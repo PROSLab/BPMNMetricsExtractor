@@ -24,13 +24,31 @@ public class MetricsExtractorRouter {
 			@FormDataParam("model") FormDataContentDisposition fileDetail,
 			@FormDataParam("conversion") String conversion,
 			@FormDataParam("extraction") String extraction) {
+		// exception handling
 		BpmnModelReader metricsExtractor = new BpmnModelReader(conversion, extraction);
-//		String fileName = fileDetail.getFileName().substring(0, fileDetail.getFileName().lastIndexOf('.'));
+		//String fileName = fileDetail.getFileName().substring(0, fileDetail.getFileName().lastIndexOf('.'));
 		String fileName = "ExtractedMetadata";
 		String json = metricsExtractor.getJsonMetrics(uploadedInputStream, fileName);
 		return  Response.ok((Object)json).
 				header("Content-Disposition","attachment; filename = " + fileName + ".json").
 				build();
+	}
+	
+	@Path("/results")
+	@POST
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@Produces(MediaType.TEXT_HTML)
+	public String getResults(
+			@FormDataParam("model") InputStream uploadedInputStream,
+			@FormDataParam("model") FormDataContentDisposition fileDetail,
+			@FormDataParam("conversion") String conversion,
+			@FormDataParam("extraction") String extraction) {
+		// exception handling
+		BpmnModelReader metricsExtractor = new BpmnModelReader(conversion, extraction);
+		//String fileName = fileDetail.getFileName().substring(0, fileDetail.getFileName().lastIndexOf('.'));
+		String fileName = "ExtractedMetadata";
+		String json = metricsExtractor.getJsonMetrics(uploadedInputStream, fileName);
+		return  json;
 	}
 }
 
