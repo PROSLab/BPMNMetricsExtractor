@@ -48,7 +48,9 @@ public class MetricsExtractorRouter {
 		//String fileName = fileDetail.getFileName().substring(0, fileDetail.getFileName().lastIndexOf('.'));
 		String fileName = "ExtractedMetadata";
 		String json = metricsExtractor.getJsonMetrics(uploadedInputStream, fileName);
-		return  json;
+		String header = "";
+		String footer = "";
+		return  header+json+footer;
 	}
 }
 

@@ -518,6 +518,7 @@ public class BpmnBasicMetricsExtractor {
 	 */
 	public int getDataObjectsInput() {
 		if(this.extraction.equals("Process")) {
+			// not consider data inputs needed by processes
 			Vector<String> dataInput = new Vector<String>();
 			for(ModelElementInstance a: this.getCollectionOfElementType(Activity.class)) 
 				for(DataInputAssociation da : ((Activity) a).getDataInputAssociations())
@@ -536,6 +537,7 @@ public class BpmnBasicMetricsExtractor {
 	 */
 	public int getDataObjectsOutput() {
 		if(this.extraction.equals("Process")) {
+			// not consider data outputs produced by processes
 			Vector<String> dataOutput = new Vector<String>();
 			for(ModelElementInstance a: this.getCollectionOfElementType(Activity.class)) 
 				for(DataOutputAssociation da : ((Activity) a).getDataOutputAssociations())
@@ -1270,7 +1272,6 @@ public class BpmnBasicMetricsExtractor {
 				  ce++;
 			return ce;
 		}
-
 		return getNumberOfTypeElement(ConditionExpression.class);
 	}
 	
@@ -1373,12 +1374,12 @@ public class BpmnBasicMetricsExtractor {
 	 */
 	public int getDataInputAssociations() {
 		if(this.extraction.equals("Process")) {
-			int DataObjectsInput = 0;
+			int dia = 0;
 			for(ModelElementInstance a: this.getCollectionOfElementType(Activity.class)) 
-				DataObjectsInput += ((Activity) a).getDataInputAssociations().size();
+				dia += ((Activity) a).getDataInputAssociations().size();
 			for(ModelElementInstance e: this.getCollectionOfElementType(ThrowEvent.class)) 
-				DataObjectsInput += ((ThrowEvent) e).getDataInputAssociations().size();
-			return DataObjectsInput;
+				dia += ((ThrowEvent) e).getDataInputAssociations().size();
+			return dia;
 		}
 		return getNumberOfTypeElement(DataInputAssociation.class);
 	}
@@ -1408,12 +1409,12 @@ public class BpmnBasicMetricsExtractor {
 	 */
 	public int getDataOutputAssociations() {
 		if(this.extraction.equals("Process")) {
-			int DataObjectsOutput = 0;
+			int doa = 0;
 			for(ModelElementInstance a: this.getCollectionOfElementType(Activity.class)) 
-				DataObjectsOutput += ((Activity) a).getDataOutputAssociations().size();
+				doa += ((Activity) a).getDataOutputAssociations().size();
 			for(ModelElementInstance e: this.getCollectionOfElementType(CatchEvent.class)) 
-				DataObjectsOutput += ((CatchEvent) e).getDataOutputAssociations().size();
-			return DataObjectsOutput;	
+				doa += ((CatchEvent) e).getDataOutputAssociations().size();
+			return doa;	
 		}
 		return getNumberOfTypeElement(DataOutputAssociation.class);
 	}
@@ -1441,11 +1442,12 @@ public class BpmnBasicMetricsExtractor {
 	 */
 	public int getDataStores() {
 		if(this.extraction.equals("Process")) {
-			int DataStore = 0;
+			/*int DataStore = 0;
 			for(ModelElementInstance ds: this.getCollectionOfElementType(DataStoreReference.class)) 
 				if(((DataStoreReference) ds).getDataStore() != null)
 					DataStore++;
-			return DataStore;	
+			return DataStore;*/
+			return this.getCollectionOfElementType(DataStoreReference.class).size();
 		}
 		return getNumberOfTypeElement(DataStore.class);
 	}
@@ -1863,6 +1865,7 @@ public class BpmnBasicMetricsExtractor {
 			for(ModelElementInstance a: this.getCollectionOfElementType(ThrowEvent.class))
 				if(((ThrowEvent) a).getInputSet() != null)
 					is++;
+			// not consider ioSpecification of CallableElements
 			for(ModelElementInstance a: this.getCollectionOfElementType(Activity.class))
 				if(((Activity) a).getIoSpecification() != null)
 					is+=((Activity) a).getIoSpecification().getInputSets().size();
@@ -2124,6 +2127,7 @@ public class BpmnBasicMetricsExtractor {
 	 */
 	public int getIoSpecifications() {
 		if(this.extraction.equals("Process")) {
+			// not consider ioSpecification of CallableElements
 			int io = 0;
 			for(ModelElementInstance a: this.getCollectionOfElementType(Activity.class))
 				if(((Activity) a).getIoSpecification() != null)
@@ -2133,7 +2137,7 @@ public class BpmnBasicMetricsExtractor {
 		return getNumberOfTypeElement(IoSpecification.class);
 	}
 	
-	/**TODO process extraction?
+	/**
 	 * Metric: NIAEL
 	 * 
 	 * @return number of Item Aware Elements
@@ -2179,13 +2183,13 @@ public class BpmnBasicMetricsExtractor {
 	 */
 	public int getLoopCardinalities() {
 		if(this.extraction.equals("Process")) {
-			int multi = 0;
+			int lc = 0;
 			for(ModelElementInstance a: this.getCollectionOfElementType(Activity.class)) {
 				if(((Activity)a).getLoopCharacteristics() instanceof MultiInstanceLoopCharacteristics)
 					if(((MultiInstanceLoopCharacteristics) ((Activity)a).getLoopCharacteristics()).getLoopCardinality() != null)
-						multi++;
+						lc++;
 				}
-			return multi;
+			return lc;
 		}
 		return getNumberOfTypeElement(LoopCardinality.class);
 	}
@@ -2262,13 +2266,13 @@ public class BpmnBasicMetricsExtractor {
 	 */
 	public int getMonitorings() {
 		if(this.extraction.equals("Process")) {
-			int a = 0;
+			int m = 0;
 			if(this.process.getMonitoring() != null)
-				a++;
+				m++;
 			for(ModelElementInstance fe : this.getCollectionOfElementType(FlowElement.class))
 				if(((FlowElement) fe).getMonitoring() != null)
-					a++;
-			return a;
+					m++;
+			return m;
 		}
 		return getNumberOfTypeElement(Monitoring.class);
 	}
@@ -2328,6 +2332,7 @@ public class BpmnBasicMetricsExtractor {
 			for(ModelElementInstance a: this.getCollectionOfElementType(CatchEvent.class))
 				if(((CatchEvent) a).getOutputSet() != null)
 					os++;
+			// not consider ioSpecification of CallableElements
 			for(ModelElementInstance a: this.getCollectionOfElementType(Activity.class))
 				if(((Activity) a).getIoSpecification() != null)
 					os+=((Activity) a).getIoSpecification().getOutputSets().size();
