@@ -26,7 +26,7 @@ public class NestingDepthMetricsExtractor {
 	private Collection<FlowNode> nodes;
 	private Map<String, Integer> nestingDepthValues;
 	private BpmnBasicMetricsExtractor basicExtractor;
-	private double NestingDepth;
+	private double nestingDepth;
 
 	public NestingDepthMetricsExtractor(BpmnBasicMetricsExtractor basicExtractor) {
 		this.basicExtractor = basicExtractor;
@@ -39,7 +39,7 @@ public class NestingDepthMetricsExtractor {
 				nodes.add((FlowNode) modelNode);
 		}
 		initializeNestingDepthValuesMap();
-		this.NestingDepth = this.setMaxNestingDepth();
+		this.nestingDepth = this.setMaxNestingDepth();
 	}
 	
 	/**
@@ -119,7 +119,7 @@ public class NestingDepthMetricsExtractor {
 	}
 	
 	public double getMaxNestingDepth() {
-		return this.NestingDepth;
+		return this.nestingDepth;
 	}
 
 }

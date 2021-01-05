@@ -29,7 +29,6 @@ public class MetricsExtractorRouter {
 			@FormDataParam("model") FormDataContentDisposition fileDetail,
 			@FormDataParam("conversion") String conversion,
 			@FormDataParam("extraction") String extraction) {
-		// exception handling
 		BpmnModelReader metricsExtractor = new BpmnModelReader(conversion, extraction);
 		//String fileName = fileDetail.getFileName().substring(0, fileDetail.getFileName().lastIndexOf('.'));
 		String fileName = "ExtractedMetadata";
@@ -48,13 +47,13 @@ public class MetricsExtractorRouter {
 			@FormDataParam("model") FormDataContentDisposition fileDetail,
 			@FormDataParam("conversion") String conversion,
 			@FormDataParam("extraction") String extraction) throws IOException {
-		// exception handling
 		BpmnModelReader metricsExtractor = new BpmnModelReader(conversion, extraction);
 		Vector<Result> results= metricsExtractor.getResultsMetrics(uploadedInputStream, "ExtractedMetadata");
 		URL urlHeader = getClass().getClassLoader().getResource("header.html");
 		URL urlFooter = getClass().getClassLoader().getResource("footer.html");
 		String header = IOUtils.toString(urlHeader, "UTF-8");
 		String footer = IOUtils.toString(urlFooter, "UTF-8");
+		// it builds the string to return as html page with all advanced metrics
 		String table = "";
 		String alerts = "";
 		for(Result r : results)

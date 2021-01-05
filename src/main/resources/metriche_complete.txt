@@ -196,73 +196,72 @@ CLA	%Connectivity level between activities	{10.19153/cleiej.9.1.5}
 CLP	%Connectivity level between participants {10.19153/cleiej.9.1.5}
 PDOPin %Proportion of data objects as incoming products and total data objects	{10.19153/cleiej.9.1.5}
 PDOPout	%Proportion of data objects as outgoing products and total data objects	{10.19153/cleiej.9.1.5}
-PDOTout	%Proportion of data objects as outgoing product of activities of the model	{10.19153/cleiej.9.1.5}
-PLT	%Proportion of pools/lanes ad activities	{10.19153/cleiej.9.1.5}
+PDOTout	%Proportion of data objects as outgoing product of tasks {10.19153/cleiej.9.1.5}
+PLT	%Proportion of lanes ad tasks	{10.19153/cleiej.9.1.5}
 TNIE	%Total number of intermediate events	{10.19153/cleiej.9.1.5}
-CFC	%Control-flow Complexity metric	{10.1007/978-3-642-01862-6\_6}
-JC %JoinComplexity	{10.1007/11841760_38}
-JSR %JoinSplitRatio	{10.1007/11841760_38}
-PFC %Process Flow Complexity	{10.1007/978-3-540-79396-0_32}
+CFC	%Control-flow Complexity {10.1007/978-3-642-01862-6\_6}
+JC %Join Complexity	{10.1007/11841760_38}
+JSR %Join-Split Ratio {10.1007/11841760_38}
+PFC % Process-flow Complexity {10.1007/978-3-540-79396-0_32}
 NOA	%Number of activities in a process	{10.1007/11837862\_13}
-NOAC	%Number of activities and control-flow elements in a process	{10.1007/11837862\_13}
-NOAJS	%Number of activities, joins, and splits in a process	{10.1007/11837862\_13}
+NOAC	%Number of activities and gateways {10.1007/11837862\_13}
+NOAJS	%Number of activities, joins, and splits {10.1007/11837862\_13}
 HPC_D	%Hasted-based Process Complexity (process difficulty)	{10.1007/11837862\_13}
 HPC_N	%Hasted-based Process Complexity (process length)	{10.1007/11837862\_13}
 HPC_V	%Hasted-based Process Complexity (process volume)	{10.1007/11837862\_13}
-CFC(rel)	%Relative Control Flow Complexity{10.4018/jwsr.2008040103}
-PCFC	%Parallel Control Flow Complexity{10.1109/tsc.2013.10}
-VOL %Structural Size {10.1016/0026-2714(92)90643-y}
+CFC(rel)	%Relative Control-flow Complexity {10.4018/jwsr.2008040103}
+PCFC	%Parallel Control-flow Complexity {10.1109/tsc.2013.10}
+VOL %Volume {10.1016/0026-2714(92)90643-y}
 AAO %Average Activity Output {10.1016/0026-2714(92)90643-y}
 AAI %Average Activity Input {Proposed Metrics}
-IC	%Interface complexity of an activity metric	{10.1007/11837862\_13}
-FIO	%Structural Complexity	{10.1007/1-4020-5634-6_2}
-CNC %Connectivity Coefficient {10.1007/11837862\_13}
-CNC^2 %Coefficient of Network Complexity	{10.1007/11837862\_13}
-CC	%Cross-connectivity metric	{10.1007/978-3-540-69534-9\_36}
-ICP	%Imported Coupling of a Process metric	{10.1016/j.procs.2016.09.274}
-ECP	%Exported Coupling of a Process metric	{10.1016/j.procs.2016.09.274}
+IC	%Interface Complexity {10.1007/11837862\_13}
+FIO	%Fan-in / Fan-out {10.1007/1-4020-5634-6_2}
+CNC %Coefficient of Network Complexity {10.1007/11837862\_13}
+CNC^2 %Coefficient of Network Complexity {10.1007/11837862\_13}
+CC	%Cross-Connectivity	{10.1007/978-3-540-69534-9\_36}
+ICP	%Imported Coupling	{10.1016/j.procs.2016.09.274}
+ECP	%Exported Coupling	{10.1016/j.procs.2016.09.274}
 W	%Cognitive Weight	{10.1109/COGINF.2006.365702}
 MaxND	%Maximum Nesting Depth	{10.1007/1-4020-5634-6_2}
-CP	%Coupling metric, it calculates the degree of coupling.	{10.1007/978-3-540-25970-1\_19}
-WCP	%Weighted Coupling metric {absent}
+CP	%Coupling {10.1007/978-3-540-25970-1\_19}
+WCP	%Weighted Coupling {absent}
 MeanND	%Mean Nesting Depth	{10.1007/1-4020-5634-6_2}
-Sequentiality	%Sequentiality	{10.1007/978-3-540-89224-3}
-diam	%Diameter	{10.1007/978-3-540-89224-3}
-Depth	%Depth	{10.1007/978-3-540-89224-3}
+SEQ	%Sequentiality	{10.1007/978-3-540-89224-3}
+DIAM	%Diameter (Longest path in the network)	{10.1007/978-3-540-89224-3}
+DEPTH	%Depth	{10.1007/978-3-540-89224-3}
 PC	%Process Complexity	{absent}
-CADAC %Cognitive Arc Weight Complexity {absent}
-GM	%Gateway Mismatch or Connector Mismatch	{10.1007/978-3-540-89224-3}
-CH	%Gateway Heterogeneity	{10.1007/978-3-540-89224-3}
+CADAC %Cognitive Activity Depth Arc Control-flow {absent}
+GM	%Connector Mismatch	{10.1007/978-3-540-89224-3}
+CH	%Connector Heterogeneity {10.1007/978-3-540-89224-3}
 F	%Structuredness	{10.1007/978-3-540-89224-3}
 PF %Process Feedback	{10.2307/249553}
-Par %Parallelism	{10.2307/249553}
-RPRA	%Ratio of process roles and activities {10.1007/978-3-540-45189-1_8}
+PAR %Parallelism (Size divided by Diameter)	{10.2307/249553}
+PPA	%Proportion of pools and activities {10.1007/978-3-540-45189-1_8}
 CYC	%Cyclicity	{10.1007/978-3-540-89224-3}
-TS %Token Splits or Concurrency	{10.1007/978-3-540-89224-3}
-Density	%Density	{10.1007/978-3-540-89224-3}
-ACD	%Average Connector Degree or Average Gayeway Degree	{10.1007/978-3-540-75183-0\_4}
-MCD	%Maximum Degree of a Connector or Maximum Gateway Degree	{10.1007/978-3-540-75183-0\_4}
+TS %Token Split or Concurrency	{10.1007/978-3-540-89224-3}
+DEN	%Density	{10.1007/978-3-540-89224-3}
+ACD	%Average Connector Degree {10.1007/978-3-540-75183-0\_4}
+MCD	%Maximum Connector Degree {10.1007/978-3-540-75183-0\_4}
 ECyM	%Extended Cyclomatic Metric	{10.1016/j.infsof.2008.08.005}
 DSM	%Durfee Square Metric	{10.1007/978-3-319-03677-9_6}
 PSM	%Perfect Square Metric	{10.1007/978-3-319-03677-9_6}
-Layout_Complexity	%It evaluates the usability of different screen designs based on the Shannon formula	{10.1007/978-0-387-35175-9_109}
-Layout_Measure	%It is a group of measures that quantify layout of models	{10.1016/j.infsof.2009.04.008}
+LC	%Layout Complexity	{10.1007/978-0-387-35175-9_109}
+LM	%Layout Measure	{10.1016/j.infsof.2009.04.008}
 DOP	%Degree of parallelism	{absent}
 B %Binding of structure	{absent}
-L %The longest shortest path in the network	{absent}
+L %Longest shortest path in the network	{absent}
 D %Structure diversity	{absent}
 AC %Aggregate indicator of process complexity	{absent}
 RT %Restrictiveness estimator 	{absent}
 T %Number of trees in a graph	{absent}
-CI %Complexity index	{absent}
+CI %Complexity Index	{absent}
 NG	%Number of Groups {absent}
 NSL	%Number of Swimlanes {absent}
 S	%Number of BPMN elements	{absent}
-PB %Number of distinct paths	{absent}
-MCC %McCabe’s Cyclomatic Number	{absent}
+PB %Process Breadth (Number of distinct paths)	{absent}
+MCC %McCabes Cyclomatic Number	{absent}
 DE %Duplicated Elements	{absent}
-Sep %Separability	{absent}
-NDOP %Number of different objects in all possible paths	{absent}
+SEP %Separability	{absent}
 PPT %Proportion of pools and tasks	{absent}
 PLA %Proportion of lanes and activities	{absent}
 NITMREV %Number of Intermediate Timer Events {Camunda API Instance Package}
