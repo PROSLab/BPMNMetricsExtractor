@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import org.camunda.bpm.engine.impl.util.json.*;
 /**
@@ -22,7 +23,8 @@ public class JsonEncoder {
 	
 	private JSONObject json;
 	private String fileName;
-	private Map<String, String[]> metricsInfos;  
+	private Map<String, String[]> metricsInfos; 
+	private Vector<Result> results;
 	
 	/**
 	 * Costruttore per l'encoder Json
@@ -30,6 +32,7 @@ public class JsonEncoder {
 	public JsonEncoder(String fileName){
 		json = new JSONObject();
 		this.fileName = fileName;
+		this.results = new Vector<Result>();
 		this.initializeJSON();
 		this.initializeMetricsInfos();
 	}
@@ -166,6 +169,7 @@ public class JsonEncoder {
 		advMetric.put("source", metricInfos[1]);
 		//edited
 		this.json.getJSONObject("process").getJSONObject("0").getJSONObject("advanced_metrics").put(metricName, advMetric);
+		this.results.add(new Result("N/A", metricName, metricInfos[0], Double.toString(n)));
 	}
 	
 	/*
@@ -181,6 +185,8 @@ public class JsonEncoder {
 		advMetric.put("description", metricInfos[0]);
 		advMetric.put("source", metricInfos[1]);
 		this.json.getJSONObject("process").getJSONObject(Integer.toString(i)).getJSONObject("advanced_metrics").put(metricName, advMetric);
+		String process = this.json.getJSONObject("process").getJSONObject(Integer.toString(i)).getJSONObject("participant").getString("process");
+		this.results.add(new Result(process, metricName, metricInfos[0], Double.toString(n)));
 	}
 	
 	public ArrayList<String> getBasicMetricsNames() {
@@ -313,6 +319,41 @@ public class JsonEncoder {
 			idStr += Integer.toString(((int)(Math.floor(Math.random() * 35))));
 		} while (idStr.length() < baseIdLen);
 		return idStr;
+	}
+	
+	public Vector<Result> getResults(){
+		return this.results;
+	}
+	
+	public class Result{
+		private String process;
+		private String id;
+		private String description;
+		private String value;
+		
+		Result(String p, String i, String d, String v){
+			this.process = p;
+			this.id = i;
+			this.description = d;
+			this.value = v;
+		}
+		
+		public String getProcess() {
+			return this.process;
+		}
+		
+		public String getID() {
+			return this.id;
+		}
+		
+		public String getInfo() {
+			return this.description;
+		}
+		
+		public String getValue() {
+			return this.value;
+		}
+		
 	}
 	
 	

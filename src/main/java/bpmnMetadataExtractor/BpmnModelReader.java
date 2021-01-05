@@ -5,10 +5,12 @@ import java.io.File;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Vector;
 
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.camunda.bpm.model.bpmn.instance.Participant;
 
+import bpmnMetadataExtractor.JsonEncoder.Result;
 import graphElements.ModelConverter;
 
 import org.camunda.bpm.model.bpmn.Bpmn;
@@ -23,6 +25,7 @@ public class BpmnModelReader {
 	private File loadedFile;
 	private String conversionType;
 	private String extractionType;
+	private Vector<String> alerts;
 	
 	/**
 	 * Costruttore in cui viene instanziato il loadedFile tramite il suo path
@@ -36,15 +39,10 @@ public class BpmnModelReader {
 		
 	}
 	
-	public BpmnModelReader(String filePath, String c, String e) {
-		loadedFile = new File(filePath);
-		this.conversionType = c;
-		this.extractionType = e;
-	}
-	
 	public BpmnModelReader(String c, String e) {
 		this.conversionType = c;
 		this.extractionType = e;
+		this.alerts = new Vector<String>();
 	}
 	
 	/**
@@ -63,9 +61,10 @@ public class BpmnModelReader {
 		this.loadedFile = new File(filePath);
 	}
 	
-	public String getJsonMetrics(InputStream fileStream, String fileName) {
+	private JsonEncoder computeMetrics(InputStream fileStream, String fileName) {
 		BpmnModelInstance modelInstance = Bpmn.readModelFromStream(fileStream);
 		JsonEncoder jsonEncoder = new JsonEncoder(fileName);
+		ModelConverter mc = new ModelConverter(modelInstance);
 		int numberProcess = 0;
 		if(this.extractionType.equals("Process")){
 			Collection<Participant> participant = modelInstance.getModelElementsByType(Participant.class);
@@ -73,7 +72,7 @@ public class BpmnModelReader {
 				if(p.getProcess() != null) {
 					jsonEncoder.buildJSON(numberProcess, p.getId(), p.getName(), p.getProcess().getId());
 					BpmnBasicMetricsExtractor basicExtractor = new BpmnBasicMetricsExtractor(modelInstance, p.getProcess(), jsonEncoder, numberProcess, this.extractionType, this.conversionType);
-					BpmnAdvancedMetricsExtractor advExtractor = new BpmnAdvancedMetricsExtractor(new ModelConverter(modelInstance), basicExtractor, jsonEncoder, numberProcess);
+					BpmnAdvancedMetricsExtractor advExtractor = new BpmnAdvancedMetricsExtractor(mc, basicExtractor, jsonEncoder, numberProcess);
 					numberProcess++;
 					basicExtractor.runMetricsProcess();
 					advExtractor.runMetricsProcess(this.conversionType);
@@ -83,16 +82,31 @@ public class BpmnModelReader {
 		} else {
 			jsonEncoder.buildJSON(numberProcess);
 			BpmnBasicMetricsExtractor basicExtractor = new BpmnBasicMetricsExtractor(modelInstance, jsonEncoder, numberProcess, this.extractionType);
-			BpmnAdvancedMetricsExtractor advExtractor = new BpmnAdvancedMetricsExtractor(new ModelConverter(modelInstance), basicExtractor, jsonEncoder, numberProcess);
+			BpmnAdvancedMetricsExtractor advExtractor = new BpmnAdvancedMetricsExtractor(mc, basicExtractor, jsonEncoder, numberProcess);
 			basicExtractor.runMetrics();
 			advExtractor.runMetrics(this.conversionType);
 			jsonEncoder.populateHeader(LocalDateTime.now());
 		}
+		this.alerts = mc.getNotification();
+		return jsonEncoder;
+	}
+	
+	public Vector<String >getAlerts() {
+		return this.alerts;
+	}
+	
+	public String getJsonMetrics(InputStream fileStream, String fileName) {
+		JsonEncoder jsonEncoder = this.computeMetrics(fileStream, fileName);
 		/*MySqlInterface db = new MySqlInterface();
 		db.connect();
 		db.saveMetrics(jsonEncoder);
 		db.closeConnection();*/
 		return jsonEncoder.getJson().toString();
+	}
+	
+	public Vector<Result> getResultsMetrics(InputStream fileStream, String fileName) {
+		JsonEncoder jsonEncoder = this.computeMetrics(fileStream, fileName);
+		return jsonEncoder.getResults();
 	}
 	
 }
