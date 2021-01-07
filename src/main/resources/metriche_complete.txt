@@ -194,18 +194,18 @@ NFJDG	%Number of Flows joining and dividing gateways {Camunda API Instance Packa
 NFJDT	%Number of flows joining and dividing tasks {Camunda API Instance Package}
 CLA	%Connectivity level between activities	{10.19153/cleiej.9.1.5}
 CLP	%Connectivity level between participants {10.19153/cleiej.9.1.5}
-PDOPin %Proportion of data objects as incoming products and total data objects	{10.19153/cleiej.9.1.5}
-PDOPout	%Proportion of data objects as outgoing products and total data objects	{10.19153/cleiej.9.1.5}
+PDOPin %Proportion of data objects as incoming product and total data objects	{10.19153/cleiej.9.1.5}
+PDOPout	%Proportion of data objects as outgoing product and total data objects	{10.19153/cleiej.9.1.5}
 PDOTout	%Proportion of data objects as outgoing product of tasks {10.19153/cleiej.9.1.5}
 PLT	%Proportion of lanes ad tasks	{10.19153/cleiej.9.1.5}
 TNIE	%Total number of intermediate events	{10.19153/cleiej.9.1.5}
 CFC	%Control-flow Complexity {10.1007/978-3-642-01862-6\_6}
 JC %Join Complexity	{10.1007/11841760_38}
-JSR %Join-Split Ratio {10.1007/11841760_38}
-PFC % Process-flow Complexity {10.1007/978-3-540-79396-0_32}
+JSR %Join Split Ratio {10.1007/11841760_38}
+PFC %Process-flow Complexity {10.1007/978-3-540-79396-0_32}
 NOA	%Number of activities in a process	{10.1007/11837862\_13}
 NOAC	%Number of activities and gateways {10.1007/11837862\_13}
-NOAJS	%Number of activities, joins, and splits {10.1007/11837862\_13}
+NOAJS	%Number of activities, joins and splits {10.1007/11837862\_13}
 HPC_D	%Hasted-based Process Complexity (process difficulty)	{10.1007/11837862\_13}
 HPC_N	%Hasted-based Process Complexity (process length)	{10.1007/11837862\_13}
 HPC_V	%Hasted-based Process Complexity (process volume)	{10.1007/11837862\_13}
@@ -218,7 +218,7 @@ IC	%Interface Complexity {10.1007/11837862\_13}
 FIO	%Fan-in / Fan-out {10.1007/1-4020-5634-6_2}
 CNC %Coefficient of Network Complexity {10.1007/11837862\_13}
 CNC^2 %Coefficient of Network Complexity {10.1007/11837862\_13}
-CC	%Cross-Connectivity	{10.1007/978-3-540-69534-9\_36}
+CC	%Cross Connectivity	{10.1007/978-3-540-69534-9\_36}
 ICP	%Imported Coupling	{10.1016/j.procs.2016.09.274}
 ECP	%Exported Coupling	{10.1016/j.procs.2016.09.274}
 W	%Cognitive Weight	{10.1109/COGINF.2006.365702}
@@ -238,7 +238,7 @@ PF %Process Feedback	{10.2307/249553}
 PAR %Parallelism (Size divided by Diameter)	{10.2307/249553}
 PPA	%Proportion of pools and activities {10.1007/978-3-540-45189-1_8}
 CYC	%Cyclicity	{10.1007/978-3-540-89224-3}
-TS %Token Split or Concurrency	{10.1007/978-3-540-89224-3}
+TS %Token Split (Concurrency)	{10.1007/978-3-540-89224-3}
 DEN	%Density	{10.1007/978-3-540-89224-3}
 ACD	%Average Connector Degree {10.1007/978-3-540-75183-0\_4}
 MCD	%Maximum Connector Degree {10.1007/978-3-540-75183-0\_4}

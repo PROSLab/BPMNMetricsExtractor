@@ -217,7 +217,8 @@ public class BpmnAdvancedMetricsExtractor {
 		json.addAdvancedMetric("W", cwExtractor.getCognitiveWeight(), this.numberProcess);
 		json.addAdvancedMetric("CADAC", getArcCognitiveComplexity(), this.numberProcess);
 		json.addAdvancedMetric("LC", dsmExtractor.getLayoutComplexityMetric(), this.numberProcess);
-		json.addAdvancedMetric("LM", this.lmExtractor.getLayoutMeasure(), this.numberProcess);
+		// LM is not intended for process extraction
+		//json.addAdvancedMetric("LM", this.lmExtractor.getLayoutMeasure(), this.numberProcess);
 		//System.out.println("JSON adv: " + this.json.getString());
 		GraphMatrixes gm = this.mc.convertModel(this.basicMetricsExtractor.getProcess(), conversion);
 		if(gm != null) {
