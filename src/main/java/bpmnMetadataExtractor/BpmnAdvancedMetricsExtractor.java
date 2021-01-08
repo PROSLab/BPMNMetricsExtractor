@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.Vector;
 
 import org.camunda.bpm.model.bpmn.instance.Activity;
-import org.camunda.bpm.model.bpmn.instance.DataObject;
+import org.camunda.bpm.model.bpmn.instance.DataObjectReference;
 import org.camunda.bpm.model.bpmn.instance.ExclusiveGateway;
 import org.camunda.bpm.model.bpmn.instance.FlowElement;
 import org.camunda.bpm.model.bpmn.instance.FlowNode;
@@ -1190,9 +1190,9 @@ public class BpmnAdvancedMetricsExtractor {
 	private int getNumberOfUniqueDataObjects() {
 		String name = "";
 		Collection<String> objectNames = new ArrayList<String>();
-		Collection<ModelElementInstance> dataObjects = basicMetricsExtractor.getCollectionOfElementType(DataObject.class);
+		Collection<ModelElementInstance> dataObjects = basicMetricsExtractor.getCollectionOfElementType(DataObjectReference.class);
 		for (ModelElementInstance obj : dataObjects) {
-			DataObject dataObj = (DataObject) obj;
+			DataObjectReference dataObj = (DataObjectReference) obj;
 			name = dataObj.getName();
 			if (!objectNames.contains(name))
 				objectNames.add(name);

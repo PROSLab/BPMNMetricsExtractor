@@ -68,6 +68,8 @@ public class BpmnModelReader {
 		int numberProcess = 0;
 		if(this.extractionType.equals("Process")){
 			Collection<Participant> participant = modelInstance.getModelElementsByType(Participant.class);
+			if(participant.isEmpty())
+				mc.getNotification().add("There is no participant for process extraction type");
 			for(Participant p: participant) {
 				if(p.getProcess() != null) {
 					jsonEncoder.buildJSON(numberProcess, p.getId(), p.getName(), p.getProcess().getId());

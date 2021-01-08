@@ -237,15 +237,26 @@ public class ModelConverter {
         //crea un nuovo arco per il grafo per ogni sequenceflow del processo
         for(SequenceFlow sf : sequenceFlows)
         	edges.add(new Edge(sf.getSource().getId(), sf.getTarget().getId()));
-        for(MessageFlow mf : this.modelInstance.getModelElementsByType(MessageFlow.class))
+        for(MessageFlow mf : this.modelInstance.getModelElementsByType(MessageFlow.class)) {
         	//se il messaggio collega due nodi di flusso viene creato un nuovo arco,
-        	//altrimenti il modello non viene convertito in grafo
+        	//altrimenti un messaggio non viene convertito in grafo
         	if(mf.getTarget() instanceof FlowNode && mf.getSource() instanceof FlowNode) {
-        		edges.add(new Edge(mf.getSource().getId(), mf.getTarget().getId()));
-        		if(mf.getTarget() instanceof BoundaryEvent || mf.getTarget() instanceof SubProcess || mf.getSource() instanceof SubProcess)
-        			this.notification.add("Graph might be disconnected: "+mf.getId());
+        		//check per gestire i boundary events
+        		if(mf.getTarget() instanceof BoundaryEvent)
+        			edges.add(new Edge(mf.getSource().getId(), ((BoundaryEvent) mf.getTarget()).getAttachedTo().getId()));
+        		else edges.add(new Edge(mf.getSource().getId(), mf.getTarget().getId()));
+        		if(mf.getTarget() instanceof SubProcess || mf.getSource() instanceof SubProcess) {
+        			//la conversione white box cancella il nodo al quale un eventuale messaggio viene collegato
+        			if(opzione.equals("WhiteBox")) {
+        				this.notification.add("Message flow cannot be white-box converted: "+mf.getId());
+        				return null;
+        			}
+        		}
+        	} else {
+        		this.notification.add("Message flow cannot be converted: "+mf.getId());
+        		return null;
         	}
-        	else return null;
+        }
         //crea la matrice di adiacenza convertita dal modello
         GraphMatrixes gm = new GraphMatrixes(edges,nodes);
         return gm;
