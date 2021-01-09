@@ -67,6 +67,10 @@ public class SizeMetricsExtractor {
 		return this.diam;
 	}
 	
+	public int getSize() {
+		return this.n;
+	}
+	
 	private void dfs(int node, ArrayList<ArrayList<Integer>> adj, int dp[], boolean visited[]) { 
 		visited[node] = true; 
 		for (int i = 0; i < adj.get(node).size(); i++) { 

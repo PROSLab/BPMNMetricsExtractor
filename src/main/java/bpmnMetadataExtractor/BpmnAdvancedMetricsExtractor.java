@@ -151,11 +151,13 @@ public class BpmnAdvancedMetricsExtractor {
 				for(Process p : mc.getProcesses())
 					this.dopExtractor.setDop(p);
 				this.json.addAdvancedMetric("DOP", this.dopExtractor.getDop());
+				// complexity index changes the composition of adjacency matrix and adjacency list
+				// metrics that use them must be calculated first
 				ComplexityIndex ci = new ComplexityIndex(gm.getAdjacencyMatrix(), gal.getAdj());
 				this.json.addAdvancedMetric("CI",ci.getCI());
 				this.json.addAdvancedMetric("PB", pb.getProcessBreadth());
 				json.addAdvancedMetric("DIAM", sizeExtractor.getDiam());
-				json.addAdvancedMetric("PAR", getParallelism(sizeExtractor.getDiam()));
+				json.addAdvancedMetric("PAR", getParallelism(sizeExtractor));
 				}
 			json.addAdvancedMetric("MCC", this.getMCC(gm.getEdge(), gm.getVertix()));
 			this.json.addAdvancedMetric("SEP",s.getSeparability());
@@ -247,11 +249,13 @@ public class BpmnAdvancedMetricsExtractor {
 				SizeMetricsExtractor sizeExtractor = new SizeMetricsExtractor(gm.getVertix(), gal.getAdj());
 				this.dopExtractor.setDop(this.basicMetricsExtractor.getProcess());
 				this.json.addAdvancedMetric("DOP", this.dopExtractor.getDop(), this.numberProcess);
+				// complexity index changes the composition of adjacency matrix and adjacency list
+				// metrics that use them must be calculated first
 				ComplexityIndex ci = new ComplexityIndex(gm.getAdjacencyMatrix(), gal.getAdj());
 				this.json.addAdvancedMetric("CI",ci.getCI(), this.numberProcess);
 				this.json.addAdvancedMetric("PB", pb.getProcessBreadth(), this.numberProcess);
 				json.addAdvancedMetric("DIAM", sizeExtractor.getDiam(), this.numberProcess);
-				json.addAdvancedMetric("PAR", getParallelism(sizeExtractor.getDiam()), this.numberProcess);
+				json.addAdvancedMetric("PAR", getParallelism(sizeExtractor), this.numberProcess);
 				}
 			json.addAdvancedMetric("MCC", this.getMCC(gm.getEdge(), gm.getVertix()), this.numberProcess);
 			this.json.addAdvancedMetric("SEP", s.getSeparability(), this.numberProcess);
@@ -952,13 +956,13 @@ public class BpmnAdvancedMetricsExtractor {
 	 * Calculate the degree of Parallelism
 	 * @return TNT/Diam
 	 */
-	public double getParallelism(double diam) {
+	public double getParallelism(SizeMetricsExtractor sme) {
 		try {
-			double result = (double)this.basicMetricsExtractor.getFlowNodes()/diam;
+			double result = (double) sme.getSize()/sme.getDiam();
 			if (!Double.isFinite(result)) 
 				return 0;
 			else
-				return  (double) this.basicMetricsExtractor.getFlowNodes()/diam;
+				return  (double) sme.getSize()/sme.getDiam();
 		} 
 		catch (ArithmeticException e) {
 			return 0;	
