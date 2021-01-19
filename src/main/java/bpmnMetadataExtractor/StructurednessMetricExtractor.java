@@ -25,10 +25,10 @@ public class StructurednessMetricExtractor {
 	private int reducedGraph;
 	private Vector<String> reducedNodes;
 	private Vector<String> gateways;
-	private String analysed;
+	private Vector<String> analysed;
 	
 	public StructurednessMetricExtractor(BpmnBasicMetricsExtractor bme, String conversion) {
-		this.analysed = "";
+		this.analysed = new Vector<String>();
 		this.process = bme.getProcess();
 		this.model = bme.getModelInstance();
 		this.extractionType = bme.getExtractionType();
@@ -55,6 +55,7 @@ public class StructurednessMetricExtractor {
 		}
 		for(Gateway split : gateways) {
 			this.reduceGraph(split);
+			this.analysed.clear();
 		}
 		//System.err.println(reducedGraph);
 		this.S = 1.0 - (((double)reducedGraph) / ((double) graph));	
@@ -103,7 +104,7 @@ public class StructurednessMetricExtractor {
 		
 		else { 
 			//detect cycles
-			if(fn.getId().equals(this.analysed))
+			if(this.analysed.contains(fn.getId()))
 				return cont;
 			for(SequenceFlow sf : fn.getOutgoing()) 
 				cont += search(sf.getTarget(), blocks);	
@@ -118,7 +119,7 @@ public class StructurednessMetricExtractor {
 	private void reduceGraph(Gateway split) {
 		//check per verificare che il gateway esaminato sia uno split
 		if(split.getIncoming().size() == 1 && !this.reducedNodes.contains(split.getId())) {
-			this.analysed = split.getId();
+			this.analysed.add(split.getId());
 			//aggiunge il gateway alla lista di quelli esaminati
 			this.reducedNodes.add(split.getId());
 			int reduce = 0;
@@ -141,7 +142,7 @@ public class StructurednessMetricExtractor {
 				try {
 					
 					if(blocks.get(0) !="NoJoin" && check && type.equals(model.getModelElementById(blocks.get(0)).getElementType().getTypeName())) {
-						if(blocks.get(0).equals(this.analysed))
+						if(this.analysed.contains(blocks.get(0)))
 							return;
 						//salva id del join se compone una struttura
 						this.gateways.addAll(blocks);
@@ -158,7 +159,7 @@ public class StructurednessMetricExtractor {
 				try {
 					
 					if(blocks.get(0) !="NoJoin" && check && type.equals(process.getModelInstance().getModelElementById(blocks.get(0)).getElementType().getTypeName())) {
-						if(blocks.get(0).equals(this.analysed))
+						if(this.analysed.contains(blocks.get(0)))
 							return;
 						//salva id del join se compone una struttura
 						this.gateways.addAll(blocks);
