@@ -247,9 +247,13 @@ public class ModelConverter {
         		else edges.add(new Edge(mf.getSource().getId(), mf.getTarget().getId()));
         		if(mf.getTarget() instanceof SubProcess || mf.getSource() instanceof SubProcess) {
         			//la conversione white box cancella il nodo al quale un eventuale messaggio viene collegato
+        			//problema per sottoprocessi che non sono collapsed segnalato in notifiche
         			if(opzione.equals("WhiteBox")) {
-        				this.notification.add("Message flow cannot be white-box converted: "+mf.getId());
-        				return null;
+        				if(!(mf.getSource().getChildElementsByType(FlowElement.class).isEmpty()) ||
+        						!(mf.getTarget().getChildElementsByType(FlowElement.class).isEmpty())) {
+        					this.notification.add("Message flow cannot be white-box converted: "+mf.getId());
+        					return null;
+        				}
         			}
         		}
         	} else {

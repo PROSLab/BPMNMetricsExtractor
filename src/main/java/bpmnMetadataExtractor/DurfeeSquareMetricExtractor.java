@@ -183,6 +183,9 @@ public class DurfeeSquareMetricExtractor {
 		}
 	
 		toReturn *= -totalElements;
+		//make a negative number positive
+		if(toReturn < 0)
+			toReturn = Math.abs(toReturn);
 		toReturn = Math.round(toReturn * 100.0) / 100.0;
 		return toReturn;
 	}

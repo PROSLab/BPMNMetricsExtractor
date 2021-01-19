@@ -56,6 +56,10 @@ public class DOPMetricsExtractor {
 		if(!(subprocess.getChildElementsByType(StartEvent.class).isEmpty()) &&
 				subprocess.getChildElementsByType(EndEvent.class).isEmpty())
 			return 1;
+		if(subprocess.getChildElementsByType(StartEvent.class).isEmpty() &&
+				subprocess.getChildElementsByType(EndEvent.class).isEmpty() &&
+				subprocess.getChildElementsByType(Activity.class).isEmpty())
+			return 1;
 		//raccolgo tutti i boundary event interni al sottoprocesso
 		for(BoundaryEvent be : subprocess.getChildElementsByType(BoundaryEvent.class)) 
 			if(!be.cancelActivity()) 
