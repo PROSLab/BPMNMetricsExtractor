@@ -83,6 +83,13 @@ public class StructurednessMetricExtractor {
 				return cont;
 				}
 			
+			//controlla se nodo in struttura ha archi provenienti da fuori struttura
+			if(fn.getIncoming().size()>1 || fn.getOutgoing().size()>1) {
+				if(!(fn instanceof Gateway)) {
+					blocks.add(fn.getId());
+					return cont;
+				}
+			}
 			//se arriva al end event il metodo termina
 			if (fn instanceof EndEvent) {
 				blocks.add(fn.getId());
