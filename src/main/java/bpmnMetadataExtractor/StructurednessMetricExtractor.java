@@ -53,11 +53,12 @@ public class StructurednessMetricExtractor {
 			PEUtility ec = new PEUtility(this.conversionType);
 			ec.getGatewaysSubProcess(gateways, process);
 		}
-		for(Gateway split : gateways) {
-			this.reduceGraph(split);
-			this.analysed.clear();
-		}
-		//System.err.println(reducedGraph);
+		try {
+		    for(Gateway split : gateways) {
+			    this.reduceGraph(split);
+			    this.analysed.clear();
+			}
+		} catch (Exception e) {System.out.println("Something went wrong during Structuredness searching");}
 		this.S = 1.0 - (((double)reducedGraph) / ((double) graph));	
 	}
 	
@@ -146,7 +147,6 @@ public class StructurednessMetricExtractor {
 				}
 			
 			if(this.extractionType.equals("Model")) {
-				try {
 					
 					if(blocks.get(0) !="NoJoin" && check && type.equals(model.getModelElementById(blocks.get(0)).getElementType().getTypeName())) {
 						if(this.analysed.contains(blocks.get(0)))
@@ -158,12 +158,10 @@ public class StructurednessMetricExtractor {
 						this.reducedGraph = this.reducedGraph - reduce;
 						//System.out.println(reduce);
 					}
-					
-				} catch (Exception e) {System.out.println("Missing end event!");}
+		
 			}
 			
 			else {
-				try {
 					
 					if(blocks.get(0) !="NoJoin" && check && type.equals(process.getModelInstance().getModelElementById(blocks.get(0)).getElementType().getTypeName())) {
 						if(this.analysed.contains(blocks.get(0)))
@@ -176,7 +174,6 @@ public class StructurednessMetricExtractor {
 						//System.out.println(reduce);
 						}
 					
-				} catch (Exception e) {System.out.println("Missing end event!");}
 			}	
 		} 
 	}

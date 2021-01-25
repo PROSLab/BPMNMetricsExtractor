@@ -205,10 +205,10 @@ public class ModelConverter {
 		Collection<FlowNode> flowNodes = new ArrayList<FlowNode>();
 		Collection<SequenceFlow> sequenceFlows = new ArrayList<SequenceFlow>();
 		for(Process p : this.modelInstance.getModelElementsByType(Process.class)) {
-			if(p.getChildElementsByType(StartEvent.class).isEmpty() || p.getChildElementsByType(EndEvent.class).isEmpty() || p.getChildElementsByType(SequenceFlow.class).isEmpty()) {
+			/*if(p.getChildElementsByType(StartEvent.class).isEmpty() || p.getChildElementsByType(EndEvent.class).isEmpty() || p.getChildElementsByType(SequenceFlow.class).isEmpty()) {
 				this.notification.add("Incomplete process: "+p.getId());
 				return null;
-			}
+			}*/
 			Collection<FlowNode> flowNodesProcess = p.getChildElementsByType(FlowNode.class);
 			//elimina tutti i flow node disconnessi
 			Iterator<FlowNode> i = flowNodesProcess.iterator();
